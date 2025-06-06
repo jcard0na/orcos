@@ -1,0 +1,224 @@
+~/dev/db48x/src ~/dev/db48x
+LCD_clear: UNUSED
+LCD_power_on: dmcp/main.cc
+LCD_power_off: dmcp/main.cc
+LCD_write_line: dmcp/main.cc
+bitblt24: dmcp/main.cc
+user_interface.cc
+lcd_line_addr: dmcp/main.cc
+lcd_clear_buf: dmcp/sysmenu.cc
+lcd_refresh: util.cc
+dmcp/sysmenu.cc
+dmcp/main.cc
+user_interface.cc
+lcd_refresh_dma: UNUSED
+lcd_refresh_wait: dmcp/main.cc
+lcd_forced_refresh: UNUSED
+lcd_refresh_lines: util.cc
+lcd_fill_rect: UNUSED
+lcd_fill_ptrn: UNUSED
+lcd_draw_img: UNUSED
+lcd_draw_img_direct: UNUSED
+lcd_draw_img_part: UNUSED
+lcd_fillLine: UNUSED
+lcd_fillLines: UNUSED
+lcd_set_buf_cleared: UNUSED
+lcd_get_buf_cleared: UNUSED
+reverse_byte: UNUSED
+lcd_writeNl: UNUSED
+lcd_prevLn: UNUSED
+lcd_writeClr: dmcp/sysmenu.cc
+lcd_setLine: UNUSED
+lcd_setXY: UNUSED
+lcd_lineHeight: UNUSED
+lcd_baseHeight: UNUSED
+lcd_fontWidth: UNUSED
+lcd_writeText: UNUSED
+lcd_textToBox: UNUSED
+lcd_textWidth: UNUSED
+lcd_charWidth: UNUSED
+lcd_textToWidth: UNUSED
+lcd_textToWidthR: UNUSED
+lcd_writeTextWidth: UNUSED
+lcd_textForWidth: UNUSED
+lcd_nextFontNr: font.cc
+lcd_prevFontNr: font.cc
+lcd_switchFont: font.cc
+lcd_toggleFontT: font.cc
+lcd_for_calc: dmcp/sysmenu.cc
+lcd_draw_menu_bg: UNUSED
+lcd_draw_menu_key: UNUSED
+lcd_draw_menu_keys: UNUSED
+lcd_print: UNUSED
+get_wday_shortcut: datetime.cc
+user_interface.cc
+get_month_shortcut: datetime.cc
+user_interface.cc
+julian_day: datetime.h
+datetime.cc
+program.cc
+julian_to_date: UNUSED
+get_hw_id: UNUSED
+rtc_read: datetime.cc
+user_interface.cc
+program.cc
+rtc_write: datetime.cc
+rtc_update_time_sec: UNUSED
+rtc_read_century: UNUSED
+rtc_write_century: UNUSED
+rtc_read_min: UNUSED
+rtc_read_sec: UNUSED
+rtc_wakeup_delay: dmcp/main.cc
+read_power_voltage: program.cc
+command.cc
+get_lowbat_state: program.cc
+command.cc
+get_vbat: program.cc
+command.cc
+start_buzzer_freq: util.cc
+stop_buzzer: util.cc
+dmcp/sim-dmcp.h
+set_buzzer: UNUSED
+beep_volume_up: UNUSED
+beep_volume_down: UNUSED
+get_beep_volume: UNUSED
+mark_region: UNUSED
+no_region: UNUSED
+set_reset_magic: dmcp/sysmenu.cc
+is_reset_state_file: UNUSED
+get_reset_state_file: dmcp/sysmenu.cc
+dmcp/main.cc
+set_reset_state_file: dmcp/sysmenu.cc
+switch_usb_powered_freq: UNUSED
+usb_powered: graphics.cc
+program.cc
+command.cc
+usb_acm_on: UNUSED
+usb_is_on: UNUSED
+usb_turn_off: UNUSED
+acm_puts: UNUSED
+aux_buf_ptr: UNUSED
+write_buf_ptr: UNUSED
+write_buf_size: UNUSED
+program_main: dmcp/main.cc
+read_key: dmcp/main.cc
+sys_last_scan: UNUSED
+suspended_bg_key_read: UNUSED
+resume_bg_key_read: UNUSED
+get_tim1_timer: UNUSED
+start_timer2: UNUSED
+start_timer3: UNUSED
+stop_timer2: UNUSED
+stop_timer3: UNUSED
+get_rtc_ticks: UNUSED
+rtc_update_ticks: UNUSED
+rtc_set_alarm: UNUSED
+rtc_cancel_alarm: UNUSED
+qspi_user_write: UNUSED
+qspi_user_addr: UNUSED
+qspi_user_size: UNUSED
+print_byte: UNUSED
+print_buffer: UNUSED
+print_is_ready: UNUSED
+printer_get_delay: UNUSED
+printer_set_delay: UNUSED
+printer_advance_buf: UNUSED
+printer_busy_for: UNUSED
+rtc_check_unset: UNUSED
+run_set_time: UNUSED
+run_set_date: UNUSED
+disp_disk_info: UNUSED
+power_check_screen: dmcp/sysmenu.cc
+handle_menu: dmcp/sysmenu.cc
+rb_str: UNUSED
+sel_str: UNUSED
+opt_str: UNUSED
+date_str: UNUSED
+time_str: UNUSED
+item_sel_init: UNUSED
+item_sel_reinit: UNUSED
+item_sel_engine: UNUSED
+item_sel_header: UNUSED
+msg_box: dmcp/main.cc
+run_menu_item_sys: UNUSED
+create_screenshot: util.cc
+key_empty: graphics.cc
+tests.cc
+dmcp/main.cc
+program.cc
+command.cc
+key_push: wasm/emcc.h
+tests.cc
+key_tail: program.cc
+command.cc
+key_pop: graphics.cc
+dmcp/main.cc
+program.cc
+command.cc
+key_pop_last: UNUSED
+key_pop_all: UNUSED
+key_to_nr: UNUSED
+wait_for_key_press: util.cc
+dmcp/sysmenu.cc
+dmcp/main.cc
+user_interface.cc
+runner_get_key: dmcp/sysmenu.cc
+runner_get_key_delay: UNUSED
+wait_for_key_release: dmcp/sysmenu.cc
+runner_key_tout_value: UNUSED
+runner_key_tout_init: UNUSED
+toggle_slow_autorepeat: UNUSED
+is_slow_autorepeat: UNUSED
+reset_auto_off: graphics.cc
+dmcp/main.cc
+program.cc
+command.cc
+is_auto_off: UNUSED
+is_menu_auto_off: dmcp/sysmenu.cc
+sys_auto_off_cnt: UNUSED
+print_dmy_date: UNUSED
+print_clk24_time: UNUSED
+check_create_dir: files.cc
+set_fat_label: UNUSED
+file_exists: UNUSED
+file_size: UNUSED
+sys_disk_ok: dmcp/sysmenu.cc
+sys_disk_write_enable: file.cc
+sys_disk_check_valid: UNUSED
+sys_is_disk_write_enable: UNUSED
+sys_clear_write_buf_used: UNUSED
+sys_write_buf_used: UNUSED
+sys_timer_disable: graphics.cc
+dmcp/sysmenu.cc
+dmcp/main.cc
+command.cc
+sys_timer_start: dmcp/main.cc
+sys_timer_active: dmcp/main.cc
+sys_timer_timeout: dmcp/main.cc
+sys_delay: util.cc
+tests.cc
+user_interface.cc
+sys_tick_count: UNUSED
+sys_current_ms: stats.cc
+grob.h
+runtime.cc
+tests.cc
+plot.cc
+dmcp/main.cc
+program.cc
+sys_critical_start: dmcp/main.cc
+sys_critical_end: dmcp/main.cc
+sys_sleep: dmcp/main.cc
+sys_free_mem: variables.cc
+dmcp/main.cc
+sys_largest_free_mem: UNUSED
+sys_reset: dmcp/sysmenu.cc
+sys_last_key: UNUSED
+make_date_filename: UNUSED
+run_help: UNUSED
+run_help_file: UNUSED
+run_help_file_style: UNUSED
+draw_power_off_image: dmcp/main.cc
+reset_off_image_cycle: UNUSED
+update_bmp_file_header: UNUSED
+~/dev/db48x

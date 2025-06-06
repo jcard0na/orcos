@@ -1,0 +1,4 @@
+[submodule "probe-rs"]
+	path = probe-rs
+	url = https://github.com/AkhilTThomas/probe-rs.git
+	branch = feat/support-stm32u3
