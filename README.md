@@ -27,7 +27,7 @@ make flash
 
 ### Aider (Optional)
 
- - Install aider-chat under .venv (once)
+ - Install aider-chat and flask under .venv (once)
  - Define your keys in .env, under project root
  - Activate it prior to launching vs-code
  - Configure Aider Composer with:
