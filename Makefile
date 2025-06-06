@@ -226,7 +226,7 @@ clean:
 probe-rs:
 	(cd probe-rs && cargo build --release)
 
-flash: build/$(TARGET).elf
+flash: build/$(TARGET).elf probe-rs
 	probe-rs/target/release/probe-rs run --chip STM32U385RGTx build/$(TARGET).elf
 
 # *** EOF ***

@@ -12,7 +12,7 @@ At the time of this writing, the main `probe-rs` repo did not support it.
 There is a fork included in this repo as a submodule:
 
 ```
-git submodule sync
+git submodule init
 git submodule update
 make probe-rs
 ```
