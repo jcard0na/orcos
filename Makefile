@@ -36,7 +36,12 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
+Core/Src/calc.c \
+Core/Src/fonts.c \
+Core/Src/func.c \
+Core/Src/io.c \
 Core/Src/main.c \
+Core/Src/sharp.c \
 Core/Src/stm32u3xx_it.c \
 Core/Src/stm32u3xx_hal_msp.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_adc.c \

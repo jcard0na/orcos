@@ -22,3 +22,14 @@ Then attach debugger to calculator and
 ``
 make flash
 ``
+
+## Development Setup
+
+### Aider (Optional)
+
+ - Install aider-chat under .venv (once)
+ - Define your keys in .env, under project root
+ - Activate it prior to launching vs-code
+ - Configure Aider Composer with:
+    "aider-composer.pythonPath": ".venv/bin/python"
+
