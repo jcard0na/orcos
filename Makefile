@@ -72,7 +72,9 @@ Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim_ex.c \
 Core/Src/system_stm32u3xx.c \
 Core/Src/sysmem.c \
-Core/Src/syscalls.c  
+Core/Src/syscalls.c \
+RTT/SEGGER_RTT.c \
+RTT/SEGGER_RTT_printf.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -136,7 +138,8 @@ C_INCLUDES =  \
 -IDrivers/STM32U3xx_HAL_Driver/Inc \
 -IDrivers/STM32U3xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32U3xx/Include \
--IDrivers/CMSIS/Include
+-IDrivers/CMSIS/Include \
+-IRTT \
 
 
 # compile gcc flags

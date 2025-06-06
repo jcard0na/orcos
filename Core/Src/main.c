@@ -27,6 +27,7 @@
 #include "sharp.h"
 #include "calc.h"
 #include "io.h"
+#include "SEGGER_RTT.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -220,6 +221,8 @@ int main(void)
   MX_SPI2_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+
+  SEGGER_RTT_printf(0, "Started...\n");
 
   HAL_LPTIM_TimeOut_Start_IT(&hlptim1, 8192);
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable

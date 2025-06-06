@@ -647,7 +647,7 @@ void draw_stack() {
 void draw_input() {
 	int i;
 	sharp_clear_buffer(44, 0xFF);
-	int pos;
+	int pos = 0;
 	if (context == CONTEXT_UNCERT) {
 		if (input_uncert) {
 			pos = 4;
