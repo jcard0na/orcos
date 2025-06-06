@@ -35,7 +35,7 @@ BUILD_DIR = build
 # source
 ######################################
 # Library name
-LIB_NAME = liborcoscore.a
+LIB_NAME = liborcos.a
 # Library sources
 LIB_SOURCES = \
 Core/Src/calc.c \
@@ -198,7 +198,7 @@ $(BUILD_DIR)/$(LIB_NAME): $(LIB_OBJECTS)
 	$(PREFIX)ar rcs $@ $^
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) $(BUILD_DIR)/$(LIB_NAME) Makefile
-	$(CC) $(OBJECTS) -L$(BUILD_DIR) -lorcoscore $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) -L$(BUILD_DIR) -lorcos $(LDFLAGS) -o $@
 	$(SZ) $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
