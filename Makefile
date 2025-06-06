@@ -34,14 +34,19 @@ BUILD_DIR = build
 ######################################
 # source
 ######################################
-# C sources
-C_SOURCES =  \
+# Library name
+LIB_NAME = liborcoscore.a
+# Library sources
+LIB_SOURCES = \
 Core/Src/calc.c \
 Core/Src/fonts.c \
 Core/Src/func.c \
 Core/Src/io.c \
+Core/Src/sharp.c
+
+# C sources
+C_SOURCES =  \
 Core/Src/main.c \
-Core/Src/sharp.c \
 Core/Src/stm32u3xx_it.c \
 Core/Src/stm32u3xx_hal_msp.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_adc.c \
@@ -167,8 +172,10 @@ all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET
 # build the application
 #######################################
 # list of objects
-OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
-vpath %.c $(sort $(dir $(C_SOURCES)))
+LIB_OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(LIB_SOURCES:.c=.o)))
+
+OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(filter-out $(LIB_SOURCES),$(C_SOURCES:.c=.o))))
+vpath %.c $(sort $(dir $(filter-out $(LIB_SOURCES),$(C_SOURCES))))
 # list of ASM program objects
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
@@ -184,7 +191,11 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+$(BUILD_DIR)/$(LIB_NAME): $(LIB_OBJECTS)
+	$(PREFIX)ar rcs $@ $^
+
+$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) $(BUILD_DIR)/$(LIB_NAME) Makefile
+	$(CC) $(OBJECTS) -L$(BUILD_DIR) -lorcoscore $(LDFLAGS) -o $@
 	$(SZ) $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
@@ -201,6 +212,7 @@ $(BUILD_DIR):
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
+	-rm -f $(LIB_NAME)
   
 #######################################
 # dependencies
