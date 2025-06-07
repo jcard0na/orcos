@@ -1514,7 +1514,8 @@ int calc_on_key(int c) {
 	// They will be set inside the functions processing key presses
 
 	switch(c) {
-	case  1 : enter_key(OP_ENTER_0, OP_NOP, OP_NOP); break;
+	//case  1 : enter_key(OP_ENTER_0, OP_NOP, OP_NOP); break;
+	case  1 : enter_key(OP_ENTER_0, OP_TEST_3, OP_NOP); break;
 	case  7 : enter_key(OP_ENTER_1, OP_CONST_PI, OP_CONST_C);  break;
 	case  8 : enter_key(OP_ENTER_2, OP_NOP, OP_CONST_PLANCK);  break;
 	case  9 : enter_key(OP_ENTER_3, OP_NOP, OP_CONST_PLANCKC);  break;
@@ -1525,7 +1526,8 @@ int calc_on_key(int c) {
 	case 20 : enter_key(OP_ENTER_8, OP_GAMMABETA, OP_BETAGAMMA);  break;
 	case 21 : enter_key(OP_ENTER_9, OP_PZXY, OP_NOP);  break;
 
-	case  2 : enter_key(OP_ENTER_SIGN, OP_NOP, OP_NOP);  break;
+	//case  2 : enter_key(OP_ENTER_SIGN, OP_NOP, OP_NOP);  break;
+	case  2 : enter_key(OP_ENTER_SIGN, OP_TEST_1, OP_NOP);  break;
 	case  3 : enter_key(OP_ENTER_DECPOINT, OP_NOP, OP_NOP);  break;
 	case  4 : enter_key(OP_ENTER_UNCERT, OP_NOP, OP_NOP); break;
 	case  5 : enter_key(OP_NOP, OP_NOP, OP_NOP);  break;
