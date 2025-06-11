@@ -22,13 +22,13 @@ uint16_t battery_voltage() {
 			// with a minimum conversion time of 12.65 us, as specified in Table 30 of datasheet
 			// If we configure the ADC to run at 1MHz the ADC needs to be configure to sample
 			// for at least 12.65 cycles.  The closest configuration is ADC_SAMPLETIME_23CYCLES_5
-			uint16_t VREF_now = HAL_ADC_GetValue(&hadc1);
+			uint16_t ADC_measure_VREF = HAL_ADC_GetValue(&hadc1);
 			// Read the VREF value that was stored after initial calibration,
 			// during manufacturing.
-			uint16_t VREF_at_cal = (*VREFINT_CAL_ADDR);
-			uint16_t VDD_at_cal = 3000;
-			uint16_t VDD_now = (VDD_at_cal * VREF_now)/VREF_at_cal;
-			return VDD_now;
+			uint16_t ADC_cal_value = (*VREFINT_CAL_ADDR);
+			uint16_t VREF_VOLTAGE_AT_CALIBRATION = 3000;
+			uint16_t VREF_VOLTAGE = (VREF_VOLTAGE_AT_CALIBRATION*ADC_cal_value)/ADC_measure_VREF;
+			return VREF_VOLTAGE;
 		}
 	}
 	return 1;
