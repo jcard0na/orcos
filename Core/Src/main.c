@@ -273,11 +273,7 @@ int main(void)
 			}
 
 			if (!ret) {  // OFF command received
-				delay_us(30);
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);  // DISP signal to "OFF"
-				delay_us(30);
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);   // EXTCOMIN signal of "OFF"
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);  // 5V booster disable
+        LCD_power_off(1);
 				off = 1;
 			}
 		}

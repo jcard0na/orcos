@@ -426,8 +426,12 @@ void LCD_power_on()
 
 void LCD_power_off(int clear)
 {
-    sharp_clear();
-    // TODO
+    delay_us(30);
+    if (clear)
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);  // DISP signal to "OFF"
+    delay_us(30);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);   // EXTCOMIN signal of "OFF"
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);  // 5V booster disable
 }
 
 void __lcd_init() {
