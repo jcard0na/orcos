@@ -40,9 +40,9 @@ static void TIM1_Init(void)
     TIM_MasterConfigTypeDef sMasterConfig = {0};
 
     htim1.Instance = TIM1;
-    htim1.Init.Prescaler = 15999;  // Assuming 16MHz clock: 16MHz/8000 = 1kHz
+    htim1.Init.Prescaler = 15;  // 16MHz/(15+1) = 1MHz → 1µs per tick (ideal for delay_us)
     htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim1.Init.Period = 999;      // 1kHz/1000 = 1Hz
+    htim1.Init.Period = 65535;
     htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim1.Init.RepetitionCounter = 0;
     htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -547,7 +547,6 @@ void HAL_LPTIM_CompareMatchCallback (LPTIM_HandleTypeDef *hlptim)
 			off = 1;
 		}
 
-        SEGGER_RTT_printf(0, "LPTIM1 IRQ\n");
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);  // Toggle LCD refresh signal (EXTIN)
 	}
 }
