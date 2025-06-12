@@ -28,6 +28,7 @@
 #include "calc.h"
 #include "io.h"
 #include "SEGGER_RTT.h"
+#include <stm32u3xx_hal_adc_ex.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -394,7 +395,10 @@ static void MX_ADC1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN ADC1_Init 2 */
-
+  // Calibrate ADC for better accuracy
+  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK) {
+    Error_Handler();
+  }
   /* USER CODE END ADC1_Init 2 */
 
 }
