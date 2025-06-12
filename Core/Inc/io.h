@@ -10,6 +10,4 @@ extern C {
 
 extern ADC_HandleTypeDef hadc1;
 
-uint16_t battery_voltage(void);
-
 #endif

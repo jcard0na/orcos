@@ -5,6 +5,7 @@
 #include "fonts.h"
 #include "func.h"
 #include "io.h"
+#include "orcos.h"
 
 #define MAX_STACK_SIZE 99
 #define MAX_MEMORY_SIZE 99
@@ -442,7 +443,7 @@ void draw_status() {
 	else if (program_size>0)
 		memcpy(&(v[24]), "P  ", 3);
 
-	uint16_t voltage = battery_voltage();
+	int voltage = get_vbat();
 	if (voltage>0 && voltage<9000) {
 		//sprintf(&(v[28]), "%d", voltage/1000);
 		//v[29] = '.';

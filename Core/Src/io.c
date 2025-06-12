@@ -1,12 +1,13 @@
 #include "stm32u3xx_hal.h"
 #include "io.h"
 #include <stm32u3xx_ll_adc.h>
+#include "orcos.h"
 
 void UpdateSysTick(uint32_t new_HCLK_freq) {
     HAL_SYSTICK_Config(new_HCLK_freq / 1000);  // Ensure 1 ms SysTick tick
 }
 
-uint16_t battery_voltage() {
+int get_vbat() {
 
 	// Datasheet Section 3.20.2
 	// Internal voltage reference (VREFINT)
