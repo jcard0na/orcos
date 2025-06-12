@@ -45,4 +45,6 @@ void sharp_filled_rectangle(size_t x, size_t y, size_t width, size_t height, uin
 
 void sharp_test_font(FontDef_t *font, char start_symbol);
 
+void __lcd_init();
+
 #endif /* INC_SHARP_H_ */
