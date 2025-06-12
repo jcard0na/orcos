@@ -6,6 +6,7 @@
 #include "func.h"
 #include "io.h"
 #include "orcos.h"
+#include "SEGGER_RTT.h"
 
 #define MAX_STACK_SIZE 99
 #define MAX_MEMORY_SIZE 99
@@ -780,20 +781,43 @@ void enter_exp() {
 	draw_flags |= (DRAW_INPUT | DRAW_CURSOR);
 }
 
+// 16x16 smiley (16 rows * 2 bytes per row = 32 bytes)
+const uint8_t test_img[] = {
+    0x00, 0x00,  // ................
+    0x03, 0xC0,  // ......####......
+    0x0F, 0xF0,  // ....########....
+    0x1E, 0x78,  // ...####..####...
+    0x39, 0x9C,  // ..###..##..###..
+    0x70, 0x0E,  // .###........###.
+    0x60, 0x06,  // .##..........##.
+    0xE7, 0xE7,  // ###..#####..###
+    0xEF, 0xF7,  // ###.########.###
+    0xFF, 0xFF,  // ################
+    0xFF, 0xFF,  // ################
+    0x7F, 0xFE,  // .#############.
+    0x7C, 0x3E,  // .#####....#####.
+    0x3F, 0xFC,  // ..############..
+    0x0F, 0xF0,  // ....########....
+    0x03, 0xC0   // ......####......
+};
+
 void enter_sign() {
-	if (input.started) {
-		if (input.expentry==0) {
-			if (input_uncert == 0) input.sign = 1-input.sign;
-		} else {
-			input.expsign = 1-input.expsign;
-		}
-		draw_flags |= (DRAW_INPUT | DRAW_CURSOR);
-	} else {
-		if (error_flag) return;
-		stack[0] = -stack[0];
-		draw_flags |= DRAW_STACK;
-		if (input.replace_x) draw_flags |= DRAW_CURSOR;
-	}
+	// if (input.started) {
+	// 	if (input.expentry==0) {
+	// 		if (input_uncert == 0) input.sign = 1-input.sign;
+	// 	} else {
+	// 		input.expsign = 1-input.expsign;
+	// 	}
+	// 	draw_flags |= (DRAW_INPUT | DRAW_CURSOR);
+	// } else {
+	// 	if (error_flag) return;
+	// 	stack[0] = -stack[0];
+	// 	draw_flags |= DRAW_STACK;
+	// 	if (input.replace_x) draw_flags |= DRAW_CURSOR;
+	// }
+    lcd_draw_img(test_img, 0, 0, 16, 16, 10, 10);  // Draw full image at (10,10)	
+	lcd_refresh();
+	SEGGER_RTT_printf(0, "enter sign\n");
 }
 
 double convert_input() {

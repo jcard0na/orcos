@@ -43,7 +43,6 @@
 #define NUM_COLUMN_PINS 6
 #define NUM_ROW_PINS 9
 
-#define OFF_TIMEOUT (5*120) // 5 min timeout before switching off
 
 /* USER CODE END PD */
 
@@ -55,14 +54,12 @@
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
 
-LPTIM_HandleTypeDef hlptim1;
 
 
 
 /* USER CODE BEGIN PV */
 
 int off;
-int timeout_counter;
 
 const uint16_t row_pin_array[NUM_ROW_PINS] = {
 		GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3,
@@ -78,7 +75,6 @@ const uint16_t column_pin_array[NUM_COLUMN_PINS] = {
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ICACHE_Init(void);
-static void MX_LPTIM1_Init(void);
 static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -166,7 +162,6 @@ int main(void)
   /* USER CODE BEGIN Init */
 
   off = 0;
-  timeout_counter = 0;
 
   /* USER CODE END Init */
 
@@ -181,14 +176,12 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ICACHE_Init();
-  MX_LPTIM1_Init();
   MX_ADC1_Init();
   orcos_init();
   /* USER CODE BEGIN 2 */
 
   SEGGER_RTT_printf(0, "Started...\n");
 
-  HAL_LPTIM_TimeOut_Start_IT(&hlptim1, 8192);
 
   LCD_power_on();
 
@@ -213,7 +206,6 @@ int main(void)
   while (1)
   {
 		uint16_t keycode = 0;
-		timeout_counter = 0;
 
 		switch_input();
 
@@ -246,7 +238,7 @@ int main(void)
 		}
 
 		last_keycode = keycode;
-		sys_sleep(off);
+		//sys_sleep(off);
 
     /* USER CODE END WHILE */
 
@@ -389,41 +381,6 @@ static void MX_ICACHE_Init(void)
   /* USER CODE BEGIN ICACHE_Init 2 */
 
   /* USER CODE END ICACHE_Init 2 */
-
-}
-
-/**
-  * @brief LPTIM1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_LPTIM1_Init(void)
-{
-
-  /* USER CODE BEGIN LPTIM1_Init 0 */
-
-  /* USER CODE END LPTIM1_Init 0 */
-
-  /* USER CODE BEGIN LPTIM1_Init 1 */
-
-  /* USER CODE END LPTIM1_Init 1 */
-  hlptim1.Instance = LPTIM1;
-  hlptim1.Init.Clock.Source = LPTIM_CLOCKSOURCE_APBCLOCK_LPOSC;
-  hlptim1.Init.Clock.Prescaler = LPTIM_PRESCALER_DIV1;
-  hlptim1.Init.Trigger.Source = LPTIM_TRIGSOURCE_SOFTWARE;
-  hlptim1.Init.Period = 16384;
-  hlptim1.Init.UpdateMode = LPTIM_UPDATE_IMMEDIATE;
-  hlptim1.Init.CounterSource = LPTIM_COUNTERSOURCE_INTERNAL;
-  hlptim1.Init.Input1Source = LPTIM_INPUT1SOURCE_GPIO;
-  hlptim1.Init.Input2Source = LPTIM_INPUT2SOURCE_GPIO;
-  hlptim1.Init.RepetitionCounter = 0;
-  if (HAL_LPTIM_Init(&hlptim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN LPTIM1_Init 2 */
-
-  /* USER CODE END LPTIM1_Init 2 */
 
 }
 
@@ -594,6 +551,7 @@ static void MX_GPIO_Init(void)
   HAL_NVIC_EnableIRQ(EXTI15_IRQn);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* TIM1 interrupt is already enabled in NVIC by HAL_TIM_Base_Init() */
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
@@ -612,20 +570,6 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 	HAL_PWR_DisableSleepOnExit();
 }
 
-void HAL_LPTIM_CompareMatchCallback (LPTIM_HandleTypeDef *hlptim)
-{
-	if (!off) {
-		timeout_counter++;
-		if (timeout_counter > OFF_TIMEOUT) {
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);  // DISP signal to "OFF"
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);   // EXTCOMIN signal of "OFF"
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);  // 5V booster disable
-			off = 1;
-		}
-
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);  // Toggle LCD refresh signal (EXTIN)
-	}
-}
 
 /* USER CODE END 4 */
 
