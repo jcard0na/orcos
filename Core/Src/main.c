@@ -87,39 +87,6 @@ static void MX_ADC1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// Switch input pins back to interrupt mode
-// and put STM to STOP
-void put_to_sleep() {
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-	if (off) {
-		// Only set the row pin corresponding to ON/OFF key to ext. interrupt mode
-		GPIO_InitStruct.Pin = GPIO_PIN_15;
-		GPIO_InitStruct.Pull = GPIO_PULLUP; // Use external 1M pull-up to minimise current draw
-		GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-		GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
-				|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_13|GPIO_PIN_14;
-		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-		GPIO_InitStruct.Pull = GPIO_PULLUP; // Use external 1M pull-up to minimise current draw
-		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-	} else {
-		GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
-				|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
-		GPIO_InitStruct.Pull = GPIO_PULLUP;
-		GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-	}
-	// Delay 100 us for all transitional processes to finish
-	// e.g. OD pins with external pull-ups take a long time to change state
-	delay_us(100);
-
-	HAL_PWR_EnableSleepOnExit();
-	HAL_SuspendTick();
-	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERMODE_STOP2, PWR_STOPENTRY_WFI);
-}
-
 // Switch input pins to simple "INPUT" mode (no interrupt)
 // Called after waking up for keyboard matrix scan
 // Internal pull-up is enabled for faster response
@@ -279,7 +246,7 @@ int main(void)
 		}
 
 		last_keycode = keycode;
-		put_to_sleep(off);
+		sys_sleep(off);
 
     /* USER CODE END WHILE */
 

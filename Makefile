@@ -44,6 +44,7 @@ Core/Src/fonts.c \
 Core/Src/func.c \
 Core/Src/io.c \
 Core/Src/orcos.c \
+Core/Src/power.c \
 Core/Src/sharp.c
 
 # C sources
