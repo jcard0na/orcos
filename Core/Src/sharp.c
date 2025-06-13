@@ -563,18 +563,21 @@ void HAL_LPTIM_CompareMatchCallback(LPTIM_HandleTypeDef *hlptim)
         timeout_counter++;
         if (timeout_counter > OFF_TIMEOUT)
         {
+            SEGGER_RTT_printf(0, "\n--- DISP off ---\n");
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET); // DISP signal to "OFF"
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);  // EXTCOMIN signal of "OFF"
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // 5V booster disable
             off = 1;
         }
 
+        // SEGGER_RTT_printf(0, "\n--- EXTIN toggle ---\n");
         HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9); // Toggle LCD refresh signal (EXTIN)
     }
 }
 
 void LCD_power_on()
 {
+    SEGGER_RTT_printf(0, "\n--- LDC_power_on() ---\n");
     sharp_init(&htim1, &hspi2);
     sharp_clear();
     HAL_TIM_Base_Start_IT(&htim1);
@@ -583,6 +586,7 @@ void LCD_power_on()
 
 void LCD_power_off(int clear)
 {
+    SEGGER_RTT_printf(0, "\n--- LDC_power_off() ---\n");
     HAL_TIM_Base_Stop_IT(&htim1); // Stop the timer
     delay_us(30);
     if (clear)
