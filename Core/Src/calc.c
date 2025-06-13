@@ -815,9 +815,23 @@ void enter_sign() {
 	// 	draw_flags |= DRAW_STACK;
 	// 	if (input.replace_x) draw_flags |= DRAW_CURSOR;
 	// }
-	//lcd_draw_test_pattern();
-	//lcd_draw_img(test_img, 0, 0, 16, 16, 10, 10);
-	lcd_refresh();
+	static int count = 0;
+	count = (count + 1) % 4;
+	if (count == 0) {
+		lcd_draw_test_pattern(16);
+		lcd_refresh();
+	}
+	if (count == 1) {
+		lcd_draw_test_pattern(32);
+		lcd_refresh();
+	}
+	if (count == 2) {
+		sharp_test_font(&font_12x20, 'a');
+	}
+	if (count == 3) {
+		lcd_draw_img(test_img, 0, 0, 16, 16, 10, 10);
+		lcd_refresh();
+	}
 	SEGGER_RTT_printf(0, "enter sign\n");
 }
 

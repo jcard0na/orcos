@@ -14,7 +14,7 @@ void LCD_power_off(int clear);
 void lcd_draw_img(const uint8_t *img, uint32_t xo, uint32_t yo,
     uint32_t w, uint32_t h, uint32_t x, uint32_t y);
 void lcd_refresh(void);
-void lcd_draw_test_pattern(void);
+void lcd_draw_test_pattern(uint8_t square_size);
 
 // Put calculator to sleep
 // off: if non-zero, only wake on ON key

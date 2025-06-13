@@ -190,11 +190,29 @@ void sharp_send_buffer(uint16_t y, uint16_t lines)
 {
     buffer[0] = 0x01;   // Write line command
     uint16_t size = (3 + lines * 52);
-    for (int j = 0; j < lines; j++)
-    {
+    
+    // Set line numbers
+    for (int j = 0; j < lines; j++) {
         if (y + j < 240)
             buffer[j * 52 + 1] = (uint8_t)(y + j + 1);
     }
+
+    // Dump buffer contents
+    SEGGER_RTT_printf(0, "\n--- sharp_send_buffer(y=%u, lines=%u) ---\n", y, lines);
+    SEGGER_RTT_printf(0, "Cmd: 0x%02X\n", buffer[0]);
+    
+    for (int j = 0; j < lines; j++) {
+        int offset = j * 52;
+        SEGGER_RTT_printf(0, "Line %u: ", buffer[offset + 1]);
+        
+        // Print first few bytes of each line
+        for (int b = 0; b < 8; b++) {
+            SEGGER_RTT_printf(0, "%02X ", buffer[offset + 2 + b]);
+        }
+        SEGGER_RTT_printf(0, "...\n");
+    }
+
+    // Send to display
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(12);
     HAL_SPI_Transmit(_hspi2, buffer, size, 100);
@@ -571,39 +589,57 @@ void LCD_power_off(int clear)
 }
 
 /* Send the entire frame buffer content to the display via SPI interface.
- * Useful: https://www.embeddedartists.com/wp-content/uploads/2018/06/Memory_LCD_Programming.pdf
+ * Uses single SPI transfer for better performance and reliability.
+ * Reference: https://www.embeddedartists.com/wp-content/uploads/2018/06/Memory_LCD_Programming.pdf
  */
 void lcd_refresh()
 {
-    // 1. Chip select
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
-    delay_us(12);
-
-    // 2. Send "write lines" command
-    uint8_t cmd = 0x01;  // WRITE LINES
-    HAL_SPI_Transmit(_hspi2, &cmd, 1, HAL_MAX_DELAY);
+    // Calculate required buffer size:
+    // 1 byte command + (240 lines * (1 byte num + 50 bytes data + 1 byte trailer)) + 1 byte final trailer
+    static uint8_t frame_buffer[1 + LCD_HEIGHT*(1 + LCD_WIDTH/8 + 1) + 1];
+    int pos = 0;
     
-    // 3. Send all lines plus one dummy line
-    for (int y = 0; y <= LCD_HEIGHT; y++)
-    {
-        // 3a. Line number (1-based)
-        uint8_t line_num = (y % LCD_HEIGHT) + 1;
-        HAL_SPI_Transmit(_hspi2, &line_num, 1, HAL_MAX_DELAY);
+    SEGGER_RTT_printf(0, "\n--- lcd_refresh() ---\n");
+    
+    // 1. Command byte
+    frame_buffer[pos++] = 0x01; // WRITE LINES command
+    SEGGER_RTT_printf(0, "Cmd: 0x%02X\n", frame_buffer[0]);
+
+    // 2. Send all lines
+    for (int y = 0; y < LCD_HEIGHT; y++) {
+        // Line number (1-based)
+        uint8_t line_num = y + 1;
+        frame_buffer[pos++] = line_num;
         
-        // 3b. Pixel data (400 bits = 50 bytes)
-        HAL_SPI_Transmit(_hspi2, g_framebuffer[y % LCD_HEIGHT], LCD_WIDTH / 8, HAL_MAX_DELAY);
+        // Pixel data
+        uint8_t *line_data = g_framebuffer[y];
+        memcpy(&frame_buffer[pos], line_data, LCD_WIDTH/8);
+        pos += LCD_WIDTH/8;
         
-        // 3c. Line trailer
-        uint8_t trailer = 0x00;
-        HAL_SPI_Transmit(_hspi2, &trailer, 1, HAL_MAX_DELAY);
+        // Line trailer
+        frame_buffer[pos++] = 0x00;
+
+        // Debug print first 8 bytes of line data
+        SEGGER_RTT_printf(0, "Line %u: ", line_num);
+        for (int b = 0; b < 8; b++) {
+            SEGGER_RTT_printf(0, "%02X ", line_data[b]);
+        }
+        SEGGER_RTT_printf(0, "...\n");
     }
     
-    // 4. End transmission
-    uint8_t final_trailer = 0x00;
-    HAL_SPI_Transmit(_hspi2, &final_trailer, 1, HAL_MAX_DELAY);
+    // 3. Final trailer
+    frame_buffer[pos++] = 0x00;
+    SEGGER_RTT_printf(0, "Final trailer: 0x%02X\n", frame_buffer[pos-1]);
+
+    // Single SPI transfer
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+    delay_us(12);
+    HAL_SPI_Transmit(_hspi2, frame_buffer, pos, HAL_MAX_DELAY);
     delay_us(10);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
     delay_us(10);
+    
+    SEGGER_RTT_printf(0, "Refresh complete (%d bytes)\n", pos);
 }
 
 /**
@@ -649,11 +685,25 @@ void lcd_draw_img(const uint8_t *img, uint32_t xo, uint32_t yo,
     }
 }
 
-void lcd_draw_test_pattern()
+void lcd_draw_test_pattern(uint8_t square_size)
 {
+    // Ensure square_size is at least 1 and not too large
+    if (square_size < 1) square_size = 1;
+    if (square_size > 32) square_size = 32;
+    
     for (int y = 0; y < LCD_HEIGHT; y++) {
-        for (int x = 0; x < LCD_WIDTH/8; x++) {
-            g_framebuffer[y][x] = ((x + y) % 20) ? 0xFF : 0x00;
+        for (int x = 0; x < LCD_WIDTH; x++) {
+            // Calculate checkerboard pattern
+            uint8_t x_block = x / square_size;
+            uint8_t y_block = y / square_size;
+            uint8_t pattern = (x_block + y_block) % 2;
+            
+            // Set pixel in framebuffer
+            if (pattern) {
+                g_framebuffer[y][x/8] |= (1 << (7 - (x % 8)));  // Set pixel white
+            } else {
+                g_framebuffer[y][x/8] &= ~(1 << (7 - (x % 8)));  // Set pixel black
+            }
         }
     }
 }
@@ -667,5 +717,5 @@ void __lcd_init()
     
     // Clear framebuffer to white (all pixels off)
     memset(g_framebuffer, 0x00, sizeof(g_framebuffer));
-    lcd_draw_test_pattern();
+    lcd_draw_test_pattern(8);  // Default 8x8 pixel squares
 }
