@@ -72,7 +72,7 @@ static void SPI2_Init(void)
     /* SPI2 parameter configuration*/
     hspi2.Instance = SPI2;
     hspi2.Init.Mode = SPI_MODE_MASTER;
-    hspi2.Init.Direction = SPI_DIRECTION_2LINES_TXONLY;
+    hspi2.Init.Direction = SPI_DIRECTION_1LINE;
     hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
     hspi2.Init.CLKPolarity = SPI_POLARITY_HIGH;
     hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -571,6 +571,7 @@ void LCD_power_off(int clear)
 }
 
 /* Send the entire frame buffer content to the display via SPI interface.
+ * Useful: https://www.embeddedartists.com/wp-content/uploads/2018/06/Memory_LCD_Programming.pdf
  */
 void lcd_refresh()
 {
@@ -582,7 +583,7 @@ void lcd_refresh()
     uint8_t cmd = 0x01;  // WRITE LINES
     HAL_SPI_Transmit(_hspi2, &cmd, 1, HAL_MAX_DELAY);
     
-    // 3. Send all lines + 1 dummy line
+    // 3. Send all lines plus one dummy line
     for (int y = 0; y <= LCD_HEIGHT; y++)
     {
         // 3a. Line number (1-based)
@@ -600,9 +601,9 @@ void lcd_refresh()
     // 4. End transmission
     uint8_t final_trailer = 0x00;
     HAL_SPI_Transmit(_hspi2, &final_trailer, 1, HAL_MAX_DELAY);
-    delay_us(4);
+    delay_us(10);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
-    delay_us(4);
+    delay_us(10);
 }
 
 /**
@@ -650,20 +651,9 @@ void lcd_draw_img(const uint8_t *img, uint32_t xo, uint32_t yo,
 
 void lcd_draw_test_pattern()
 {
-    // Draw a test pattern that alternates every 8 pixels
-    // This will help verify both pixel addressing and data transfer
     for (int y = 0; y < LCD_HEIGHT; y++) {
-        for (int x = 0; x < LCD_WIDTH; x++) {
-            uint8_t *byte = &g_framebuffer[y][x / 8];
-            uint8_t bit = 1 << (x % 8);
-            
-            // Create a checkerboard pattern that changes every 8 pixels
-            // and alternates every other row
-            if ((x / 8 + y) % 2 == 0) {
-                *byte &= ~bit;  // Set pixel to black
-            } else {
-                *byte |= bit;    // Set pixel to white
-            }
+        for (int x = 0; x < LCD_WIDTH/8; x++) {
+            g_framebuffer[y][x] = ((x + y) % 20) ? 0xFF : 0x00;
         }
     }
 }
@@ -676,5 +666,6 @@ void __lcd_init()
     LPTIM1_Init();
     
     // Clear framebuffer to white (all pixels off)
-    memset(g_framebuffer, 0xff, sizeof(g_framebuffer));
+    memset(g_framebuffer, 0x00, sizeof(g_framebuffer));
+    lcd_draw_test_pattern();
 }
