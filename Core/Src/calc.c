@@ -854,7 +854,9 @@ void enter_sign() {
 		lcd_refresh();
 	}
 	if (count == 5) {
-		lcd_draw_img(test_img, 0, 0, 32, 32, 10, 10);
+		lcd_draw_img(test_img, 32, 32, 8, 8);
+		lcd_draw_img(test_img, 32, 32, 50, 50);
+		lcd_draw_img(test_img, 32, 32, 90, 90);
 		lcd_refresh();
 	}
 	SEGGER_RTT_printf(0, "enter sign (%d)\n", count);
