@@ -610,6 +610,18 @@ void lcd_refresh()
 
     SEGGER_RTT_printf(0, "\n--- lcd_refresh() (chunked) ---\n");
 
+    // 0. Transmit NOP
+    uint8_t nop = 0x0;
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+    delay_us(10);
+    if (HAL_SPI_Transmit(_hspi2, &nop, 1, HAL_MAX_DELAY) != HAL_OK) {
+        LCD_Error_Handler();
+    }
+    delay_us(10);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+    delay_us(10);
+
+
     for (int chunk = 0; chunk < num_chunks; chunk++)
     {
         int pos = 0;
