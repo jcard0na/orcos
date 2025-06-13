@@ -7,6 +7,7 @@
 #include "io.h"
 #include "orcos.h"
 #include "SEGGER_RTT.h"
+#include "openrpncalc.h"
 
 #define MAX_STACK_SIZE 99
 #define MAX_MEMORY_SIZE 99
@@ -832,33 +833,32 @@ void enter_sign() {
 	// 	if (input.replace_x) draw_flags |= DRAW_CURSOR;
 	// }
 	static int count = 0;
-	count = (count + 1) % 6;
+	count = (count + 1) % 7;
 	if (count == 0) {
 		lcd_draw_test_pattern(8);
-		lcd_refresh();
 	}
 	if (count == 1) {
 		lcd_draw_test_pattern(16);
-		lcd_refresh();
 	}
 	if (count == 2) {
 		lcd_draw_test_pattern(32);
-		lcd_refresh();
 	}
 	if (count == 3) {
 		lcd_fill(0xff);
-		lcd_refresh();
 	}
 	if (count == 4) {
 		lcd_fill(0x00);
-		lcd_refresh();
 	}
 	if (count == 5) {
 		lcd_draw_img(test_img, 32, 32, 8, 8);
 		lcd_draw_img(test_img, 32, 32, 50, 50);
 		lcd_draw_img(test_img, 32, 32, 90, 90);
-		lcd_refresh();
 	}
+	if (count == 6) {
+		lcd_draw_img(pixel_data_bin, 400, 240, 0, 0);
+		lcd_invert_framebuffer();
+	}
+	lcd_refresh();
 	SEGGER_RTT_printf(0, "enter sign (%d)\n", count);
 }
 

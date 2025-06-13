@@ -15,6 +15,7 @@ void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32
 void lcd_refresh(void);
 void lcd_draw_test_pattern(uint8_t square_size);
 void lcd_fill(uint8_t fill_pattern);
+void lcd_invert_framebuffer(void);
 
 // Put calculator to sleep
 // off: if non-zero, only wake on ON key

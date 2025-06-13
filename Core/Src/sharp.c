@@ -703,6 +703,18 @@ void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32
     }
 }
 
+/**
+ * Inverts all pixels in the global framebuffer (black becomes white and vice versa)
+ */
+void lcd_invert_framebuffer(void)
+{
+    for (int y = 0; y < LCD_HEIGHT; y++) {
+        for (int x_byte = 0; x_byte < (LCD_WIDTH / 8); x_byte++) {
+            g_framebuffer[y][x_byte] = ~g_framebuffer[y][x_byte];
+        }
+    }
+}
+
 void lcd_draw_test_pattern(uint8_t square_size)
 {
     // Ensure square_size is at least 1 and not too large
