@@ -597,81 +597,61 @@ void LCD_power_off(int clear)
 }
 
 /* Send the entire frame buffer content to the display via SPI interface.
- * Uses multiple SPI transfers (4 chunks of 60 lines each) for better reliability.
+ * Uses a configurable number of SPI transfers in case we need to reduce RAM usage. 
  * Reference: https://www.embeddedartists.com/wp-content/uploads/2018/06/Memory_LCD_Programming.pdf
  */
 void lcd_refresh()
 {
-    // Buffer size for 60 lines:
-    // 1 byte command + (60 lines * (1 byte num + 50 bytes data + 1 byte trailer)) + 1 byte final trailer
-    static uint8_t frame_buffer[1 + 60 * (1 + LCD_WIDTH / 8 + 1) + 1];
-    const int chunk_size = 60; // Lines per chunk
-    const int num_chunks = LCD_HEIGHT / chunk_size;
+    // This should be a divisor of 240.  240 means a single transfer, which would mean fastest
+    // speed but highest RAM usage
+    #define CHUNK_SIZE_IN_LINES 240
+    
+    // Calculate buffer size based on chunk size
+    #define CHUNK_BUFFER_SIZE (1 + CHUNK_SIZE_IN_LINES * (1 + LCD_WIDTH / 8 + 1) + 1)
+    static uint8_t frame_buffer[CHUNK_BUFFER_SIZE];
+    
+    const int total_lines = LCD_HEIGHT;
+    const int chunk_size = CHUNK_SIZE_IN_LINES;
+    const int num_chunks = (total_lines + chunk_size - 1) / chunk_size; // Round up
 
-    SEGGER_RTT_printf(0, "\n--- lcd_refresh() (chunked) ---\n");
-
-    // 0. Transmit NOP
-    uint8_t nop = 0x0;
+    // Send NOP command to initialize interface
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(10);
-    if (HAL_SPI_Transmit(_hspi2, &nop, 1, HAL_MAX_DELAY) != HAL_OK) {
-        LCD_Error_Handler();
-    }
+    uint8_t nop = 0x00;
+    HAL_SPI_Transmit(_hspi2, &nop, 1, HAL_MAX_DELAY);
     delay_us(10);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
     delay_us(10);
-
 
     for (int chunk = 0; chunk < num_chunks; chunk++)
     {
         int pos = 0;
         int start_line = chunk * chunk_size;
-        int end_line = start_line + chunk_size;
+        int lines_in_chunk = (chunk == num_chunks - 1) ? 
+                           (total_lines - start_line) : chunk_size;
 
-        // 1. Command byte
-        frame_buffer[pos++] = 0x01; // WRITE LINES command
-        SEGGER_RTT_printf(0, "Chunk %d Cmd: 0x%02X\n", chunk, frame_buffer[0]);
+        // Command byte
+        frame_buffer[pos++] = 0x01; // Write command
 
-        // 2. Send chunk lines
-        for (int y = start_line; y < end_line; y++)
-        {
-            // Line number (1-based)
-            uint8_t line_num = y + 1;
-            frame_buffer[pos++] = line_num;
-
-            // Pixel data
-            uint8_t *line_data = g_framebuffer[y];
-            memcpy(&frame_buffer[pos], line_data, LCD_WIDTH / 8);
-            pos += LCD_WIDTH / 8;
-
-            // Line trailer
-            frame_buffer[pos++] = 0x00;
-
-            // Debug print first line of each chunk
-            // if (y == start_line) {
-            //     SEGGER_RTT_printf(0, "Line %u: ", line_num);
-            //     for (int b = 0; b < 8; b++) {
-            //         SEGGER_RTT_printf(0, "%02X ", line_data[b]);
-            //     }
-            //     SEGGER_RTT_printf(0, "...\n");
-            // }
+        // Fill chunk data
+        for (int y = 0; y < lines_in_chunk; y++) {
+            frame_buffer[pos++] = start_line + y + 1; // 1-based line number
+            memcpy(&frame_buffer[pos], g_framebuffer[start_line + y], LCD_WIDTH/8);
+            pos += LCD_WIDTH/8;
+            frame_buffer[pos++] = 0x00; // Line trailer
         }
 
-        // 3. Chunk trailer
+        // Chunk trailer
         frame_buffer[pos++] = 0x00;
 
-        // 4. Transmit
+        // Send chunk
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
-        delay_us(10);
-        if (HAL_SPI_Transmit(_hspi2, frame_buffer, pos, HAL_MAX_DELAY) != HAL_OK) {
-            LCD_Error_Handler();
-        }
-        delay_us(10);
+        delay_us(12);
+        HAL_SPI_Transmit(_hspi2, frame_buffer, pos, HAL_MAX_DELAY);
+        delay_us(4);
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
-        delay_us(10);
+        delay_us(4);
     }
-
-    SEGGER_RTT_printf(0, "Refresh complete (4 chunks)\n");
 }
 
 /**
