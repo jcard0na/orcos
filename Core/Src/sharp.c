@@ -597,59 +597,69 @@ void LCD_power_off(int clear)
 }
 
 /* Send the entire frame buffer content to the display via SPI interface.
- * Uses single SPI transfer for better performance and reliability.
+ * Uses multiple SPI transfers (4 chunks of 60 lines each) for better reliability.
  * Reference: https://www.embeddedartists.com/wp-content/uploads/2018/06/Memory_LCD_Programming.pdf
  */
 void lcd_refresh()
 {
-    // Calculate required buffer size:
-    // 1 byte command + (240 lines * (1 byte num + 50 bytes data + 1 byte trailer)) + 1 byte final trailer
-    static uint8_t frame_buffer[1 + LCD_HEIGHT * (1 + LCD_WIDTH / 8 + 1) + 1];
-    int pos = 0;
+    // Buffer size for 60 lines:
+    // 1 byte command + (60 lines * (1 byte num + 50 bytes data + 1 byte trailer)) + 1 byte final trailer
+    static uint8_t frame_buffer[1 + 60 * (1 + LCD_WIDTH / 8 + 1) + 1];
+    const int chunk_size = 60; // Lines per chunk
+    const int num_chunks = LCD_HEIGHT / chunk_size;
 
-    SEGGER_RTT_printf(0, "\n--- lcd_refresh() ---\n");
+    SEGGER_RTT_printf(0, "\n--- lcd_refresh() (chunked) ---\n");
 
-    // 1. Command byte
-    frame_buffer[pos++] = 0x01; // WRITE LINES command
-    SEGGER_RTT_printf(0, "Cmd: 0x%02X\n", frame_buffer[0]);
-
-    // 2. Send all lines
-    for (int y = 0; y < LCD_HEIGHT; y++)
+    for (int chunk = 0; chunk < num_chunks; chunk++)
     {
-        // Line number (1-based)
-        uint8_t line_num = y + 1;
-        frame_buffer[pos++] = line_num;
+        int pos = 0;
+        int start_line = chunk * chunk_size;
+        int end_line = start_line + chunk_size;
 
-        // Pixel data
-        uint8_t *line_data = g_framebuffer[y];
-        memcpy(&frame_buffer[pos], line_data, LCD_WIDTH / 8);
-        pos += LCD_WIDTH / 8;
+        // 1. Command byte
+        frame_buffer[pos++] = 0x01; // WRITE LINES command
+        SEGGER_RTT_printf(0, "Chunk %d Cmd: 0x%02X\n", chunk, frame_buffer[0]);
 
-        // Line trailer
+        // 2. Send chunk lines
+        for (int y = start_line; y < end_line; y++)
+        {
+            // Line number (1-based)
+            uint8_t line_num = y + 1;
+            frame_buffer[pos++] = line_num;
+
+            // Pixel data
+            uint8_t *line_data = g_framebuffer[y];
+            memcpy(&frame_buffer[pos], line_data, LCD_WIDTH / 8);
+            pos += LCD_WIDTH / 8;
+
+            // Line trailer
+            frame_buffer[pos++] = 0x00;
+
+            // Debug print first line of each chunk
+            // if (y == start_line) {
+            //     SEGGER_RTT_printf(0, "Line %u: ", line_num);
+            //     for (int b = 0; b < 8; b++) {
+            //         SEGGER_RTT_printf(0, "%02X ", line_data[b]);
+            //     }
+            //     SEGGER_RTT_printf(0, "...\n");
+            // }
+        }
+
+        // 3. Chunk trailer
         frame_buffer[pos++] = 0x00;
 
-        // Debug print first 8 bytes of line data
-        SEGGER_RTT_printf(0, "Line %u: ", line_num);
-        for (int b = 0; b < 8; b++)
-        {
-            SEGGER_RTT_printf(0, "%02X ", line_data[b]);
+        // 4. Transmit
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+        delay_us(10);
+        if (HAL_SPI_Transmit(_hspi2, frame_buffer, pos, HAL_MAX_DELAY) != HAL_OK) {
+            LCD_Error_Handler();
         }
-        SEGGER_RTT_printf(0, "...\n");
+        delay_us(10);
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+        delay_us(10);
     }
 
-    // 3. Final trailer
-    frame_buffer[pos++] = 0x00;
-    SEGGER_RTT_printf(0, "Final trailer: 0x%02X\n", frame_buffer[pos - 1]);
-
-    // Single SPI transfer
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
-    delay_us(20);
-    HAL_SPI_Transmit(_hspi2, frame_buffer, pos, HAL_MAX_DELAY);
-    delay_us(20);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
-    delay_us(20);
-
-    SEGGER_RTT_printf(0, "Refresh complete (%d bytes)\n", pos);
+    SEGGER_RTT_printf(0, "Refresh complete (4 chunks)\n");
 }
 
 /**
