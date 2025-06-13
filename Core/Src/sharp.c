@@ -188,6 +188,7 @@ void sharp_init(TIM_HandleTypeDef *htim1, SPI_HandleTypeDef *hspi2)
  */
 void sharp_send_buffer(uint16_t y, uint16_t lines)
 {
+    return;
     buffer[0] = 0x01;   // Write line command
     uint16_t size = (3 + lines * 52);
     
@@ -633,11 +634,11 @@ void lcd_refresh()
 
     // Single SPI transfer
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
-    delay_us(12);
+    delay_us(20);
     HAL_SPI_Transmit(_hspi2, frame_buffer, pos, HAL_MAX_DELAY);
-    delay_us(10);
+    delay_us(20);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
-    delay_us(10);
+    delay_us(20);
     
     SEGGER_RTT_printf(0, "Refresh complete (%d bytes)\n", pos);
 }
@@ -708,6 +709,10 @@ void lcd_draw_test_pattern(uint8_t square_size)
     }
 }
 
+void lcd_fill(uint8_t fill_pattern) {
+    memset(g_framebuffer, fill_pattern, sizeof(g_framebuffer));
+}
+
 void __lcd_init()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
@@ -716,6 +721,5 @@ void __lcd_init()
     LPTIM1_Init();
     
     // Clear framebuffer to white (all pixels off)
-    memset(g_framebuffer, 0x00, sizeof(g_framebuffer));
-    lcd_draw_test_pattern(8);  // Default 8x8 pixel squares
+    lcd_fill(0xff);
 }
