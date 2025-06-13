@@ -188,7 +188,7 @@ void sharp_init(TIM_HandleTypeDef *htim1, SPI_HandleTypeDef *hspi2)
  */
 void sharp_send_buffer(uint16_t y, uint16_t lines)
 {
-    buffer[0] = 0x01;
+    buffer[0] = 0x01;   // Write line command
     uint16_t size = (3 + lines * 52);
     for (int j = 0; j < lines; j++)
     {
@@ -574,14 +574,32 @@ void LCD_power_off(int clear)
  */
 void lcd_refresh()
 {
-    // chip select
+    // 1. Chip select
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(12);
-    // Send entire framebuffer (row-major order)
-    for (int y = 0; y < LCD_HEIGHT; y++)
+
+    // 2. Send "write lines" command
+    uint8_t cmd = 0x01;  // WRITE LINES
+    HAL_SPI_Transmit(_hspi2, &cmd, 1, HAL_MAX_DELAY);
+    
+    // 3. Send all lines + 1 dummy line
+    for (int y = 0; y <= LCD_HEIGHT; y++)
     {
-        HAL_SPI_Transmit(_hspi2, g_framebuffer[y], LCD_WIDTH / 8, HAL_MAX_DELAY);
+        // 3a. Line number (1-based)
+        uint8_t line_num = (y % LCD_HEIGHT) + 1;
+        HAL_SPI_Transmit(_hspi2, &line_num, 1, HAL_MAX_DELAY);
+        
+        // 3b. Pixel data (400 bits = 50 bytes)
+        HAL_SPI_Transmit(_hspi2, g_framebuffer[y % LCD_HEIGHT], LCD_WIDTH / 8, HAL_MAX_DELAY);
+        
+        // 3c. Line trailer
+        uint8_t trailer = 0x00;
+        HAL_SPI_Transmit(_hspi2, &trailer, 1, HAL_MAX_DELAY);
     }
+    
+    // 4. End transmission
+    uint8_t final_trailer = 0x00;
+    HAL_SPI_Transmit(_hspi2, &final_trailer, 1, HAL_MAX_DELAY);
     delay_us(4);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
     delay_us(4);
@@ -600,6 +618,7 @@ void lcd_refresh()
 void lcd_draw_img(const uint8_t *img, uint32_t xo, uint32_t yo,
                   uint32_t w, uint32_t h, uint32_t x, uint32_t y)
 {
+    y = LCD_HEIGHT - y - h;
     for (uint32_t dy = 0; dy < h; dy++)
     {
         if (y + dy >= LCD_HEIGHT)
@@ -629,10 +648,33 @@ void lcd_draw_img(const uint8_t *img, uint32_t xo, uint32_t yo,
     }
 }
 
+void lcd_draw_test_pattern()
+{
+    // Draw a test pattern that alternates every 8 pixels
+    // This will help verify both pixel addressing and data transfer
+    for (int y = 0; y < LCD_HEIGHT; y++) {
+        for (int x = 0; x < LCD_WIDTH; x++) {
+            uint8_t *byte = &g_framebuffer[y][x / 8];
+            uint8_t bit = 1 << (x % 8);
+            
+            // Create a checkerboard pattern that changes every 8 pixels
+            // and alternates every other row
+            if ((x / 8 + y) % 2 == 0) {
+                *byte &= ~bit;  // Set pixel to black
+            } else {
+                *byte |= bit;    // Set pixel to white
+            }
+        }
+    }
+}
+
 void __lcd_init()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
     SPI2_Init();
     TIM1_Init();
     LPTIM1_Init();
+    
+    // Clear framebuffer to white (all pixels off)
+    memset(g_framebuffer, 0xff, sizeof(g_framebuffer));
 }
