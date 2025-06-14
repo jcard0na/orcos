@@ -24,3 +24,10 @@ void sys_sleep(int off);
 
 // Main library init function
 void orcos_init();
+
+
+#if DEBUG
+    #define DEBUG_PRINT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
+#else
+    #define DEBUG_PRINT(...) 
+#endif

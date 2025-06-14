@@ -28,8 +28,11 @@
 #include "calc.h"
 #include "io.h"
 #include "orcos.h"
-#include "SEGGER_RTT.h"
 #include <stm32u3xx_hal_adc_ex.h>
+
+#if DEBUG
+#include "SEGGER_RTT.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -185,7 +188,7 @@ int main(void)
   orcos_init();
   /* USER CODE BEGIN 2 */
 
-  SEGGER_RTT_printf(0, "Started...\n");
+  DEBUG_PRINT("Started...\n");
 
   LCD_power_on();
 
@@ -217,7 +220,7 @@ int main(void)
     HAL_Delay(10); // Debouncing delay in ms
 
     keycode = scan_keyboard();
-    SEGGER_RTT_printf(0, "keycode pressed = %d\n", keycode);
+    DEBUG_PRINT("keycode pressed = %d\n", keycode);
 
     if (keycode == 54 && off && last_keycode == 0)
     {                                                      // Calculator was OFF and the ON button was pressed

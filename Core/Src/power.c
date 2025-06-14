@@ -1,6 +1,8 @@
 #include "stm32u3xx_hal.h"
 #include "orcos.h"
+#if DEBUG
 #include "SEGGER_RTT.h"
+#endif
 
 static void delay_us(uint16_t us) {
     /* Assuming 16MHz clock */
@@ -39,7 +41,7 @@ void sys_sleep(int off) {
 	HAL_PWR_EnableSleepOnExit();
 	HAL_SuspendTick();
 	HAL_DBGMCU_EnableDBGStopMode();
-	SEGGER_RTT_printf(0, "--- sleep (off = %d)---\n", off);
+	DEBUG_PRINT("--- sleep (off = %d)---\n", off);
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERMODE_STOP2, PWR_STOPENTRY_WFI);
-	SEGGER_RTT_printf(0, "--- wake up --- \n");
+	DEBUG_PRINT("--- wake up --- \n");
 }

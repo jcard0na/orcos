@@ -6,8 +6,11 @@
 #include "func.h"
 #include "io.h"
 #include "orcos.h"
-#include "SEGGER_RTT.h"
 #include "openrpncalc.h"
+
+#if DEBUG
+#include "SEGGER_RTT.h"
+#endif
 
 #define MAX_STACK_SIZE 99
 #define MAX_MEMORY_SIZE 99
@@ -859,7 +862,7 @@ void enter_sign() {
 		lcd_invert_framebuffer();
 	}
 	lcd_refresh();
-	SEGGER_RTT_printf(0, "enter sign (%d)\n", count);
+	DEBUG_PRINT("enter sign (%d)\n", count);
 }
 
 double convert_input() {

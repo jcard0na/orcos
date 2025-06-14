@@ -14,7 +14,10 @@
 #include "fonts.h"
 #include "sharp.h"
 #include "orcos.h"
+
+#if DEBUG
 #include "SEGGER_RTT.h"
+#endif
 
 TIM_HandleTypeDef htim1;
 SPI_HandleTypeDef hspi2;
@@ -198,20 +201,20 @@ void sharp_send_buffer(uint16_t y, uint16_t lines)
     }
 
     // Dump buffer contents
-    SEGGER_RTT_printf(0, "\n--- sharp_send_buffer(y=%u, lines=%u) ---\n", y, lines);
-    SEGGER_RTT_printf(0, "Cmd: 0x%02X\n", buffer[0]);
+    DEBUG_PRINT("\n--- sharp_send_buffer(y=%u, lines=%u) ---\n", y, lines);
+    DEBUG_PRINT("Cmd: 0x%02X\n", buffer[0]);
 
     for (int j = 0; j < lines; j++)
     {
-        int offset = j * 52;
-        SEGGER_RTT_printf(0, "Line %u: ", buffer[offset + 1]);
+        int offset __attribute__((unused)) = j * 52;
+        DEBUG_PRINT("Line %u: ", buffer[offset + 1]);
 
         // Print first few bytes of each line
         for (int b = 0; b < 8; b++)
         {
-            SEGGER_RTT_printf(0, "%02X ", buffer[offset + 2 + b]);
+            DEBUG_PRINT("%02X ", buffer[offset + 2 + b]);
         }
-        SEGGER_RTT_printf(0, "...\n");
+        DEBUG_PRINT("...\n");
     }
 
     // Send to display
@@ -563,21 +566,21 @@ void HAL_LPTIM_CompareMatchCallback(LPTIM_HandleTypeDef *hlptim)
         timeout_counter++;
         if (timeout_counter > OFF_TIMEOUT)
         {
-            SEGGER_RTT_printf(0, "\n--- DISP off ---\n");
+            DEBUG_PRINT("\n--- DISP off ---\n");
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET); // DISP signal to "OFF"
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);  // EXTCOMIN signal of "OFF"
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // 5V booster disable
             off = 1;
         }
 
-        // SEGGER_RTT_printf(0, "\n--- EXTIN toggle ---\n");
+        // DEBUG_PRINT("\n--- EXTIN toggle ---\n");
         HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9); // Toggle LCD refresh signal (EXTIN)
     }
 }
 
 void LCD_power_on()
 {
-    SEGGER_RTT_printf(0, "\n--- LDC_power_on() ---\n");
+    DEBUG_PRINT("\n--- LDC_power_on() ---\n");
     sharp_init(&htim1, &hspi2);
     sharp_clear();
     HAL_TIM_Base_Start_IT(&htim1);
@@ -586,7 +589,7 @@ void LCD_power_on()
 
 void LCD_power_off(int clear)
 {
-    SEGGER_RTT_printf(0, "\n--- LDC_power_off() ---\n");
+    DEBUG_PRINT("\n--- LDC_power_off() ---\n");
     HAL_TIM_Base_Stop_IT(&htim1); // Stop the timer
     delay_us(30);
     if (clear)
