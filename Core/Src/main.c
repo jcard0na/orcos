@@ -560,6 +560,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
+  DEBUG_PRINT("INT Rising\n");
   SystemClock_Config();
   HAL_ResumeTick();
   HAL_PWR_DisableSleepOnExit();
@@ -567,6 +568,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {
+  DEBUG_PRINT("INT Falling\n");
   SystemClock_Config();
   HAL_ResumeTick();
   HAL_PWR_DisableSleepOnExit();

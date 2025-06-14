@@ -590,7 +590,8 @@ void LCD_power_on()
 void LCD_power_off(int clear)
 {
     DEBUG_PRINT("\n--- LDC_power_off() ---\n");
-    HAL_TIM_Base_Stop_IT(&htim1); // Stop the timer
+    // XXX: this prevents waking up form STOP2
+    //HAL_TIM_Base_Stop_IT(&htim1); // Stop the timer
     delay_us(30);
     if (clear)
         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET); // DISP signal to "OFF"
