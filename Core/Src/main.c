@@ -217,6 +217,7 @@ int main(void)
     HAL_Delay(10); // Debouncing delay in ms
 
     keycode = scan_keyboard();
+    SEGGER_RTT_printf(0, "keycode pressed = %d\n", keycode);
 
     if (keycode == 54 && off && last_keycode == 0)
     {                                                      // Calculator was OFF and the ON button was pressed
@@ -247,7 +248,7 @@ int main(void)
     }
 
     last_keycode = keycode;
-    // sys_sleep(off);
+    sys_sleep(off);
 
     /* USER CODE END WHILE */
 

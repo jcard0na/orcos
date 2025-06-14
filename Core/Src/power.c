@@ -5,7 +5,6 @@
 static void delay_us(uint16_t us) {
     /* Assuming 16MHz clock */
     uint32_t delay = us * (SystemCoreClock / 1000000);
-    SEGGER_RTT_printf(0, "SystemCoreClock: %lu\n", SystemCoreClock);
     while(delay--) {
         __NOP(); // No operation instruction
     }
@@ -39,5 +38,8 @@ void sys_sleep(int off) {
 
 	HAL_PWR_EnableSleepOnExit();
 	HAL_SuspendTick();
+	HAL_DBGMCU_EnableDBGStopMode();
+	SEGGER_RTT_printf(0, "--- sleep (off = %d)---\n", off);
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERMODE_STOP2, PWR_STOPENTRY_WFI);
+	SEGGER_RTT_printf(0, "--- wake up --- \n");
 }
