@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -43,7 +43,6 @@
 #define NUM_COLUMN_PINS 6
 #define NUM_ROW_PINS 9
 
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -54,20 +53,17 @@
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
 
-
-
-
 /* USER CODE BEGIN PV */
 
 int off;
 
 const uint16_t row_pin_array[NUM_ROW_PINS] = {
-		GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3,
-		GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15};
+    GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3,
+    GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15};
 
 const uint16_t column_pin_array[NUM_COLUMN_PINS] = {
-		GPIO_PIN_0, GPIO_PIN_2, GPIO_PIN_3,
-		GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8};
+    GPIO_PIN_0, GPIO_PIN_2, GPIO_PIN_3,
+    GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8};
 
 /* USER CODE END PV */
 
@@ -86,67 +82,76 @@ static void MX_ADC1_Init(void);
 // Switch input pins to simple "INPUT" mode (no interrupt)
 // Called after waking up for keyboard matrix scan
 // Internal pull-up is enabled for faster response
-void switch_input() {
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
+void switch_input()
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
-			|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
-uint16_t scan_keyboard(void) {
-	int16_t pressed_row = 0;
-	int16_t pressed_column = -1;
-	uint16_t multiple_key_press = 0;
+uint16_t scan_keyboard(void)
+{
+  int16_t pressed_row = 0;
+  int16_t pressed_column = -1;
+  uint16_t multiple_key_press = 0;
 
-	// Set all output column pins to high
-	for (uint16_t column = 0; column < NUM_COLUMN_PINS; column++) {
-		HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_SET);
-	}
+  // Set all output column pins to high
+  for (uint16_t column = 0; column < NUM_COLUMN_PINS; column++)
+  {
+    HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_SET);
+  }
 
-	// Scan columns
-	for (int16_t column = 0; column < NUM_COLUMN_PINS; column++) {
-		HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_RESET); // Set column pin to low
-		delay_us(20);   // Small delay (20 us) for all transitional processes to finish
+  // Scan columns
+  for (int16_t column = 0; column < NUM_COLUMN_PINS; column++)
+  {
+    HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_RESET); // Set column pin to low
+    delay_us(20);                                                       // Small delay (20 us) for all transitional processes to finish
 
-		// Read row pins
-		for (int16_t row = 0; row < NUM_ROW_PINS; row++) {
-			GPIO_PinState status = HAL_GPIO_ReadPin(GPIOB, row_pin_array[row]);
-			if (status == GPIO_PIN_RESET) {
-				if (pressed_column == -1) {
-					pressed_row = row;
-					pressed_column = column;
-				} else {
-					// Another key press already registered
-					multiple_key_press = 1;
-				}
-			}
-		}
+    // Read row pins
+    for (int16_t row = 0; row < NUM_ROW_PINS; row++)
+    {
+      GPIO_PinState status = HAL_GPIO_ReadPin(GPIOB, row_pin_array[row]);
+      if (status == GPIO_PIN_RESET)
+      {
+        if (pressed_column == -1)
+        {
+          pressed_row = row;
+          pressed_column = column;
+        }
+        else
+        {
+          // Another key press already registered
+          multiple_key_press = 1;
+        }
+      }
+    }
 
-		HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_SET); // Set column pin back to high
-	}
+    HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_SET); // Set column pin back to high
+  }
 
-	// Reset all output column pins to low
-	for (uint16_t column = 0; column < NUM_COLUMN_PINS; column++) {
-		HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_RESET);
-	}
+  // Reset all output column pins to low
+  for (uint16_t column = 0; column < NUM_COLUMN_PINS; column++)
+  {
+    HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_RESET);
+  }
 
-	if (pressed_column >= 0 && !multiple_key_press)
-		// Only if single key pressed
-		return (pressed_column + pressed_row*NUM_COLUMN_PINS + 1);
-	else
-		// Return 0 if no keys or multiple keys pressed
-		return 0;
+  if (pressed_column >= 0 && !multiple_key_press)
+    // Only if single key pressed
+    return (pressed_column + pressed_row * NUM_COLUMN_PINS + 1);
+  else
+    // Return 0 if no keys or multiple keys pressed
+    return 0;
 }
 
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
@@ -182,16 +187,16 @@ int main(void)
 
   SEGGER_RTT_printf(0, "Started...\n");
 
-
   LCD_power_on();
 
   uint16_t keycode = scan_keyboard();
-  if (keycode == 49) { // RESET with "F" button pressed
-	memset(buffer, 0xFF, BUFFER_SIZE);
-	sharp_string("Waiting ST-LINK", &font_24x40, 10, 0);
-	sharp_send_buffer(120, 40);
-	HAL_Delay(30000); // Delay to connect ST-Link probe
-	sharp_clear();
+  if (keycode == 49)
+  { // RESET with "F" button pressed
+    memset(buffer, 0xFF, BUFFER_SIZE);
+    sharp_string("Waiting ST-LINK", &font_24x40, 10, 0);
+    sharp_send_buffer(120, 40);
+    HAL_Delay(30000); // Delay to connect ST-Link probe
+    sharp_clear();
   }
 
   uint16_t last_keycode = keycode;
@@ -205,40 +210,44 @@ int main(void)
 
   while (1)
   {
-		uint16_t keycode = 0;
+    uint16_t keycode = 0;
 
-		switch_input();
+    switch_input();
 
-		HAL_Delay(10); // Debouncing delay in ms
+    HAL_Delay(10); // Debouncing delay in ms
 
-		keycode = scan_keyboard();
+    keycode = scan_keyboard();
 
-		if (keycode == 54 && off && last_keycode == 0) {  // Calculator was OFF and the ON button was pressed
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
-			HAL_Delay(1); // Wait while 5V rises
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // DISP signal to "ON"
-			delay_us(30);
-			keycode = 0;
-			off = 0;
-			sharp_clear();
-			calc_refresh();
-		}
-		int ret = 1;
+    if (keycode == 54 && off && last_keycode == 0)
+    {                                                      // Calculator was OFF and the ON button was pressed
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
+      HAL_Delay(1);                                        // Wait while 5V rises
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // DISP signal to "ON"
+      delay_us(30);
+      keycode = 0;
+      off = 0;
+      sharp_clear();
+      calc_refresh();
+    }
+    int ret = 1;
 
-		if (!off) {
+    if (!off)
+    {
 
-			if (keycode) {
-				ret = calc_on_key(keycode);
-			}
+      if (keycode)
+      {
+        ret = calc_on_key(keycode);
+      }
 
-			if (!ret) {  // OFF command received
+      if (!ret)
+      { // OFF command received
         LCD_power_off(1);
-				off = 1;
-			}
-		}
+        off = 1;
+      }
+    }
 
-		last_keycode = keycode;
-		//sys_sleep(off);
+    last_keycode = keycode;
+    // sys_sleep(off);
 
     /* USER CODE END WHILE */
 
@@ -248,24 +257,24 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE2) != HAL_OK)
   {
     Error_Handler();
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
+   */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
@@ -276,10 +285,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2
-                              |RCC_CLOCKTYPE_PCLK3;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_PCLK3;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -293,10 +300,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief ADC1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief ADC1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_ADC1_Init(void)
 {
 
@@ -311,7 +318,7 @@ static void MX_ADC1_Init(void)
   /* USER CODE END ADC1_Init 1 */
 
   /** Common config
-  */
+   */
   hadc1.Instance = ADC1;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.GainCompensation = 0;
@@ -333,7 +340,7 @@ static void MX_ADC1_Init(void)
   }
 
   /** Configure Regular Channel
-  */
+   */
   sConfig.Channel = ADC_CHANNEL_VREFINT;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_23CYCLES_5;
@@ -345,18 +352,18 @@ static void MX_ADC1_Init(void)
   }
   /* USER CODE BEGIN ADC1_Init 2 */
   // Calibrate ADC for better accuracy
-  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK) {
+  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
+  {
     Error_Handler();
   }
   /* USER CODE END ADC1_Init 2 */
-
 }
 
 /**
-  * @brief ICACHE Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief ICACHE Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_ICACHE_Init(void)
 {
 
@@ -369,7 +376,7 @@ static void MX_ICACHE_Init(void)
   /* USER CODE END ICACHE_Init 1 */
 
   /** Enable instruction cache in 1-way (direct mapped cache)
-  */
+   */
   if (HAL_ICACHE_ConfigAssociativityMode(ICACHE_1WAY) != HAL_OK)
   {
     Error_Handler();
@@ -381,16 +388,13 @@ static void MX_ICACHE_Init(void)
   /* USER CODE BEGIN ICACHE_Init 2 */
 
   /* USER CODE END ICACHE_Init 2 */
-
 }
 
-
-
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief GPIO Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -408,9 +412,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4
-                          |GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10
-                          |GPIO_PIN_15, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_15, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
@@ -420,14 +422,13 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PC13 PC14 PC15 PC8
                            PC9 PC10 PC11 PC12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_8
-                          |GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
+  GPIO_InitStruct.Pin = GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PH0 PH1 PH3 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_3;
+  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
@@ -440,7 +441,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PC2 PC6 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_6;
+  GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_6;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
@@ -453,8 +454,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PA0 PA2 PA3 PA4
                            PA5 PA8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4
-                          |GPIO_PIN_5|GPIO_PIN_8;
+  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -462,16 +462,14 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PA1 PA6 PA7 PA11
                            PA12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_11
-                          |GPIO_PIN_12;
+  GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB0 PB1 PB2 PB13
                            PB14 PB3 PB4 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_13
-                          |GPIO_PIN_14|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -490,7 +488,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PA9 PA10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+  GPIO_InitStruct.Pin = GPIO_PIN_9 | GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -511,7 +509,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB6 PB7 */
-  GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+  GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -558,25 +556,24 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
-	SystemClock_Config ();
-	HAL_ResumeTick();
-	HAL_PWR_DisableSleepOnExit();
+  SystemClock_Config();
+  HAL_ResumeTick();
+  HAL_PWR_DisableSleepOnExit();
 }
 
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {
-	SystemClock_Config ();
-	HAL_ResumeTick();
-	HAL_PWR_DisableSleepOnExit();
+  SystemClock_Config();
+  HAL_ResumeTick();
+  HAL_PWR_DisableSleepOnExit();
 }
-
 
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -588,14 +585,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
