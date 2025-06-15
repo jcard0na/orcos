@@ -754,6 +754,36 @@ void lcd_fill(uint8_t fill_pattern)
     memset(g_framebuffer, fill_pattern, sizeof(g_framebuffer));
 }
 
+void lcd_clear_buffer(void)
+{
+    lcd_fill(0x00);
+}
+
+// Sends line data to LCD.
+//
+// Parameters
+//     buf	Buffer with line data
+//
+// Buffer should be of LCD_LINE_BUF_SIZE.
+//
+// With following values:
+//
+//     [0] - reserved space for LCD write command
+//     [1] - LCD line number
+//     [2..51] - 50 bytes of LCD line data
+//     [52..53] - padding required by LCD hw
+//
+// Only line number and line data have to by filled by user.
+void LCD_write_line(uint8_t *buf)
+{
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+    delay_us(12);
+    HAL_SPI_Transmit(_hspi2, buf, LCD_LINE_BUF_SIZE, HAL_MAX_DELAY);
+    delay_us(4);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+    delay_us(4);
+}
+
 void __lcd_init()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable

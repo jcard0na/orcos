@@ -8,13 +8,20 @@ int get_vbat(void);
 
 #define LCD_WIDTH   400
 #define LCD_HEIGHT  240
+#define LCD_LINE_SIZE 50
+#define LCD_LINE_BUF_SIZE (LCD_LINE_SIZE + 4)
 
 void LCD_power_on(void);
 void LCD_power_off(int clear);
+
+
+// Sends one line data to LCD
+void LCD_write_line(uint8_t *buf);
 void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y);
 void lcd_refresh(void);
 void lcd_draw_test_pattern(uint8_t square_size);
 void lcd_fill(uint8_t fill_pattern);
+void lcd_clear_buffer(void);
 void lcd_invert_framebuffer(void);
 
 // Put calculator to sleep
