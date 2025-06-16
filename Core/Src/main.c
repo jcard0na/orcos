@@ -158,6 +158,7 @@ uint16_t scan_keyboard(void)
 int main(void)
 {
 
+  DEBUG_PRINT("Started...\n");
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -174,6 +175,7 @@ int main(void)
   /* USER CODE END Init */
 
   /* Configure the system clock */
+  DEBUG_PRINT("Config clocks...\n");
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
@@ -182,13 +184,13 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  DEBUG_PRINT("Initialize all peripherals...\n");
   MX_GPIO_Init();
   MX_ICACHE_Init();
   MX_ADC1_Init();
   orcos_init();
   /* USER CODE BEGIN 2 */
 
-  DEBUG_PRINT("Started...\n");
 
   LCD_power_on();
 
@@ -220,7 +222,6 @@ int main(void)
     HAL_Delay(10); // Debouncing delay in ms
 
     keycode = scan_keyboard();
-    DEBUG_PRINT("keycode pressed = %d\n", keycode);
 
     if (keycode == 54 && off && last_keycode == 0)
     {                                                      // Calculator was OFF and the ON button was pressed
@@ -251,7 +252,8 @@ int main(void)
     }
 
     last_keycode = keycode;
-    sys_sleep(off);
+    HAL_Delay(1000);
+    //sys_sleep(off);
 
     /* USER CODE END WHILE */
 
@@ -552,9 +554,6 @@ static void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI15_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI15_IRQn);
 
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
-  /* TIM1 interrupt is already enabled in NVIC by HAL_TIM_Base_Init() */
-  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */

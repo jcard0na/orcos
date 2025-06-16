@@ -115,19 +115,19 @@ static void SPI2_Init(void)
  */
 static void LPTIM1_Init(void)
 {
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
-    /* USER CODE BEGIN LPTIM1_Init 0 */
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LPTIM1;
+    PeriphClkInitStruct.Lptim1ClockSelection = RCC_LPTIM1CLKSOURCE_LSI;
+    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
-    /* USER CODE END LPTIM1_Init 0 */
+    __HAL_RCC_LPTIM1_CLK_ENABLE();
 
-    /* USER CODE BEGIN LPTIM1_Init 1 */
-
-    /* USER CODE END LPTIM1_Init 1 */
     hlptim1.Instance = LPTIM1;
     hlptim1.Init.Clock.Source = LPTIM_CLOCKSOURCE_APBCLOCK_LPOSC;
     hlptim1.Init.Clock.Prescaler = LPTIM_PRESCALER_DIV1;
     hlptim1.Init.Trigger.Source = LPTIM_TRIGSOURCE_SOFTWARE;
-    hlptim1.Init.Period = 16384;
+    hlptim1.Init.Period = 32000;
     hlptim1.Init.UpdateMode = LPTIM_UPDATE_IMMEDIATE;
     hlptim1.Init.CounterSource = LPTIM_COUNTERSOURCE_INTERNAL;
     hlptim1.Init.Input1Source = LPTIM_INPUT1SOURCE_GPIO;
@@ -137,9 +137,10 @@ static void LPTIM1_Init(void)
     {
         LCD_Error_Handler();
     }
-    /* USER CODE BEGIN LPTIM1_Init 2 */
 
-    /* USER CODE END LPTIM1_Init 2 */
+    // Enable LPTIM as an interrupt source
+    HAL_NVIC_SetPriority(LPTIM1_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(LPTIM1_IRQn);
 }
 
 /* String buffer (maximum 64 pixels high) */
@@ -559,8 +560,10 @@ void sharp_test_font(FontDef_t *font, char start_symbol)
     }
 }
 
-void HAL_LPTIM_CompareMatchCallback(LPTIM_HandleTypeDef *hlptim)
+void HAL_LPTIM_AutoReloadMatchCallback(LPTIM_HandleTypeDef *hlptim)
 {
+    HAL_LPTIM_IRQHandler(&hlptim1);
+    DEBUG_PRINT("-- LPTIM1: EXTIN toggle ---\n");
     if (!off)
     {
         timeout_counter++;
@@ -584,7 +587,8 @@ void LCD_power_on()
     sharp_init(&htim1, &hspi2);
     sharp_clear();
     HAL_TIM_Base_Start_IT(&htim1);
-    HAL_LPTIM_TimeOut_Start_IT(&hlptim1, 8192);
+    HAL_LPTIM_Counter_Start_IT(&hlptim1);
+    __HAL_LPTIM_ENABLE_IT(&hlptim1, LPTIM_IT_ARRM);
 }
 
 void LCD_power_off(int clear)
@@ -648,6 +652,10 @@ void lcd_refresh()
         // Chunk trailer
         frame_buffer[pos++] = 0x00;
 
+        // Stop EXTIN interrupts during framebuffer transfer
+        HAL_NVIC_DisableIRQ(LPTIM1_IRQn);
+        HAL_LPTIM_Counter_Stop_IT(&hlptim1);
+
         // Send chunk
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
         delay_us(12);
@@ -655,6 +663,11 @@ void lcd_refresh()
         delay_us(4);
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
         delay_us(4);
+
+        // Restore EXTIN interrupts after framebuffer transfer
+        HAL_NVIC_EnableIRQ(LPTIM1_IRQn);
+        HAL_LPTIM_Counter_Start_IT(&hlptim1);
+        __HAL_LPTIM_ENABLE_IT(&hlptim1, LPTIM_IT_ARRM);
     }
 }
 
