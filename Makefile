@@ -69,6 +69,8 @@ Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_pwr_ex.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_gtzc.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_icache.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_lptim.c \
+Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rtc.c \
+Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rtc_ex.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi_ex.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim.c \

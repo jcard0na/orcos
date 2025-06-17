@@ -55,6 +55,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+RTC_HandleTypeDef hrtc;
 
 /* USER CODE BEGIN PV */
 
