@@ -118,7 +118,7 @@ static void LPTIM1_Init(void)
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LPTIM1;
-    PeriphClkInitStruct.Lptim1ClockSelection = RCC_LPTIM1CLKSOURCE_LSI;
+    PeriphClkInitStruct.Lptim1ClockSelection = RCC_LPTIM1CLKSOURCE_LSE;
     HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
     __HAL_RCC_LPTIM1_CLK_ENABLE();
