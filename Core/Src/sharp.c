@@ -108,41 +108,6 @@ static void SPI2_Init(void)
     }
 }
 
-/**
- * @brief LPTIM1 Initialization Function
- * @param None
- * @retval None
- */
-static void LPTIM1_Init(void)
-{
-    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
-
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LPTIM1;
-    PeriphClkInitStruct.Lptim1ClockSelection = RCC_LPTIM1CLKSOURCE_LSE;
-    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
-
-    __HAL_RCC_LPTIM1_CLK_ENABLE();
-
-    hlptim1.Instance = LPTIM1;
-    hlptim1.Init.Clock.Source = LPTIM_CLOCKSOURCE_APBCLOCK_LPOSC;
-    hlptim1.Init.Clock.Prescaler = LPTIM_PRESCALER_DIV1;
-    hlptim1.Init.Trigger.Source = LPTIM_TRIGSOURCE_SOFTWARE;
-    hlptim1.Init.Period = 32000;
-    hlptim1.Init.UpdateMode = LPTIM_UPDATE_IMMEDIATE;
-    hlptim1.Init.CounterSource = LPTIM_COUNTERSOURCE_INTERNAL;
-    hlptim1.Init.Input1Source = LPTIM_INPUT1SOURCE_GPIO;
-    hlptim1.Init.Input2Source = LPTIM_INPUT2SOURCE_GPIO;
-    hlptim1.Init.RepetitionCounter = 0;
-    if (HAL_LPTIM_Init(&hlptim1) != HAL_OK)
-    {
-        LCD_Error_Handler();
-    }
-
-    // Enable LPTIM as an interrupt source
-    HAL_NVIC_SetPriority(LPTIM1_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(LPTIM1_IRQn);
-}
-
 /* String buffer (maximum 64 pixels high) */
 uint8_t buffer[BUFFER_SIZE];
 
@@ -587,8 +552,6 @@ void LCD_power_on()
     sharp_init(&htim1, &hspi2);
     sharp_clear();
     HAL_TIM_Base_Start_IT(&htim1);
-    HAL_LPTIM_Counter_Start_IT(&hlptim1);
-    __HAL_LPTIM_ENABLE_IT(&hlptim1, LPTIM_IT_ARRM);
 }
 
 void LCD_power_off(int clear)
@@ -653,8 +616,6 @@ void lcd_refresh()
         frame_buffer[pos++] = 0x00;
 
         // Stop EXTIN interrupts during framebuffer transfer
-        HAL_NVIC_DisableIRQ(LPTIM1_IRQn);
-        HAL_LPTIM_Counter_Stop_IT(&hlptim1);
 
         // Send chunk
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
@@ -665,9 +626,6 @@ void lcd_refresh()
         delay_us(4);
 
         // Restore EXTIN interrupts after framebuffer transfer
-        HAL_NVIC_EnableIRQ(LPTIM1_IRQn);
-        HAL_LPTIM_Counter_Start_IT(&hlptim1);
-        __HAL_LPTIM_ENABLE_IT(&hlptim1, LPTIM_IT_ARRM);
     }
 }
 
@@ -802,7 +760,6 @@ void __lcd_init()
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
     SPI2_Init();
     TIM1_Init();
-    LPTIM1_Init();
 
     // Clear framebuffer to white (all pixels off)
     lcd_fill(0xff);

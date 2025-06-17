@@ -179,6 +179,8 @@ int main(void)
   DEBUG_PRINT("Config clocks...\n");
   SystemClock_Config();
 
+  LL_RCC_SetRTCClockSource(LL_RCC_RTC_CLKSOURCE_LSE);
+
   /* USER CODE BEGIN SysInit */
   HAL_PWREx_ConfigSupply(PWR_SMPS_SUPPLY);
 
@@ -189,9 +191,10 @@ int main(void)
   MX_GPIO_Init();
   MX_ICACHE_Init();
   MX_ADC1_Init();
+  DEBUG_PRINT("Line: %d\n", __LINE__);
   orcos_init();
+  DEBUG_PRINT("Line: %d\n", __LINE__);
   /* USER CODE BEGIN 2 */
-
 
   LCD_power_on();
 
@@ -253,11 +256,11 @@ int main(void)
     }
 
     last_keycode = keycode;
-    #if DEBUG
+#if DEBUG
     // This is required to keep RTT debug messages flowing when in STOP mode :shrug:
     // https://community.st.com/t5/stm32-mcus-products/how-to-get-segger-rtt-to-work-with-sleep-modes-on-stm32l0/m-p/121639
     __HAL_RCC_GPDMA1_CLK_ENABLE();
-    #endif
+#endif
     sys_sleep(off);
 
     /* USER CODE END WHILE */
@@ -283,17 +286,24 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
+  HAL_PWR_EnableBkUpAccess(); // Required for LSE configuration
+  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_HIGH);
+
   /** Initializes the CPU, AHB and APB buses clocks
    */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
-  RCC_OscInitStruct.LSIDiv = RCC_LSI_DIV1;
+  RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+  // RCC_OscInitStruct.LSIState = RCC_LSI_ON;
+  // RCC_OscInitStruct.LSIDiv = RCC_LSI_DIV1;
+  DEBUG_PRINT("Line: %d\n", __LINE__);
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
+    DEBUG_PRINT("Failed to HAL_RCC_OscConfig\n");
     Error_Handler();
   }
+  DEBUG_PRINT("Line: %d\n", __LINE__);
 
   /** Initializes the CPU, AHB and APB buses clocks
    */
@@ -306,6 +316,18 @@ void SystemClock_Config(void)
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
+    Error_Handler();
+  }
+  DEBUG_PRINT("Line: %d\n", __LINE__);
+
+  // After enabling LSE but before peripheral init
+  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW); // Start with low drive strength
+  HAL_Delay(100);                              // Extra stabilization time
+
+  // Verify LSE is running
+  if (__HAL_RCC_GET_FLAG(RCC_FLAG_LSERDY) == RESET)
+  {
+    DEBUG_PRINT("LSE failed to start\n");
     Error_Handler();
   }
 }
@@ -558,7 +580,6 @@ static void MX_GPIO_Init(void)
 
   HAL_NVIC_SetPriority(EXTI15_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI15_IRQn);
-
 }
 
 /* USER CODE BEGIN 4 */
