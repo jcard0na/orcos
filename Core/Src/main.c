@@ -252,8 +252,12 @@ int main(void)
     }
 
     last_keycode = keycode;
-    HAL_Delay(1000);
-    //sys_sleep(off);
+    #if DEBUG
+    // This is required to keep RTT debug messages flowing when in STOP mode :shrug:
+    // https://community.st.com/t5/stm32-mcus-products/how-to-get-segger-rtt-to-work-with-sleep-modes-on-stm32l0/m-p/121639
+    __HAL_RCC_GPDMA1_CLK_ENABLE();
+    #endif
+    sys_sleep(off);
 
     /* USER CODE END WHILE */
 
