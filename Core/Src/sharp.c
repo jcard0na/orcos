@@ -809,14 +809,18 @@ void lcd_draw_test_pattern(uint8_t square_size)
     }
 }
 
-void lcd_fill(uint8_t fill_pattern)
+void lcd_fill(uint8_t color)
 {
-    memset(g_framebuffer, fill_pattern, sizeof(g_framebuffer));
+    if (color == BLACK) {
+        memset(g_framebuffer, 0x00, sizeof(g_framebuffer));
+    } else {
+        memset(g_framebuffer, 0xff, sizeof(g_framebuffer));
+    }
 }
 
 void lcd_clear_buffer(void)
 {
-    lcd_fill(0x00);
+    lcd_fill(WHITE);
 }
 
 // Sends line data to LCD.
@@ -852,8 +856,7 @@ void __lcd_init()
     TIM1_Init();
     HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 4095, RTC_WAKEUPCLOCK_RTCCLK_DIV8, 0);
 
-    // Clear framebuffer to white (all pixels off)
-    lcd_fill(0xff);
+    lcd_fill(WHITE);
 }
 
 void LCD_test_screen(uint16_t count)
@@ -873,10 +876,17 @@ void LCD_test_screen(uint16_t count)
     }
     if (count == 3)
     {
-        lcd_fill(0xff);
+        lcd_draw_test_pattern(32);
+        lcd_draw_img(rook_img, 32, 32, 7 * 32, 1 * 32, WHITE);
+        lcd_draw_img(rook_img, 32, 32, 2 * 32, 1 * 32, BLACK);
+        lcd_draw_img(rook_img, 32, 32, 3 * 32, 3 * 32, WHITE);
+        lcd_draw_img(rook_img, 32, 32, 4 * 32, 3 * 32, BLACK);
+        lcd_draw_img(rook_img, 32, 32, 5 * 32, 5 * 32, WHITE);
+        lcd_draw_img(rook_img, 32, 32, 6 * 32, 5 * 32, BLACK);
     }
     if (count == 4)
     {
+        lcd_clear_buffer();
         lcd_draw_img(pixel_data_bin, 400, 240, 0, 0, BLACK);
         lcd_draw_img(test_img, 32, 32, 0, 0, BLACK);
         lcd_draw_img(test_img, 32, 32, 50, 50, BLACK);
@@ -884,7 +894,7 @@ void LCD_test_screen(uint16_t count)
     }
     if (count == 5)
     {
-        lcd_fill(0xff);
+        lcd_clear_buffer();
         lcd_draw_img(test_img, 32, 32, 0, 0, BLACK);
         lcd_draw_img(test_img, 32, 32, 50, 50, WHITE);
         lcd_draw_img(test_img, 32, 32, 90, 90, BLACK);
@@ -892,6 +902,7 @@ void LCD_test_screen(uint16_t count)
     if (count == 6)
     {
         lcd_draw_img(pixel_data_bin, 400, 240, 0, 0, BLACK);
+        lcd_invert_framebuffer();
     }
     if (count == 7)
     {
@@ -917,6 +928,7 @@ void LCD_test_screen(uint16_t count)
                                      ((original & 0x20) >> 3) |
                                      ((original & 0x40) >> 5) |
                                      ((original & 0x80) >> 7);
+                line_buffer[2 + x] = ~line_buffer[2 + x];
             }
 
             // Send the line
