@@ -27,9 +27,9 @@ LPTIM_HandleTypeDef hlptim1;
 
 // 1bpp packed buffer (400x240 / 8 = 12,000 bytes)
 static uint8_t g_framebuffer[LCD_HEIGHT][LCD_WIDTH / 8];
-static int off = 0;
+extern int off;
 static int timeout_counter = 0;
-#define OFF_TIMEOUT (5 * 1) // 5 min timeout before switching off
+#define OFF_TIMEOUT (5 * 60) // 5 min timeout before switching off
 
 static void LCD_Error_Handler(void)
 {
@@ -114,14 +114,11 @@ static void SPI2_Init(void)
 /* String buffer (maximum 64 pixels high) */
 uint8_t buffer[BUFFER_SIZE];
 
-TIM_HandleTypeDef *_htim1;
-SPI_HandleTypeDef *_hspi2;
-
 /* Microsecond delay */
 void delay_us(uint16_t us)
 {
-    __HAL_TIM_SET_COUNTER(_htim1, 0); // set the counter value a 0
-    while (__HAL_TIM_GET_COUNTER(_htim1) < us)
+    __HAL_TIM_SET_COUNTER(&htim1, 0); // set the counter value a 0
+    while (__HAL_TIM_GET_COUNTER(&htim1) < us)
         ; // wait for the counter to reach the us input in the parameter
 }
 
@@ -136,25 +133,10 @@ void sharp_clear()
     uint8_t b[2] = {0x04, 0x00};
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(12);
-    HAL_SPI_Transmit(_hspi2, b, 2, 100);
+    HAL_SPI_Transmit(&hspi2, b, 2, 100);
     delay_us(4);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
     delay_us(4);
-}
-
-/* Initialise display: start timers, send "ON" signal, and call clear function.  */
-void sharp_init(TIM_HandleTypeDef *htim1, SPI_HandleTypeDef *hspi2)
-{
-    _htim1 = htim1;
-    _hspi2 = hspi2;
-
-    // Start microsecond timer without interrupts
-    HAL_TIM_Base_Start(_htim1);
-
-    delay_us(30);
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // DISP signal to "ON"
-    delay_us(30);
-    sharp_clear();
 }
 
 /* Send the string buffer content to the display via SPI interface.
@@ -194,7 +176,7 @@ void sharp_send_buffer(uint16_t y, uint16_t lines)
     // Send to display
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(12);
-    HAL_SPI_Transmit(_hspi2, buffer, size, 100);
+    HAL_SPI_Transmit(&hspi2, buffer, size, 100);
     delay_us(4);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
     delay_us(4);
@@ -542,7 +524,7 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
     HAL_RTC_GetTime(hrtc, &Time, RTC_FORMAT_BIN);
     // Do not skip reading the date: This triggers an update to the shadow registers!
     HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);  
-    SEGGER_RTT_printf(0, "hullo %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
+    SEGGER_RTT_printf(0, "wake up timer event %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
     if (!off)
     {
         timeout_counter++;
@@ -560,8 +542,9 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 void LCD_power_on()
 {
     DEBUG_PRINT("\n--- LDC_power_on() ---\n");
-    sharp_init(&htim1, &hspi2);
-    sharp_clear();
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
+    HAL_Delay(1);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // DISP signal to "ON"
     HAL_TIM_Base_Start_IT(&htim1);
     /* Configure wakeup interrupt */
     /* RTC Wakeup Interrupt Generation:
@@ -609,7 +592,7 @@ void lcd_refresh()
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(10);
     uint8_t nop = 0x00;
-    HAL_SPI_Transmit(_hspi2, &nop, 1, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(&hspi2, &nop, 1, HAL_MAX_DELAY);
     delay_us(10);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
     delay_us(10);
@@ -638,7 +621,7 @@ void lcd_refresh()
         // Send chunk
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
         delay_us(12);
-        HAL_SPI_Transmit(_hspi2, frame_buffer, pos, HAL_MAX_DELAY);
+        HAL_SPI_Transmit(&hspi2, frame_buffer, pos, HAL_MAX_DELAY);
         delay_us(4);
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
         delay_us(4);
@@ -771,7 +754,7 @@ void LCD_write_line(uint8_t *buf)
 {
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(12);
-    HAL_SPI_Transmit(_hspi2, buf, LCD_LINE_BUF_SIZE, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(&hspi2, buf, LCD_LINE_BUF_SIZE, HAL_MAX_DELAY);
     delay_us(4);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
     delay_us(4);
@@ -779,7 +762,6 @@ void LCD_write_line(uint8_t *buf)
 
 void __lcd_init()
 {
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
     SPI2_Init();
     TIM1_Init();
     HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 4095, RTC_WAKEUPCLOCK_RTCCLK_DIV8, 0);

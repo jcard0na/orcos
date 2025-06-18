@@ -238,14 +238,9 @@ int main(void)
 
     if (keycode == 54 && off && last_keycode == 0)
     {                                                      // Calculator was OFF and the ON button was pressed
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
-      HAL_Delay(1);                                        // Wait while 5V rises
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // DISP signal to "ON"
-      delay_us(30);
+      LCD_power_on();
       keycode = 0;
       off = 0;
-      sharp_clear();
-      calc_refresh();
     }
     int ret = 1;
 
