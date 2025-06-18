@@ -193,9 +193,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ICACHE_Init();
-  DEBUG_PRINT("Line: %d\n", __LINE__);
   MX_RTC_Init();
-  DEBUG_PRINT("Line: %d\n", __LINE__);
   MX_ADC1_Init();
   orcos_init();
   /* USER CODE BEGIN 2 */
@@ -324,7 +322,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  DEBUG_PRINT("Line: %d\n", __LINE__);
 
   // Verify LSE is running
   if (__HAL_RCC_GET_FLAG(RCC_FLAG_LSERDY) == RESET)
