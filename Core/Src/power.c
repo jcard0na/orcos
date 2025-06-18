@@ -38,6 +38,7 @@ void sys_sleep(int off) {
 	// e.g. OD pins with external pull-ups take a long time to change state
     delay_us(100);
 
+	// Go back to STOP mode after interrupt completes
 	HAL_PWR_EnableSleepOnExit();
 	HAL_SuspendTick();
 

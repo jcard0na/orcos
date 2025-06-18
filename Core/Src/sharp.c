@@ -631,8 +631,6 @@ void lcd_refresh()
         // Chunk trailer
         frame_buffer[pos++] = 0x00;
 
-        // Stop EXTIN interrupts during framebuffer transfer
-
         // Send chunk
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
         delay_us(12);
@@ -640,8 +638,6 @@ void lcd_refresh()
         delay_us(4);
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
         delay_us(4);
-
-        // Restore EXTIN interrupts after framebuffer transfer
     }
 }
 

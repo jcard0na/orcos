@@ -269,11 +269,9 @@ int main(void)
     __HAL_RCC_GPDMA1_CLK_ENABLE();
 #endif
     sys_sleep(off);
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    DEBUG_PRINT("wakeup");
   }
   /* USER CODE END 3 */
 }
@@ -660,6 +658,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
   SystemClock_Config();
   HAL_ResumeTick();
   HAL_PWR_DisableSleepOnExit();
+  // We should now wake up from STOP
 }
 
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
@@ -668,6 +667,7 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
   SystemClock_Config();
   HAL_ResumeTick();
   HAL_PWR_DisableSleepOnExit();
+  // We should now wake up from STOP
 }
 
 /* USER CODE END 4 */
