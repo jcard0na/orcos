@@ -11,13 +11,17 @@ int get_vbat(void);
 #define LCD_LINE_SIZE 50
 #define LCD_LINE_BUF_SIZE (LCD_LINE_SIZE + 4)
 
+/* Color Constants */
+#define BLACK 0  // '1' bits will set display pixels (black)
+#define WHITE 1  // '1' bits will clear display pixels (white)
+
 void LCD_power_on(void);
 void LCD_power_off(int clear);
 
 
 // Sends one line data to LCD
 void LCD_write_line(uint8_t *buf);
-void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y);
+void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
 void lcd_refresh(void);
 void lcd_draw_test_pattern(uint8_t square_size);
 void lcd_fill(uint8_t fill_pattern);
@@ -28,6 +32,8 @@ void lcd_invert_framebuffer(void);
 // off: if non-zero, only wake on ON key
 // off: if zero, wake on any key
 void sys_sleep(int off);
+
+void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc) __attribute__((used, noinline));
 
 // Main library init function
 void orcos_init();

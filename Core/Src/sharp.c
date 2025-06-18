@@ -26,8 +26,8 @@ TIM_HandleTypeDef htim1;
 SPI_HandleTypeDef hspi2;
 LPTIM_HandleTypeDef hlptim1;
 
-static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y);
-static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y);
+static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
+static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
 static uint8_t reverse_bits(uint8_t b);
 
 // 1bpp packed buffer (400x240 / 8 = 12,000 bytes)
@@ -43,7 +43,6 @@ static void LCD_Error_Handler(void)
     {
     }
 }
-
 
 static void TIM1_Init(void)
 {
@@ -528,7 +527,7 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
     /* Get the RTC calendar time */
     HAL_RTC_GetTime(hrtc, &Time, RTC_FORMAT_BIN);
     // Do not skip reading the date: This triggers an update to the shadow registers!
-    HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);  
+    HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);
     SEGGER_RTT_printf(0, "wake up timer event %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
     if (!off)
     {
@@ -555,7 +554,8 @@ void LCD_power_on()
     /* RTC Wakeup Interrupt Generation:
       (2047 + 1) × (16 / 32768) = 1.000 seconds
     */
-    if (HAL_RTC_RegisterCallback(&hrtc, HAL_RTC_WAKEUPTIMER_EVENT_CB_ID, WakeUpTimerEventCallback) != HAL_OK) {
+    if (HAL_RTC_RegisterCallback(&hrtc, HAL_RTC_WAKEUPTIMER_EVENT_CB_ID, WakeUpTimerEventCallback) != HAL_OK)
+    {
         LCD_Error_Handler();
     }
     HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 2047, RTC_WAKEUPCLOCK_RTCCLK_DIV16, 0);
@@ -633,41 +633,59 @@ void lcd_refresh()
     }
 }
 
-/* LCD Image Drawing Functions */
 /**
- * @brief Draws a 1bpp image to the LCD framebuffer
+ * @brief Draws a 1bpp image to the LCD framebuffer with color option
  * @param img Pointer to 1bpp bitmap (LSB-first packed)
  * @param w Width in pixels
  * @param h Height in pixels
  * @param x X position (0-399)
  * @param y Y position (0-239)
- * @note '1' bits draw black, '0' bits are transparent
+ * @param color BLACK (1=set) or WHITE (1=clear)
+ * @note '0' bits are always transparent
  */
-void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y) {
-    if (img == NULL || x >= LCD_WIDTH || y >= LCD_HEIGHT) return;
-    
-    if ((x % 8) == 0 && (w % 8) == 0) {
-        lcd_draw_img_aligned(img, w, h, x, y);
-    } else {
-        lcd_draw_img_unaligned(img, w, h, x, y);
+void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color)
+{
+    if (img == NULL || x >= LCD_WIDTH || y >= LCD_HEIGHT)
+        return;
+
+    if ((x % 8) == 0 && (w % 8) == 0)
+    {
+        lcd_draw_img_aligned(img, w, h, x, y, color);
+    }
+    else
+    {
+        lcd_draw_img_unaligned(img, w, h, x, y, color);
     }
 }
 
 /* Optimized aligned version */
-static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y) {
+static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color)
+{
     uint32_t img_stride = w / 8;
     uint32_t dest_x = x / 8;
-    
-    for (uint32_t dy = 0; dy < h; dy++) {
+
+    for (uint32_t dy = 0; dy < h; dy++)
+    {
         uint32_t dest_y = y + dy;
-        if (dest_y >= LCD_HEIGHT) break;
-        
-        for (uint32_t sx = 0; sx < img_stride; sx++) {
+        if (dest_y >= LCD_HEIGHT)
+            break;
+
+        for (uint32_t sx = 0; sx < img_stride; sx++)
+        {
             uint8_t src_byte = reverse_bits(img[dy * img_stride + sx]);
-            if (src_byte) {  // Only process if pixels need drawing
+            if (src_byte)
+            {
                 uint32_t dx = dest_x + sx;
-                if (dx < (LCD_WIDTH/8)) {
-                    g_framebuffer[dest_y][dx] &= ~src_byte;
+                if (dx < (LCD_WIDTH / 8))
+                {
+                    if (color == BLACK)
+                    {
+                        g_framebuffer[dest_y][dx] &= ~src_byte; // Clear bits for white
+                    }
+                    else
+                    {
+                        g_framebuffer[dest_y][dx] |= src_byte; // Set bits for black
+                    }
                 }
             }
         }
@@ -675,31 +693,63 @@ static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uin
 }
 
 /* General unaligned version */
-static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y) {
+static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color)
+{
     uint32_t img_stride = (w + 7) / 8;
     uint8_t x_align = x % 8;
 
-    for (uint32_t dy = 0; dy < h; dy++) {
+    for (uint32_t dy = 0; dy < h; dy++)
+    {
         uint32_t dest_y = y + dy;
-        if (dest_y >= LCD_HEIGHT) continue;
+        if (dest_y >= LCD_HEIGHT)
+            continue;
 
-        for (uint32_t sx = 0; sx < img_stride; sx++) {
+        for (uint32_t sx = 0; sx < img_stride; sx++)
+        {
             uint8_t img_byte = reverse_bits(img[dy * img_stride + sx]);
-            if (img_byte == 0) continue;
+            if (img_byte == 0)
+                continue;
 
             uint32_t dest_byte = (x / 8) + sx;
-            
-            if (x_align == 0) {
-                if (dest_byte < (LCD_WIDTH / 8)) {
-                    g_framebuffer[dest_y][dest_byte] &= ~img_byte;
+
+            if (x_align == 0)
+            {
+                if (dest_byte < (LCD_WIDTH / 8))
+                {
+                    if (color == BLACK)
+                    {
+                        g_framebuffer[dest_y][dest_byte] &= ~img_byte;
+                    }
+                    else
+                    {
+                        g_framebuffer[dest_y][dest_byte] |= img_byte;
+                    }
                 }
-            } else {
+            }
+            else
+            {
                 uint8_t shift = x_align;
-                if (dest_byte < (LCD_WIDTH / 8)) {
-                    g_framebuffer[dest_y][dest_byte] &= ~(img_byte << shift);
+                if (dest_byte < (LCD_WIDTH / 8))
+                {
+                    if (color == BLACK)
+                    {
+                        g_framebuffer[dest_y][dest_byte] |= (img_byte << shift);
+                    }
+                    else
+                    {
+                        g_framebuffer[dest_y][dest_byte] &= ~(img_byte << shift);
+                    }
                 }
-                if (dest_byte + 1 < (LCD_WIDTH / 8)) {
-                    g_framebuffer[dest_y][dest_byte + 1] &= ~(img_byte >> (8 - shift));
+                if (dest_byte + 1 < (LCD_WIDTH / 8))
+                {
+                    if (color == BLACK)
+                    {
+                        g_framebuffer[dest_y][dest_byte + 1] |= (img_byte >> (8 - shift));
+                    }
+                    else
+                    {
+                        g_framebuffer[dest_y][dest_byte + 1] &= ~(img_byte >> (8 - shift));
+                    }
                 }
             }
         }
@@ -707,7 +757,8 @@ static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, u
 }
 
 /* Bit reversal helper */
-static uint8_t reverse_bits(uint8_t b) {
+static uint8_t reverse_bits(uint8_t b)
+{
     b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
     b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
     b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
@@ -785,7 +836,7 @@ void lcd_clear_buffer(void)
 // Only line number and line data have to by filled by user.
 void LCD_write_line(uint8_t *buf)
 {
-    buf[0] = 0x1;  // Write Line command
+    buf[0] = 0x1; // Write Line command
     buf[52] = buf[53] = 0;
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(12);
@@ -805,73 +856,73 @@ void __lcd_init()
     lcd_fill(0xff);
 }
 
-
 void LCD_test_screen(uint16_t count)
 {
-	count = count % 8;
-	if (count == 0)
-	{
-		lcd_draw_test_pattern(8);
-	}
-	if (count == 1)
-	{
-		lcd_draw_test_pattern(16);
-	}
-	if (count == 2)
-	{
-		lcd_draw_test_pattern(32);
-	}
-	if (count == 3)
-	{
-		lcd_fill(0xff);
-	}
-	if (count == 4)
-	{
-		lcd_draw_img(pixel_data_bin, 400, 240, 0, 0);
-		lcd_draw_img(test_img, 32, 32, 0, 0);
-		lcd_draw_img(test_img, 32, 32, 50, 50);
-		lcd_draw_img(test_img, 32, 32, 90, 90);
-	}
-	if (count == 5)
-	{
-		lcd_fill(0xff);
-		lcd_draw_img(test_img, 32, 32, 0, 0);
-		lcd_draw_img(test_img, 32, 32, 50, 50);
-		lcd_draw_img(test_img, 32, 32, 90, 90);
-	}
-	if (count == 6)
-	{
-		lcd_draw_img(pixel_data_bin, 400, 240, 0, 0);
-	}
-	if (count == 7)
-	{
-		// Draw test image line by line using LCD_write_line
-		uint8_t line_buffer[LCD_LINE_BUF_SIZE] = {0};
+    count = count % 8;
+    if (count == 0)
+    {
+        lcd_draw_test_pattern(8);
+    }
+    if (count == 1)
+    {
+        lcd_draw_test_pattern(16);
+    }
+    if (count == 2)
+    {
+        lcd_draw_test_pattern(32);
+    }
+    if (count == 3)
+    {
+        lcd_fill(0xff);
+    }
+    if (count == 4)
+    {
+        lcd_draw_img(pixel_data_bin, 400, 240, 0, 0, BLACK);
+        lcd_draw_img(test_img, 32, 32, 0, 0, BLACK);
+        lcd_draw_img(test_img, 32, 32, 50, 50, BLACK);
+        lcd_draw_img(test_img, 32, 32, 90, 90, WHITE);
+    }
+    if (count == 5)
+    {
+        lcd_fill(0xff);
+        lcd_draw_img(test_img, 32, 32, 0, 0, BLACK);
+        lcd_draw_img(test_img, 32, 32, 50, 50, WHITE);
+        lcd_draw_img(test_img, 32, 32, 90, 90, BLACK);
+    }
+    if (count == 6)
+    {
+        lcd_draw_img(pixel_data_bin, 400, 240, 0, 0, BLACK);
+    }
+    if (count == 7)
+    {
+        // Draw test image line by line using LCD_write_line
+        uint8_t line_buffer[LCD_LINE_BUF_SIZE] = {0};
 
-		// Loop through each line of the test image
-		for (int y = 0; y < 240; y++)
-		{
-			// Set line number (1-based)
-			line_buffer[1] = y + 1;
+        // Loop through each line of the test image
+        for (int y = 0; y < 240; y++)
+        {
+            // Set line number (1-based)
+            line_buffer[1] = y + 1;
 
-			// Copy one line swapping byte order
-			for (int x = 0; x < LCD_LINE_SIZE; x++) {
+            // Copy one line swapping byte order
+            for (int x = 0; x < LCD_LINE_SIZE; x++)
+            {
                 uint8_t original = pixel_data_bin[y * LCD_LINE_SIZE + x];
                 // Reverse bits in each byte
                 line_buffer[2 + x] = ((original & 0x01) << 7) |
-                                    ((original & 0x02) << 5) |
-                                    ((original & 0x04) << 3) |
-                                    ((original & 0x08) << 1) |
-                                    ((original & 0x10) >> 1) |
-                                    ((original & 0x20) >> 3) |
-                                    ((original & 0x40) >> 5) |
-                                    ((original & 0x80) >> 7);
+                                     ((original & 0x02) << 5) |
+                                     ((original & 0x04) << 3) |
+                                     ((original & 0x08) << 1) |
+                                     ((original & 0x10) >> 1) |
+                                     ((original & 0x20) >> 3) |
+                                     ((original & 0x40) >> 5) |
+                                     ((original & 0x80) >> 7);
             }
 
-			// Send the line
-			LCD_write_line(line_buffer);
-		}
-	}
-	if (count < 7)
-		lcd_refresh();
+            // Send the line
+            LCD_write_line(line_buffer);
+        }
+    }
+    if (count < 7)
+        lcd_refresh();
 }
