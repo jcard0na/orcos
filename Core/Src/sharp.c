@@ -14,11 +14,13 @@
 #include "fonts.h"
 #include "sharp.h"
 #include "orcos.h"
+#include "stm32u3xx_hal_rtc_ex.h"
 
 #if DEBUG
 #include "SEGGER_RTT.h"
 #endif
 
+extern RTC_HandleTypeDef hrtc;
 TIM_HandleTypeDef htim1;
 SPI_HandleTypeDef hspi2;
 LPTIM_HandleTypeDef hlptim1;
@@ -525,10 +527,16 @@ void sharp_test_font(FontDef_t *font, char start_symbol)
     }
 }
 
-void HAL_LPTIM_AutoReloadMatchCallback(LPTIM_HandleTypeDef *hlptim)
+void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
-    HAL_LPTIM_IRQHandler(&hlptim1);
     DEBUG_PRINT("-- LPTIM1: EXTIN toggle ---\n");
+    RTC_TimeTypeDef Time;
+    RTC_DateTypeDef Date;
+    /* Get the RTC calendar time */
+    HAL_RTC_GetTime(hrtc, &Time, RTC_FORMAT_BIN);
+    // Do not skip reading the date: This triggers an update to the shadow registers!
+    HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);  
+    SEGGER_RTT_printf(0, "hullo %02d:%02d!\n", Time.Minutes, Time.Seconds);
     if (!off)
     {
         timeout_counter++;
@@ -552,13 +560,21 @@ void LCD_power_on()
     sharp_init(&htim1, &hspi2);
     sharp_clear();
     HAL_TIM_Base_Start_IT(&htim1);
+    /* Configure wakeup interrupt */
+    /* RTC Wakeup Interrupt Generation:
+      (2047 + 1) × (16 / 32768) = 1.000 seconds
+    */
+    if (HAL_RTC_RegisterCallback(&hrtc, HAL_RTC_WAKEUPTIMER_EVENT_CB_ID, WakeUpTimerEventCallback) != HAL_OK) {
+        LCD_Error_Handler();
+    }
+    HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 2047, RTC_WAKEUPCLOCK_RTCCLK_DIV16, 0);
 }
 
 void LCD_power_off(int clear)
 {
     DEBUG_PRINT("\n--- LDC_power_off() ---\n");
     // XXX: this prevents waking up form STOP2
-    //HAL_TIM_Base_Stop_IT(&htim1); // Stop the timer
+    // HAL_TIM_Base_Stop_IT(&htim1); // Stop the timer
     delay_us(30);
     if (clear)
         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET); // DISP signal to "OFF"
@@ -568,19 +584,19 @@ void LCD_power_off(int clear)
 }
 
 /* Send the entire frame buffer content to the display via SPI interface.
- * Uses a configurable number of SPI transfers in case we need to reduce RAM usage. 
+ * Uses a configurable number of SPI transfers in case we need to reduce RAM usage.
  * Reference: https://www.embeddedartists.com/wp-content/uploads/2018/06/Memory_LCD_Programming.pdf
  */
 void lcd_refresh()
 {
-    // This should be a divisor of 240.  240 means a single transfer, which would mean fastest
-    // speed but highest RAM usage
-    #define CHUNK_SIZE_IN_LINES 240
-    
-    // Calculate buffer size based on chunk size
-    #define CHUNK_BUFFER_SIZE (1 + CHUNK_SIZE_IN_LINES * (1 + LCD_WIDTH / 8 + 1) + 1)
+// This should be a divisor of 240.  240 means a single transfer, which would mean fastest
+// speed but highest RAM usage
+#define CHUNK_SIZE_IN_LINES 240
+
+// Calculate buffer size based on chunk size
+#define CHUNK_BUFFER_SIZE (1 + CHUNK_SIZE_IN_LINES * (1 + LCD_WIDTH / 8 + 1) + 1)
     static uint8_t frame_buffer[CHUNK_BUFFER_SIZE];
-    
+
     const int total_lines = LCD_HEIGHT;
     const int chunk_size = CHUNK_SIZE_IN_LINES;
     const int num_chunks = (total_lines + chunk_size - 1) / chunk_size; // Round up
@@ -598,17 +614,17 @@ void lcd_refresh()
     {
         int pos = 0;
         int start_line = chunk * chunk_size;
-        int lines_in_chunk = (chunk == num_chunks - 1) ? 
-                           (total_lines - start_line) : chunk_size;
+        int lines_in_chunk = (chunk == num_chunks - 1) ? (total_lines - start_line) : chunk_size;
 
         // Command byte
         frame_buffer[pos++] = 0x01; // Write command
 
         // Fill chunk data
-        for (int y = 0; y < lines_in_chunk; y++) {
+        for (int y = 0; y < lines_in_chunk; y++)
+        {
             frame_buffer[pos++] = start_line + y + 1; // 1-based line number
-            memcpy(&frame_buffer[pos], g_framebuffer[start_line + y], LCD_WIDTH/8);
-            pos += LCD_WIDTH/8;
+            memcpy(&frame_buffer[pos], g_framebuffer[start_line + y], LCD_WIDTH / 8);
+            pos += LCD_WIDTH / 8;
             frame_buffer[pos++] = 0x00; // Line trailer
         }
 
@@ -657,20 +673,24 @@ void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32
             img_byte = (img_byte & 0xF0) >> 4 | (img_byte & 0x0F) << 4;
             img_byte = (img_byte & 0xCC) >> 2 | (img_byte & 0x33) << 2;
             img_byte = (img_byte & 0xAA) >> 1 | (img_byte & 0x55) << 1;
-            
+
             uint32_t dest_byte = (x / 8) + src_byte;
-            
+
             if (dest_byte >= (LCD_WIDTH / 8))
                 continue;
 
-            if (x_align == 0) {
+            if (x_align == 0)
+            {
                 // Simple case - aligned x position
                 g_framebuffer[dest_y][dest_byte] = img_byte;
-            } else {
+            }
+            else
+            {
                 // Unaligned case - shift bits between bytes
                 uint8_t shift = x_align;
                 g_framebuffer[dest_y][dest_byte] |= (img_byte << shift);
-                if (dest_byte + 1 < (LCD_WIDTH / 8)) {
+                if (dest_byte + 1 < (LCD_WIDTH / 8))
+                {
                     g_framebuffer[dest_y][dest_byte + 1] |= (img_byte >> (8 - shift));
                 }
             }
@@ -683,8 +703,10 @@ void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32
  */
 void lcd_invert_framebuffer(void)
 {
-    for (int y = 0; y < LCD_HEIGHT; y++) {
-        for (int x_byte = 0; x_byte < (LCD_WIDTH / 8); x_byte++) {
+    for (int y = 0; y < LCD_HEIGHT; y++)
+    {
+        for (int x_byte = 0; x_byte < (LCD_WIDTH / 8); x_byte++)
+        {
             g_framebuffer[y][x_byte] = ~g_framebuffer[y][x_byte];
         }
     }
@@ -760,6 +782,7 @@ void __lcd_init()
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
     SPI2_Init();
     TIM1_Init();
+    HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 4095, RTC_WAKEUPCLOCK_RTCCLK_DIV8, 0);
 
     // Clear framebuffer to white (all pixels off)
     lcd_fill(0xff);

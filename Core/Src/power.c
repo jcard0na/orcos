@@ -40,6 +40,19 @@ void sys_sleep(int off) {
 
 	HAL_PWR_EnableSleepOnExit();
 	HAL_SuspendTick();
+
+    // /* Disable all used wakeup source */
+	// extern RTC_HandleTypeDef hrtc;
+    // HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
+    // /* Clear all related wakeup flags */
+    // __HAL_PWR_CLEAR_FLAG(PWR_FLAG_STOPF);
+
+    // /* Re-enable wakeup source */
+    // /* ## Setting the Wake up time ############################################*/
+    // /* RTC Wakeup Interrupt Generation:
+    //   (2047 + 1) × (16 / 32768) = 1.000 seconds
+    // */
+    // HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 2047, RTC_WAKEUPCLOCK_RTCCLK_DIV16, 0);
 	HAL_DBGMCU_EnableDBGStopMode();
 	DEBUG_PRINT("--- sleep (off = %d)---\n", off);
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERMODE_STOP2, PWR_STOPENTRY_WFI);

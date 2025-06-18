@@ -75,6 +75,8 @@ const uint16_t column_pin_array[NUM_COLUMN_PINS] = {
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ICACHE_Init(void);
+static void MX_RTC_Init(void);
+static void RTC_Config(void);
 static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -179,24 +181,29 @@ int main(void)
   DEBUG_PRINT("Config clocks...\n");
   SystemClock_Config();
 
-  LL_RCC_SetRTCClockSource(LL_RCC_RTC_CLKSOURCE_LSE);
-
   /* USER CODE BEGIN SysInit */
   HAL_PWREx_ConfigSupply(PWR_SMPS_SUPPLY);
 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  DEBUG_PRINT("Initialize all peripherals...\n");
   MX_GPIO_Init();
   MX_ICACHE_Init();
+  DEBUG_PRINT("Line: %d\n", __LINE__);
+  MX_RTC_Init();
+  DEBUG_PRINT("Line: %d\n", __LINE__);
   MX_ADC1_Init();
-  DEBUG_PRINT("Line: %d\n", __LINE__);
   orcos_init();
-  DEBUG_PRINT("Line: %d\n", __LINE__);
   /* USER CODE BEGIN 2 */
 
+  RTC_Config();
   LCD_power_on();
+
+  // Verify RTC is running
+  if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR0) != 0x32F2) {
+    DEBUG_PRINT("RTC not initialized properly\n");
+    Error_Handler();
+  }
 
   uint16_t keycode = scan_keyboard();
   if (keycode == 49)
@@ -266,6 +273,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    DEBUG_PRINT("wakeup");
   }
   /* USER CODE END 3 */
 }
@@ -281,13 +289,13 @@ void SystemClock_Config(void)
 
   /** Configure the main internal regulator output voltage
    */
-  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE2) != HAL_OK)
+  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
   {
     Error_Handler();
   }
 
   HAL_PWR_EnableBkUpAccess(); // Required for LSE configuration
-  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_HIGH);
+  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
 
   /** Initializes the CPU, AHB and APB buses clocks
    */
@@ -295,15 +303,11 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
-  // RCC_OscInitStruct.LSIState = RCC_LSI_ON;
-  // RCC_OscInitStruct.LSIDiv = RCC_LSI_DIV1;
-  DEBUG_PRINT("Line: %d\n", __LINE__);
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     DEBUG_PRINT("Failed to HAL_RCC_OscConfig\n");
     Error_Handler();
   }
-  DEBUG_PRINT("Line: %d\n", __LINE__);
 
   /** Initializes the CPU, AHB and APB buses clocks
    */
@@ -319,10 +323,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   DEBUG_PRINT("Line: %d\n", __LINE__);
-
-  // After enabling LSE but before peripheral init
-  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW); // Start with low drive strength
-  HAL_Delay(100);                              // Extra stabilization time
 
   // Verify LSE is running
   if (__HAL_RCC_GET_FLAG(RCC_FLAG_LSERDY) == RESET)
@@ -580,9 +580,80 @@ static void MX_GPIO_Init(void)
 
   HAL_NVIC_SetPriority(EXTI15_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI15_IRQn);
+
+  // This happens later
+  // HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
+  // HAL_NVIC_EnableIRQ(RTC_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
+/**
+ * @brief  RTC Configuration
+ *         RTC Clocked by LSE (see HAL_RTC_MspInit)
+ * @param  None
+ * @retval None
+ */
+static void RTC_Config(void)
+{
+  /* Configure RTC */
+  /* after MX_RTC_Init : this not done in the MX_RTC_Init*/
+
+  /*##-2- Enable the RTC peripheral Clock ####################################*/
+  /* Enable RTC Clock */
+  __HAL_RCC_RTC_ENABLE();
+  __HAL_RCC_RTCAPB_CLK_ENABLE();
+
+  /*##-3- Configure the NVIC for RTC Alarm ###################################*/
+  HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(RTC_IRQn);
+}
+/**
+ * @brief RTC Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_RTC_Init(void)
+{
+
+  /* USER CODE BEGIN RTC_Init 0 */
+  HAL_PWR_EnableBkUpAccess();
+  /* USER CODE END RTC_Init 0 */
+
+  RTC_PrivilegeStateTypeDef privilegeState = {0};
+
+  /* USER CODE BEGIN RTC_Init 1 */
+
+  /* USER CODE END RTC_Init 1 */
+
+  /** Initialize RTC Only
+   */
+  hrtc.Instance = RTC;
+  hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
+  hrtc.Init.AsynchPrediv = RTC_ASYNCH_PREDIV;
+  hrtc.Init.SynchPrediv = RTC_SYNCH_PREDIV;
+  hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
+  hrtc.Init.OutPutRemap = RTC_OUTPUT_REMAP_NONE;
+  hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+  hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+  hrtc.Init.OutPutPullUp = RTC_OUTPUT_PULLUP_NONE;
+  hrtc.Init.BinMode = RTC_BINARY_NONE;
+  if (HAL_RTC_Init(&hrtc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  privilegeState.rtcPrivilegeFull = RTC_PRIVILEGE_FULL_NO;
+  privilegeState.backupRegisterPrivZone = RTC_PRIVILEGE_BKUP_ZONE_NONE;
+  privilegeState.backupRegisterStartZone2 = RTC_BKP_DR0;
+  privilegeState.backupRegisterStartZone3 = RTC_BKP_DR0;
+  if (HAL_RTCEx_PrivilegeModeSet(&hrtc, &privilegeState) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN RTC_Init 2 */
+
+  /* USER CODE END RTC_Init 2 */
+}
+
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
   DEBUG_PRINT("INT Rising\n");

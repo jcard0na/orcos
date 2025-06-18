@@ -41,7 +41,8 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+#define RTC_ASYNCH_PREDIV    0x7F
+#define RTC_SYNCH_PREDIV     0x00F9  /* 32 kHz RC/128 - 1 */
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

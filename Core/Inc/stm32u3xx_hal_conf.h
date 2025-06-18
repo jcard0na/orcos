@@ -227,7 +227,11 @@
 #define  USE_HAL_RAMCFG_REGISTER_CALLBACKS        0U /* RAMCFG register callback disabled    */
 #define  USE_HAL_RCC_REGISTER_CALLBACKS           0U /* RCC register callback disabled       */
 #define  USE_HAL_RNG_REGISTER_CALLBACKS           0U /* RNG register callback disabled       */
-#define  USE_HAL_RTC_REGISTER_CALLBACKS           0U /* RTC register callback disabled       */
+/* The RTC callback might be in a separate library than the HAL code.  In that case
+   we cannot use the default callback name, as it will not be picked up over the weakly
+   defined callback.
+   */
+#define  USE_HAL_RTC_REGISTER_CALLBACKS           1U /* RTC register callback enabled        */
 #define  USE_HAL_SAI_REGISTER_CALLBACKS           0U /* SAI register callback disabled       */
 #define  USE_HAL_SD_REGISTER_CALLBACKS            0U /* SD register callback disabled        */
 #define  USE_HAL_SMARTCARD_REGISTER_CALLBACKS     0U /* SMARTCARD register callback disabled */
