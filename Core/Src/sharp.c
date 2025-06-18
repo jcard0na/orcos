@@ -876,13 +876,16 @@ void LCD_test_screen(uint16_t count)
     }
     if (count == 3)
     {
-        lcd_draw_test_pattern(32);
-        lcd_draw_img(rook_img, 32, 32, 7 * 32, 1 * 32, WHITE);
-        lcd_draw_img(rook_img, 32, 32, 2 * 32, 1 * 32, BLACK);
-        lcd_draw_img(rook_img, 32, 32, 3 * 32, 3 * 32, WHITE);
-        lcd_draw_img(rook_img, 32, 32, 4 * 32, 3 * 32, BLACK);
-        lcd_draw_img(rook_img, 32, 32, 5 * 32, 5 * 32, WHITE);
-        lcd_draw_img(rook_img, 32, 32, 6 * 32, 5 * 32, BLACK);
+        for (int i = 0; i < 9; i++) {
+            lcd_refresh();
+            lcd_draw_test_pattern(32);
+            lcd_draw_img(rook_img, 32, 32, 7 * 32, 1 * 32 + i * 16, WHITE);
+            lcd_draw_img(rook_img, 32, 32, 2 * 32 + i * 16, 1 * 32 + i * 16, BLACK);
+            lcd_draw_img(rook_img, 32, 32, 3 * 32 + i*8, 3 * 32 + i*8, WHITE);
+            lcd_draw_img(rook_img, 32, 32, 4 * 32, 3 * 32 + i*8, BLACK);
+            lcd_draw_img(rook_img, 32, 32, 5 * 32 - i*8, 5 * 32, WHITE);
+            lcd_draw_img(rook_img, 32, 32, 6 * 32 - i*16, 5 * 32, BLACK);
+        }
     }
     if (count == 4)
     {
