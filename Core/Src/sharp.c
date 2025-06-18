@@ -15,6 +15,7 @@
 #include "sharp.h"
 #include "orcos.h"
 #include "stm32u3xx_hal_rtc_ex.h"
+#include "openrpncalc.h"
 
 #if DEBUG
 #include "SEGGER_RTT.h"
@@ -770,4 +771,72 @@ void __lcd_init()
 
     // Clear framebuffer to white (all pixels off)
     lcd_fill(0xff);
+}
+
+
+void LCD_test_screen(uint16_t count)
+{
+	count = count % 8;
+	if (count == 0)
+	{
+		lcd_draw_test_pattern(8);
+	}
+	if (count == 1)
+	{
+		lcd_draw_test_pattern(16);
+	}
+	if (count == 2)
+	{
+		lcd_draw_test_pattern(32);
+	}
+	if (count == 3)
+	{
+		lcd_fill(0xff);
+	}
+	if (count == 4)
+	{
+		lcd_fill(0x00);
+	}
+	if (count == 5)
+	{
+		lcd_draw_img(test_img, 32, 32, 8, 8);
+		lcd_draw_img(test_img, 32, 32, 50, 50);
+		lcd_draw_img(test_img, 32, 32, 90, 90);
+	}
+	if (count == 6)
+	{
+		lcd_draw_img(pixel_data_bin, 400, 240, 0, 0);
+		lcd_invert_framebuffer();
+	}
+	if (count == 7)
+	{
+		// Draw test image line by line using LCD_write_line
+		uint8_t line_buffer[LCD_LINE_BUF_SIZE] = {0};
+
+		// Loop through each line of the test image
+		for (int y = 0; y < 240; y++)
+		{
+			// Set line number (1-based)
+			line_buffer[1] = y + 1;
+
+			// Copy one line swapping byte order
+			for (int x = 0; x < LCD_LINE_SIZE; x++) {
+                uint8_t original = pixel_data_bin[y * LCD_LINE_SIZE + x];
+                // Reverse bits in each byte
+                line_buffer[2 + x] = ((original & 0x01) << 7) |
+                                    ((original & 0x02) << 5) |
+                                    ((original & 0x04) << 3) |
+                                    ((original & 0x08) << 1) |
+                                    ((original & 0x10) >> 1) |
+                                    ((original & 0x20) >> 3) |
+                                    ((original & 0x40) >> 5) |
+                                    ((original & 0x80) >> 7);
+            }
+
+			// Send the line
+			LCD_write_line(line_buffer);
+		}
+	}
+	if (count < 7)
+		lcd_refresh();
 }

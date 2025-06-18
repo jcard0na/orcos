@@ -6,7 +6,6 @@
 #include "func.h"
 #include "io.h"
 #include "orcos.h"
-#include "openrpncalc.h"
 
 #if DEBUG
 #include "SEGGER_RTT.h"
@@ -980,84 +979,19 @@ void enter_exp()
 
 void enter_sign()
 {
-	// if (input.started) {
-	// 	if (input.expentry==0) {
-	// 		if (input_uncert == 0) input.sign = 1-input.sign;
-	// 	} else {
-	// 		input.expsign = 1-input.expsign;
-	// 	}
-	// 	draw_flags |= (DRAW_INPUT | DRAW_CURSOR);
-	// } else {
-	// 	if (error_flag) return;
-	// 	stack[0] = -stack[0];
-	// 	draw_flags |= DRAW_STACK;
-	// 	if (input.replace_x) draw_flags |= DRAW_CURSOR;
-	// }
-	static int count = 0;
-	count = (count + 1) % 8;
-	if (count == 0)
-	{
-		lcd_draw_test_pattern(8);
-	}
-	if (count == 1)
-	{
-		lcd_draw_test_pattern(16);
-	}
-	if (count == 2)
-	{
-		lcd_draw_test_pattern(32);
-	}
-	if (count == 3)
-	{
-		lcd_fill(0xff);
-	}
-	if (count == 4)
-	{
-		lcd_fill(0x00);
-	}
-	if (count == 5)
-	{
-		lcd_draw_img(test_img, 32, 32, 8, 8);
-		lcd_draw_img(test_img, 32, 32, 50, 50);
-		lcd_draw_img(test_img, 32, 32, 90, 90);
-	}
-	if (count == 6)
-	{
-		lcd_draw_img(pixel_data_bin, 400, 240, 0, 0);
-		lcd_invert_framebuffer();
-	}
-	if (count == 7)
-	{
-		// Draw test image line by line using LCD_write_line
-		uint8_t line_buffer[LCD_LINE_BUF_SIZE] = {0};
-
-		// Loop through each line of the test image
-		for (int y = 0; y < 240; y++)
-		{
-			// Set line number (1-based)
-			line_buffer[1] = y + 1;
-
-			// Copy one line swapping byte order
-			for (int x = 0; x < LCD_LINE_SIZE; x++) {
-                uint8_t original = pixel_data_bin[y * LCD_LINE_SIZE + x];
-                // Reverse bits in each byte
-                line_buffer[2 + x] = ((original & 0x01) << 7) |
-                                    ((original & 0x02) << 5) |
-                                    ((original & 0x04) << 3) |
-                                    ((original & 0x08) << 1) |
-                                    ((original & 0x10) >> 1) |
-                                    ((original & 0x20) >> 3) |
-                                    ((original & 0x40) >> 5) |
-                                    ((original & 0x80) >> 7);
-            }
-
-			// Send the line
-			LCD_write_line(line_buffer);
+	if (input.started) {
+		if (input.expentry==0) {
+			if (input_uncert == 0) input.sign = 1-input.sign;
+		} else {
+			input.expsign = 1-input.expsign;
 		}
+		draw_flags |= (DRAW_INPUT | DRAW_CURSOR);
+	} else {
+		if (error_flag) return;
+		stack[0] = -stack[0];
+		draw_flags |= DRAW_STACK;
+		if (input.replace_x) draw_flags |= DRAW_CURSOR;
 	}
-	if (count < 7)
-		lcd_refresh();
-	DEBUG_PRINT("enter sign (%d)\n", count);
 }
 
 double convert_input()
@@ -1909,6 +1843,7 @@ void apply_memory_minus()
 
 void apply_test(uint16_t code)
 {
+	static uint16_t counter = 0;
 	switch (code)
 	{
 	case OP_TEST_1:
@@ -1931,6 +1866,12 @@ void apply_test(uint16_t code)
 		break;
 	case OP_TEST_7:
 		sharp_test_font(NULL, 0);
+		break;
+	case OP_TEST_8:
+		LCD_test_screen(++counter);
+		break;
+	case OP_TEST_9:
+		LCD_test_screen(--counter);
 		break;
 	default:
 		break;
@@ -2158,7 +2099,7 @@ int calc_on_key(int c)
 	switch (c)
 	{
 	case 1:
-		enter_key(OP_ENTER_0, OP_NOP, OP_NOP);
+		enter_key(OP_ENTER_0, OP_TEST_9, OP_NOP);
 		break;
 	case 7:
 		enter_key(OP_ENTER_1, OP_CONST_PI, OP_CONST_C);
@@ -2189,7 +2130,7 @@ int calc_on_key(int c)
 		break;
 
 	case 2:
-		enter_key(OP_ENTER_SIGN, OP_NOP, OP_NOP);
+		enter_key(OP_ENTER_SIGN, OP_TEST_8, OP_NOP);
 		break;
 	case 3:
 		enter_key(OP_ENTER_DECPOINT, OP_NOP, OP_NOP);

@@ -48,4 +48,6 @@ void sharp_test_font(FontDef_t *font, char start_symbol);
 void __lcd_init();
 
 void lcd_keep_alive();
+
+void LCD_test_screen(uint16_t count);
 #endif /* INC_SHARP_H_ */
