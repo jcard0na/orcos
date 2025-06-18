@@ -22,6 +22,8 @@ TARGET = orcos
 # debug build?
 DEBUG = 1
 # optimization
+# With this optimization, display updates using LCD_write_line() will not work.
+# lcd_update(), on the other hand, works just fine.
 #OPT = -Og
 OPT = -O0
 
