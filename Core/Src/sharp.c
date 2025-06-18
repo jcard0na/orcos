@@ -39,6 +39,7 @@ static void LCD_Error_Handler(void)
     }
 }
 
+
 static void TIM1_Init(void)
 {
     TIM_ClockConfigTypeDef sClockSourceConfig = {0};
@@ -122,6 +123,11 @@ void delay_us(uint16_t us)
     __HAL_TIM_SET_COUNTER(_htim1, 0); // set the counter value a 0
     while (__HAL_TIM_GET_COUNTER(_htim1) < us)
         ; // wait for the counter to reach the us input in the parameter
+}
+
+void lcd_keep_alive()
+{
+    timeout_counter = 0;
 }
 
 /* Clear display */

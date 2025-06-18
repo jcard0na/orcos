@@ -144,6 +144,10 @@ uint16_t scan_keyboard(void)
     HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_RESET);
   }
 
+  if (pressed_column >= 0) {
+    lcd_keep_alive();
+  }
+
   if (pressed_column >= 0 && !multiple_key_press)
     // Only if single key pressed
     return (pressed_column + pressed_row * NUM_COLUMN_PINS + 1);
