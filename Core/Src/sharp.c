@@ -29,7 +29,7 @@ LPTIM_HandleTypeDef hlptim1;
 static uint8_t g_framebuffer[LCD_HEIGHT][LCD_WIDTH / 8];
 static int off = 0;
 static int timeout_counter = 0;
-#define OFF_TIMEOUT (5 * 120) // 5 min timeout before switching off
+#define OFF_TIMEOUT (5 * 1) // 5 min timeout before switching off
 
 static void LCD_Error_Handler(void)
 {
@@ -542,10 +542,7 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
         timeout_counter++;
         if (timeout_counter > OFF_TIMEOUT)
         {
-            DEBUG_PRINT("\n--- DISP off ---\n");
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET); // DISP signal to "OFF"
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);  // EXTCOMIN signal of "OFF"
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // 5V booster disable
+            LCD_power_off(1);
             off = 1;
         }
 
