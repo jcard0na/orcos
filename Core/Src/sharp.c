@@ -529,14 +529,14 @@ void sharp_test_font(FontDef_t *font, char start_symbol)
 
 void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
-    DEBUG_PRINT("-- LPTIM1: EXTIN toggle ---\n");
+    // DEBUG_PRINT("-- LPTIM1: EXTIN toggle ---\n");
     RTC_TimeTypeDef Time;
     RTC_DateTypeDef Date;
     /* Get the RTC calendar time */
     HAL_RTC_GetTime(hrtc, &Time, RTC_FORMAT_BIN);
     // Do not skip reading the date: This triggers an update to the shadow registers!
     HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);  
-    SEGGER_RTT_printf(0, "hullo %02d:%02d!\n", Time.Minutes, Time.Seconds);
+    SEGGER_RTT_printf(0, "hullo %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
     if (!off)
     {
         timeout_counter++;
@@ -581,6 +581,7 @@ void LCD_power_off(int clear)
     delay_us(30);
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);  // EXTCOMIN signal of "OFF"
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // 5V booster disable
+    HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
 }
 
 /* Send the entire frame buffer content to the display via SPI interface.
