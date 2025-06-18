@@ -752,6 +752,8 @@ void lcd_clear_buffer(void)
 // Only line number and line data have to by filled by user.
 void LCD_write_line(uint8_t *buf)
 {
+    buf[0] = 0x1;  // Write Line command
+    buf[52] = buf[53] = 0;
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
     delay_us(12);
     HAL_SPI_Transmit(&hspi2, buf, LCD_LINE_BUF_SIZE, HAL_MAX_DELAY);
