@@ -26,6 +26,10 @@ TIM_HandleTypeDef htim1;
 SPI_HandleTypeDef hspi2;
 LPTIM_HandleTypeDef hlptim1;
 
+static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y);
+static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y);
+static uint8_t reverse_bits(uint8_t b);
+
 // 1bpp packed buffer (400x240 / 8 = 12,000 bytes)
 static uint8_t g_framebuffer[LCD_HEIGHT][LCD_WIDTH / 8];
 extern int off;
@@ -629,57 +633,85 @@ void lcd_refresh()
     }
 }
 
+/* LCD Image Drawing Functions */
 /**
- * Draws a 1bpp image to the LCD framebuffer
- * @param img   Pointer to 1bpp bitmap data (row-major, packed LSB-first)
- * @param w     Width of image (in pixels)
- * @param h     Height of image (in pixels)
- * @param x     X position on LCD
- * @param y     Y position on LCD
+ * @brief Draws a 1bpp image to the LCD framebuffer
+ * @param img Pointer to 1bpp bitmap (LSB-first packed)
+ * @param w Width in pixels
+ * @param h Height in pixels
+ * @param x X position (0-399)
+ * @param y Y position (0-239)
+ * @note '1' bits draw black, '0' bits are transparent
  */
-void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y)
-{
-    // Calculate image stride (bytes per row)
-    uint32_t img_stride = (w + 7) / 8;
-    uint8_t x_align = x % 8;
+void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y) {
+    if (img == NULL || x >= LCD_WIDTH || y >= LCD_HEIGHT) return;
+    
+    if ((x % 8) == 0 && (w % 8) == 0) {
+        lcd_draw_img_aligned(img, w, h, x, y);
+    } else {
+        lcd_draw_img_unaligned(img, w, h, x, y);
+    }
+}
 
-    for (uint32_t dy = 0; dy < h; dy++)
-    {
+/* Optimized aligned version */
+static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y) {
+    uint32_t img_stride = w / 8;
+    uint32_t dest_x = x / 8;
+    
+    for (uint32_t dy = 0; dy < h; dy++) {
         uint32_t dest_y = y + dy;
-        if (dest_y >= LCD_HEIGHT)
-            continue;
-
-        // Handle unaligned x positions by processing bytes
-        for (uint32_t src_byte = 0; src_byte < img_stride; src_byte++)
-        {
-            uint8_t img_byte = img[dy * img_stride + src_byte];
-            // Reverse bit order for endianness swap
-            img_byte = (img_byte & 0xF0) >> 4 | (img_byte & 0x0F) << 4;
-            img_byte = (img_byte & 0xCC) >> 2 | (img_byte & 0x33) << 2;
-            img_byte = (img_byte & 0xAA) >> 1 | (img_byte & 0x55) << 1;
-
-            uint32_t dest_byte = (x / 8) + src_byte;
-
-            if (dest_byte >= (LCD_WIDTH / 8))
-                continue;
-
-            if (x_align == 0)
-            {
-                // Simple case - aligned x position
-                g_framebuffer[dest_y][dest_byte] = img_byte;
-            }
-            else
-            {
-                // Unaligned case - shift bits between bytes
-                uint8_t shift = x_align;
-                g_framebuffer[dest_y][dest_byte] |= (img_byte << shift);
-                if (dest_byte + 1 < (LCD_WIDTH / 8))
-                {
-                    g_framebuffer[dest_y][dest_byte + 1] |= (img_byte >> (8 - shift));
+        if (dest_y >= LCD_HEIGHT) break;
+        
+        for (uint32_t sx = 0; sx < img_stride; sx++) {
+            uint8_t src_byte = reverse_bits(img[dy * img_stride + sx]);
+            if (src_byte) {  // Only process if pixels need drawing
+                uint32_t dx = dest_x + sx;
+                if (dx < (LCD_WIDTH/8)) {
+                    g_framebuffer[dest_y][dx] &= ~src_byte;
                 }
             }
         }
     }
+}
+
+/* General unaligned version */
+static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y) {
+    uint32_t img_stride = (w + 7) / 8;
+    uint8_t x_align = x % 8;
+
+    for (uint32_t dy = 0; dy < h; dy++) {
+        uint32_t dest_y = y + dy;
+        if (dest_y >= LCD_HEIGHT) continue;
+
+        for (uint32_t sx = 0; sx < img_stride; sx++) {
+            uint8_t img_byte = reverse_bits(img[dy * img_stride + sx]);
+            if (img_byte == 0) continue;
+
+            uint32_t dest_byte = (x / 8) + sx;
+            
+            if (x_align == 0) {
+                if (dest_byte < (LCD_WIDTH / 8)) {
+                    g_framebuffer[dest_y][dest_byte] &= ~img_byte;
+                }
+            } else {
+                uint8_t shift = x_align;
+                if (dest_byte < (LCD_WIDTH / 8)) {
+                    g_framebuffer[dest_y][dest_byte] &= ~(img_byte << shift);
+                }
+                if (dest_byte + 1 < (LCD_WIDTH / 8)) {
+                    g_framebuffer[dest_y][dest_byte + 1] &= ~(img_byte >> (8 - shift));
+                }
+            }
+        }
+    }
+}
+
+/* Bit reversal helper */
+static uint8_t reverse_bits(uint8_t b) {
+    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+    return b;
 }
 
 /**
@@ -795,18 +827,21 @@ void LCD_test_screen(uint16_t count)
 	}
 	if (count == 4)
 	{
-		lcd_fill(0x00);
+		lcd_draw_img(pixel_data_bin, 400, 240, 0, 0);
+		lcd_draw_img(test_img, 32, 32, 0, 0);
+		lcd_draw_img(test_img, 32, 32, 50, 50);
+		lcd_draw_img(test_img, 32, 32, 90, 90);
 	}
 	if (count == 5)
 	{
-		lcd_draw_img(test_img, 32, 32, 8, 8);
+		lcd_fill(0xff);
+		lcd_draw_img(test_img, 32, 32, 0, 0);
 		lcd_draw_img(test_img, 32, 32, 50, 50);
 		lcd_draw_img(test_img, 32, 32, 90, 90);
 	}
 	if (count == 6)
 	{
 		lcd_draw_img(pixel_data_bin, 400, 240, 0, 0);
-		lcd_invert_framebuffer();
 	}
 	if (count == 7)
 	{
