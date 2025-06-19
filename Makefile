@@ -41,19 +41,6 @@ BUILD_DIR = build
 LIB_NAME = liborcos.a
 # Library sources
 LIB_SOURCES = \
-Core/Src/calc.c \
-Core/Src/fonts.c \
-Core/Src/func.c \
-Core/Src/io.c \
-Core/Src/orcos.c \
-Core/Src/power.c \
-Core/Src/sharp.c
-
-# C sources
-C_SOURCES =  \
-Core/Src/main.c \
-Core/Src/stm32u3xx_it.c \
-Core/Src/stm32u3xx_hal_msp.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_adc.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_adc_ex.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_dma.c \
@@ -77,6 +64,19 @@ Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi_ex.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim.c \
 Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim_ex.c \
+Core/Src/calc.c \
+Core/Src/fonts.c \
+Core/Src/func.c \
+Core/Src/io.c \
+Core/Src/orcos.c \
+Core/Src/power.c \
+Core/Src/sharp.c
+
+# C sources
+C_SOURCES =  \
+Core/Src/main.c \
+Core/Src/stm32u3xx_it.c \
+Core/Src/stm32u3xx_hal_msp.c \
 Core/Src/system_stm32u3xx.c \
 Core/Src/sysmem.c \
 Core/Src/syscalls.c \
