@@ -39,49 +39,53 @@ BUILD_DIR = build
 ######################################
 # Library name
 LIB_NAME = liborcos.a
+
+RTT_SOURCES = \
+liborcos/RTT/SEGGER_RTT.c \
+liborcos/RTT/SEGGER_RTT_printf.c
+
 # Library sources
 LIB_SOURCES = \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_adc.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_adc_ex.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_dma.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_dma_ex.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rcc.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rcc_ex.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_cortex.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_flash.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_flash_ex.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_gpio.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_exti.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_pwr.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_pwr_ex.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_gtzc.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_icache.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_lptim.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rtc.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rtc_ex.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi_ex.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim.c \
-Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim_ex.c \
-Core/Src/calc.c \
-Core/Src/fonts.c \
-Core/Src/func.c \
-Core/Src/io.c \
-Core/Src/orcos.c \
-Core/Src/power.c \
-Core/Src/sharp.c
+$(RTT_SOURCES) \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_adc.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_adc_ex.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_dma.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_dma_ex.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rcc.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rcc_ex.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_cortex.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_flash.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_flash_ex.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_gpio.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_exti.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_pwr.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_pwr_ex.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_gtzc.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_icache.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_lptim.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rtc.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_rtc_ex.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi_ex.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim.c \
+liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim_ex.c \
+liborcos/Src/calc.c \
+liborcos/Src/fonts.c \
+liborcos/Src/func.c \
+liborcos/Src/io.c \
+liborcos/Src/orcos.c \
+liborcos/Src/power.c \
+liborcos/Src/sharp.c
 
 # C sources
 C_SOURCES =  \
-Core/Src/main.c \
-Core/Src/stm32u3xx_it.c \
-Core/Src/stm32u3xx_hal_msp.c \
-Core/Src/system_stm32u3xx.c \
-Core/Src/sysmem.c \
-Core/Src/syscalls.c \
-RTT/SEGGER_RTT.c \
-RTT/SEGGER_RTT_printf.c
+demo/Src/main.c \
+demo/Src/stm32u3xx_it.c \
+demo/Src/stm32u3xx_hal_msp.c \
+demo/Src/system_stm32u3xx.c \
+demo/Src/sysmem.c \
+demo/Src/syscalls.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -141,12 +145,13 @@ AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
--ICore/Inc \
--IDrivers/STM32U3xx_HAL_Driver/Inc \
--IDrivers/STM32U3xx_HAL_Driver/Inc/Legacy \
--IDrivers/CMSIS/Device/ST/STM32U3xx/Include \
--IDrivers/CMSIS/Include \
--IRTT \
+-Idemo/Inc \
+-Iliborcos/Inc \
+-Iliborcos/Drivers/STM32U3xx_HAL_Driver/Inc \
+-Iliborcos/Drivers/STM32U3xx_HAL_Driver/Inc/Legacy \
+-Iliborcos/Drivers/CMSIS/Device/ST/STM32U3xx/Include \
+-Iliborcos/Drivers/CMSIS/Include \
+-Iliborcos/RTT \
 
 
 # compile gcc flags
@@ -182,17 +187,20 @@ all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET
 # build the application
 #######################################
 # list of objects
-LIB_OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(LIB_SOURCES:.c=.o)))
-
-OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(filter-out $(LIB_SOURCES),$(C_SOURCES:.c=.o))))
-vpath %.c $(sort $(dir $(filter-out $(LIB_SOURCES),$(C_SOURCES))))
+LIB_OBJECTS = $(patsubst %.c,$(BUILD_DIR)/%.o,$(LIB_SOURCES))
+OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
+vpath %.c $(sort $(dir $(C_SOURCES) $(dir $(LIB_SOURCES))))
 # list of ASM program objects
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASMM_SOURCES:.S=.o)))
 vpath %.S $(sort $(dir $(ASMM_SOURCES)))
 
-$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
+	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
+	@mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
@@ -215,7 +223,7 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@	
 	
 $(BUILD_DIR):
-	mkdir $@		
+	mkdir -p $@
 
 #######################################
 # clean up
