@@ -16,6 +16,7 @@
 #include "orcos.h"
 #include "stm32u3xx_hal_rtc_ex.h"
 #include "openrpncalc.h"
+#include <stdbool.h>
 
 #if DEBUG
 #include "SEGGER_RTT.h"
@@ -26,8 +27,8 @@ TIM_HandleTypeDef htim1;
 SPI_HandleTypeDef hspi2;
 LPTIM_HandleTypeDef hlptim1;
 
-static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
-static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
+static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb);
+static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb);
 static uint8_t reverse_bits(uint8_t b);
 
 // 1bpp packed buffer (400x240 / 8 = 12,000 bytes)
@@ -201,14 +202,72 @@ void sharp_invert_buffer(uint16_t lines)
     }
 }
 
-/* Draw string in the string buffer (without sending it to screen).
- *   str : string to be drawn
- *   font: pointer to the font structure
- *   dx: x coordinate of the start of the string
- *   dy: y coordinate of the start of the string in the buffer
- *       (keep in mind that the buffer itself can be drawn at the arbitrary
- *       location later in the call to sharp_send_buffer(). )
- *   */
+static FontDef_t * font_lookup(uint8_t font_id)
+{
+    switch (font_id)
+    {
+    case FONT_6x8:
+        return &font_6x8;
+    case FONT_7x12b:
+        return &font_7x12b;
+    case FONT_12x20:
+        return &font_12x20;
+    case FONT_16x26:
+        return &font_16x26;
+    case FONT_24x40:
+        return &font_24x40;
+    default:
+        return NULL; // Invalid font ID
+    }
+}
+
+/**
+ * @brief Draws a string directly to the LCD framebuffer
+ * @param str: String to draw
+ * @param font: Pointer to font definition
+ * @param dx: X position (0-399) 
+ * @param dy: Y position (0-239)
+ * @param color: BLACK (1=set) or WHITE (1=clear)
+ * 
+ * Note: dx will be rounded to the closest byte-aligned address
+ */
+void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint8_t color)
+{
+
+    FontDef_t *font = font_lookup(font_id);
+    if (font == NULL)
+        return;
+
+    uint16_t width = font->FontWidth;
+    uint16_t height = font->FontHeight;
+    uint16_t bytes_per_char = (width + 7) / 8;
+    const char (*font_data)[bytes_per_char * height] = font->data;
+    
+    if (dy >= LCD_HEIGHT)
+        return;
+
+    uint16_t xpos = ((dx + 7) / 8) << 3;
+    int char_idx = 0;
+
+    // Temporary buffer for one character
+    uint8_t char_buffer[bytes_per_char * height];
+
+    while (xpos < LCD_WIDTH && str[char_idx] != '\0')
+    {
+        uint8_t current_char = str[char_idx];
+        const char *char_data = font_data[current_char];
+        
+        // Copy character data directly (already in MSB format)
+        memcpy(char_buffer, char_data, bytes_per_char * height);
+        
+        // Draw character using MSB-optimized function
+        lcd_draw_img_unaligned(char_buffer, width, height, xpos, dy, color, true);
+        
+        xpos += width;
+        char_idx++;
+    }
+}
+
 void sharp_string(char *str, FontDef_t *font, uint16_t dx, uint16_t dy)
 {
     uint16_t width = font->FontWidth;
@@ -633,16 +692,6 @@ void lcd_refresh()
     }
 }
 
-/**
- * @brief Draws a 1bpp image to the LCD framebuffer with color option
- * @param img Pointer to 1bpp bitmap (LSB-first packed)
- * @param w Width in pixels
- * @param h Height in pixels
- * @param x X position (0-399)
- * @param y Y position (0-239)
- * @param color BLACK (1=set) or WHITE (1=clear)
- * @note '0' bits are always transparent
- */
 void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color)
 {
     if (img == NULL || x >= LCD_WIDTH || y >= LCD_HEIGHT)
@@ -650,16 +699,16 @@ void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32
 
     if ((x % 8) == 0 && (w % 8) == 0)
     {
-        lcd_draw_img_aligned(img, w, h, x, y, color);
+        lcd_draw_img_aligned(img, w, h, x, y, color, false);
     }
     else
     {
-        lcd_draw_img_unaligned(img, w, h, x, y, color);
+        lcd_draw_img_unaligned(img, w, h, x, y, color, false);
     }
 }
 
 /* Optimized aligned version */
-static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color)
+static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb)
 {
     uint32_t img_stride = w / 8;
     uint32_t dest_x = x / 8;
@@ -672,7 +721,7 @@ static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uin
 
         for (uint32_t sx = 0; sx < img_stride; sx++)
         {
-            uint8_t src_byte = reverse_bits(img[dy * img_stride + sx]);
+            uint8_t src_byte = msb ? img[dy * img_stride + sx] : reverse_bits(img[dy * img_stride + sx] );
             if (src_byte)
             {
                 uint32_t dx = dest_x + sx;
@@ -693,63 +742,36 @@ static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uin
 }
 
 /* General unaligned version */
-static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color)
-{
+static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb) {
     uint32_t img_stride = (w + 7) / 8;
     uint8_t x_align = x % 8;
 
-    for (uint32_t dy = 0; dy < h; dy++)
-    {
+    for (uint32_t dy = 0; dy < h; dy++) {
         uint32_t dest_y = y + dy;
-        if (dest_y >= LCD_HEIGHT)
-            continue;
+        if (dest_y >= LCD_HEIGHT) continue;
 
-        for (uint32_t sx = 0; sx < img_stride; sx++)
-        {
-            uint8_t img_byte = reverse_bits(img[dy * img_stride + sx]);
-            if (img_byte == 0)
-                continue;
+        for (uint32_t sx = 0; sx < img_stride; sx++) {
+            uint8_t img_byte = msb ? img[dy * img_stride + sx] : reverse_bits(img[dy * img_stride + sx]);
+            if (img_byte == 0) continue;
 
             uint32_t dest_byte = (x / 8) + sx;
+            uint8_t shift = x_align;
 
-            if (x_align == 0)
-            {
-                if (dest_byte < (LCD_WIDTH / 8))
-                {
-                    if (color == BLACK)
-                    {
-                        g_framebuffer[dest_y][dest_byte] &= ~img_byte;
-                    }
-                    else
-                    {
-                        g_framebuffer[dest_y][dest_byte] |= img_byte;
-                    }
+            if (dest_byte < (LCD_WIDTH / 8)) {
+                uint8_t mask = img_byte << shift;
+                if (color == BLACK) {
+                    g_framebuffer[dest_y][dest_byte] &= ~mask; // Clear bits
+                } else {
+                    g_framebuffer[dest_y][dest_byte] |= mask; // Set bits
                 }
             }
-            else
-            {
-                uint8_t shift = x_align;
-                if (dest_byte < (LCD_WIDTH / 8))
-                {
-                    if (color == BLACK)
-                    {
-                        g_framebuffer[dest_y][dest_byte] |= (img_byte << shift);
-                    }
-                    else
-                    {
-                        g_framebuffer[dest_y][dest_byte] &= ~(img_byte << shift);
-                    }
-                }
-                if (dest_byte + 1 < (LCD_WIDTH / 8))
-                {
-                    if (color == BLACK)
-                    {
-                        g_framebuffer[dest_y][dest_byte + 1] |= (img_byte >> (8 - shift));
-                    }
-                    else
-                    {
-                        g_framebuffer[dest_y][dest_byte + 1] &= ~(img_byte >> (8 - shift));
-                    }
+
+            if (shift != 0 && dest_byte + 1 < (LCD_WIDTH / 8)) {
+                uint8_t mask = img_byte >> (8 - shift);
+                if (color == BLACK) {
+                    g_framebuffer[dest_y][dest_byte + 1] &= ~mask;
+                } else {
+                    g_framebuffer[dest_y][dest_byte + 1] |= mask;
                 }
             }
         }
@@ -757,7 +779,7 @@ static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, u
 }
 
 /* Bit reversal helper */
-static uint8_t reverse_bits(uint8_t b)
+uint8_t reverse_bits(uint8_t b)
 {
     b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
     b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
@@ -811,9 +833,12 @@ void lcd_draw_test_pattern(uint8_t square_size)
 
 void lcd_fill(uint8_t color)
 {
-    if (color == BLACK) {
+    if (color == BLACK)
+    {
         memset(g_framebuffer, 0x00, sizeof(g_framebuffer));
-    } else {
+    }
+    else
+    {
         memset(g_framebuffer, 0xff, sizeof(g_framebuffer));
     }
 }
@@ -861,7 +886,9 @@ void __lcd_init()
 
 void LCD_test_screen(uint16_t count)
 {
-    count = count % 8;
+    #define NUM_OF_TEST_SCREENS 9
+    count = (count % NUM_OF_TEST_SCREENS);
+    DEBUG_PRINT("Test screen %d\n", count);
     if (count == 0)
     {
         lcd_draw_test_pattern(8);
@@ -876,15 +903,16 @@ void LCD_test_screen(uint16_t count)
     }
     if (count == 3)
     {
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
+        {
             lcd_refresh();
             lcd_draw_test_pattern(32);
             lcd_draw_img(rook_img, 32, 32, 7 * 32, 1 * 32 + i * 16, WHITE);
             lcd_draw_img(rook_img, 32, 32, 2 * 32 + i * 16, 1 * 32 + i * 16, BLACK);
-            lcd_draw_img(rook_img, 32, 32, 3 * 32 + i*8, 3 * 32 + i*8, WHITE);
-            lcd_draw_img(rook_img, 32, 32, 4 * 32, 3 * 32 + i*8, BLACK);
-            lcd_draw_img(rook_img, 32, 32, 5 * 32 - i*8, 5 * 32, WHITE);
-            lcd_draw_img(rook_img, 32, 32, 6 * 32 - i*16, 5 * 32, BLACK);
+            lcd_draw_img(rook_img, 32, 32, 3 * 32 + i * 8, 3 * 32 + i * 8, WHITE);
+            lcd_draw_img(rook_img, 32, 32, 4 * 32, 3 * 32 + i * 8, BLACK);
+            lcd_draw_img(rook_img, 32, 32, 5 * 32 - i * 8, 5 * 32, WHITE);
+            lcd_draw_img(rook_img, 32, 32, 6 * 32 - i * 16, 5 * 32, BLACK);
         }
     }
     if (count == 4)
@@ -894,6 +922,11 @@ void LCD_test_screen(uint16_t count)
         lcd_draw_img(test_img, 32, 32, 0, 0, BLACK);
         lcd_draw_img(test_img, 32, 32, 50, 50, BLACK);
         lcd_draw_img(test_img, 32, 32, 90, 90, WHITE);
+
+        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 100, 100, BLACK);
+        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 106, 100, BLACK);
+        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 100, 106, BLACK);
+        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 106, 106, BLACK);
     }
     if (count == 5)
     {
@@ -904,10 +937,23 @@ void LCD_test_screen(uint16_t count)
     }
     if (count == 6)
     {
+        lcd_clear_buffer();
+
+        lcd_putsAt("OpenRPNCalc", FONT_24x40, 72, 40, BLACK);
+        lcd_putsAt("Open Hardware", FONT_16x26, 96, 80, BLACK);
+        lcd_putsAt("Hello World!", FONT_12x20, 110, 120, BLACK);
+        lcd_putsAt("Small and Bold!", FONT_7x12b, 130, 140, BLACK);
+        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 160, BLACK);
+        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 170, BLACK);
+        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 180, BLACK);
+        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 190, BLACK);
+    }
+    if (count == 7)
+    {
         lcd_draw_img(pixel_data_bin, 400, 240, 0, 0, BLACK);
         lcd_invert_framebuffer();
     }
-    if (count == 7)
+    if (count == 8)
     {
         // Draw test image line by line using LCD_write_line
         uint8_t line_buffer[LCD_LINE_BUF_SIZE] = {0};
@@ -938,6 +984,7 @@ void LCD_test_screen(uint16_t count)
             LCD_write_line(line_buffer);
         }
     }
-    if (count < 7)
+    // Screens that call LCD_write_line(line_buffer) do not need refresh
+    if (count != 8)
         lcd_refresh();
 }
