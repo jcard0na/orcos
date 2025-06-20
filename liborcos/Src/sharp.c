@@ -202,7 +202,7 @@ void sharp_invert_buffer(uint16_t lines)
     }
 }
 
-static FontDef_t * font_lookup(uint8_t font_id)
+static FontDef_t *font_lookup(uint8_t font_id)
 {
     switch (font_id)
     {
@@ -225,10 +225,10 @@ static FontDef_t * font_lookup(uint8_t font_id)
  * @brief Draws a string directly to the LCD framebuffer
  * @param str: String to draw
  * @param font: Pointer to font definition
- * @param dx: X position (0-399) 
+ * @param dx: X position (0-399)
  * @param dy: Y position (0-239)
  * @param color: BLACK (1=set) or WHITE (1=clear)
- * 
+ *
  * Note: dx will be rounded to the closest byte-aligned address
  */
 void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint8_t color)
@@ -242,7 +242,7 @@ void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint
     uint16_t height = font->FontHeight;
     uint16_t bytes_per_char = (width + 7) / 8;
     const char (*font_data)[bytes_per_char * height] = font->data;
-    
+
     if (dy >= LCD_HEIGHT)
         return;
 
@@ -256,13 +256,13 @@ void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint
     {
         uint8_t current_char = str[char_idx];
         const char *char_data = font_data[current_char];
-        
+
         // Copy character data directly (already in MSB format)
         memcpy(char_buffer, char_data, bytes_per_char * height);
-        
+
         // Draw character using MSB-optimized function
         lcd_draw_img_unaligned(char_buffer, width, height, xpos, dy, color, true);
-        
+
         xpos += width;
         char_idx++;
     }
@@ -721,7 +721,7 @@ static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uin
 
         for (uint32_t sx = 0; sx < img_stride; sx++)
         {
-            uint8_t src_byte = msb ? img[dy * img_stride + sx] : reverse_bits(img[dy * img_stride + sx] );
+            uint8_t src_byte = msb ? img[dy * img_stride + sx] : reverse_bits(img[dy * img_stride + sx]);
             if (src_byte)
             {
                 uint32_t dx = dest_x + sx;
@@ -742,35 +742,48 @@ static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uin
 }
 
 /* General unaligned version */
-static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb) {
+static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb)
+{
     uint32_t img_stride = (w + 7) / 8;
     uint8_t x_align = x % 8;
 
-    for (uint32_t dy = 0; dy < h; dy++) {
+    for (uint32_t dy = 0; dy < h; dy++)
+    {
         uint32_t dest_y = y + dy;
-        if (dest_y >= LCD_HEIGHT) continue;
+        if (dest_y >= LCD_HEIGHT)
+            continue;
 
-        for (uint32_t sx = 0; sx < img_stride; sx++) {
+        for (uint32_t sx = 0; sx < img_stride; sx++)
+        {
             uint8_t img_byte = msb ? img[dy * img_stride + sx] : reverse_bits(img[dy * img_stride + sx]);
-            if (img_byte == 0) continue;
+            if (img_byte == 0)
+                continue;
 
             uint32_t dest_byte = (x / 8) + sx;
             uint8_t shift = x_align;
 
-            if (dest_byte < (LCD_WIDTH / 8)) {
+            if (dest_byte < (LCD_WIDTH / 8))
+            {
                 uint8_t mask = img_byte << shift;
-                if (color == BLACK) {
+                if (color == BLACK)
+                {
                     g_framebuffer[dest_y][dest_byte] &= ~mask; // Clear bits
-                } else {
+                }
+                else
+                {
                     g_framebuffer[dest_y][dest_byte] |= mask; // Set bits
                 }
             }
 
-            if (shift != 0 && dest_byte + 1 < (LCD_WIDTH / 8)) {
+            if (shift != 0 && dest_byte + 1 < (LCD_WIDTH / 8))
+            {
                 uint8_t mask = img_byte >> (8 - shift);
-                if (color == BLACK) {
+                if (color == BLACK)
+                {
                     g_framebuffer[dest_y][dest_byte + 1] &= ~mask;
-                } else {
+                }
+                else
+                {
                     g_framebuffer[dest_y][dest_byte + 1] |= mask;
                 }
             }
@@ -886,7 +899,7 @@ void __lcd_init()
 
 void LCD_test_screen(uint16_t count)
 {
-    #define NUM_OF_TEST_SCREENS 9
+#define NUM_OF_TEST_SCREENS 9
     count = (count % NUM_OF_TEST_SCREENS);
     DEBUG_PRINT("Test screen %d\n", count);
     if (count == 0)
@@ -903,16 +916,16 @@ void LCD_test_screen(uint16_t count)
     }
     if (count == 3)
     {
-        for (int i = 0; i < 9; i++)
+        lcd_draw_test_pattern(32);
+        for (int i = 0; i < 7; i++)
         {
-            lcd_refresh();
-            lcd_draw_test_pattern(32);
-            lcd_draw_img(rook_img, 32, 32, 7 * 32, 1 * 32 + i * 16, WHITE);
-            lcd_draw_img(rook_img, 32, 32, 2 * 32 + i * 16, 1 * 32 + i * 16, BLACK);
-            lcd_draw_img(rook_img, 32, 32, 3 * 32 + i * 8, 3 * 32 + i * 8, WHITE);
-            lcd_draw_img(rook_img, 32, 32, 4 * 32, 3 * 32 + i * 8, BLACK);
-            lcd_draw_img(rook_img, 32, 32, 5 * 32 - i * 8, 5 * 32, WHITE);
-            lcd_draw_img(rook_img, 32, 32, 6 * 32 - i * 16, 5 * 32, BLACK);
+            for (int j = 0; j < 6; j++)
+            {
+                lcd_draw_img(rook_img, 32, 32, i * 64, j * 64, WHITE);
+                lcd_draw_img(rook_img, 32, 32, i * 64, j * 64 + 32, BLACK);
+                lcd_draw_img(rook_img, 32, 32, i * 64 + 32, j * 64 + 32, WHITE);
+                lcd_draw_img(rook_img, 32, 32, i * 64 + 32, j * 64, BLACK);
+            }
         }
     }
     if (count == 4)
