@@ -11,17 +11,17 @@
 
 int get_vbat(void);
 
-#define LCD_WIDTH   400
-#define LCD_HEIGHT  240
+#define LCD_WIDTH 400
+#define LCD_HEIGHT 240
 #define LCD_LINE_SIZE 50
 #define LCD_LINE_BUF_SIZE (LCD_LINE_SIZE + 4)
 
 /* Color Constants */
-#define BLACK 0  // '1' bits will set display pixels (black)
-#define WHITE 1  // '1' bits will clear display pixels (white)
+#define BLACK 0 // '1' bits will set display pixels (black)
+#define WHITE 1 // '1' bits will clear display pixels (white)
 
 /* Font identifiers */
-#define FONT_6x8   0
+#define FONT_6x8 0
 #define FONT_7x12b 1
 #define FONT_12x20 2
 #define FONT_24x40 3
@@ -30,7 +30,6 @@ int get_vbat(void);
 void LCD_power_on(void);
 void LCD_power_off(int clear);
 bool LCD_is_on(void);
-
 
 // Sends one line data to LCD
 void LCD_write_line(uint8_t *buf);
@@ -53,24 +52,25 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc) __attribute__((used, noin
 // Main library init function
 void orcos_init();
 
-
 #if DEBUG
-    #define DEBUG_PRINT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
+#define DEBUG_PRINT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
 #else
-    #define DEBUG_PRINT(...) 
+#define DEBUG_PRINT(...)
 #endif
 
 void switch_input();
 uint16_t scan_keyboard(void);
 
 // RTC
-typedef struct {
+typedef struct
+{
   uint16_t year;
-  uint8_t  month;
-  uint8_t  day;
+  uint8_t month;
+  uint8_t day;
 } dt_t;
 
-typedef struct {
+typedef struct
+{
   uint8_t hour;
   uint8_t min;
   uint8_t sec;
@@ -78,7 +78,7 @@ typedef struct {
   uint8_t dow;
 } tm_t;
 
-
+void rtc_read(tm_t *tm, dt_t *dt);
 
 // Deprecated
 

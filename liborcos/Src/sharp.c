@@ -17,6 +17,7 @@
 #include "stm32u3xx_hal_rtc_ex.h"
 #include "openrpncalc.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 #if DEBUG
 #include "SEGGER_RTT.h"
@@ -944,8 +945,24 @@ void LCD_test_screen(uint16_t count)
     {
         lcd_clear_buffer();
         lcd_draw_img(test_img, 32, 32, 0, 0, BLACK);
-        lcd_draw_img(test_img, 32, 32, 50, 50, WHITE);
-        lcd_draw_img(test_img, 32, 32, 90, 90, BLACK);
+        lcd_draw_img(test_img, 32, 32, 50, 0, BLACK);
+        lcd_draw_img(test_img, 32, 32, 350, 200, BLACK);
+        lcd_draw_img(test_img, 32, 32, 300, 200, BLACK);
+
+        // Get and display RTC time
+        tm_t time;
+        dt_t date;
+        rtc_read(&time, &date);
+        
+        char time_str[20];
+        snprintf(time_str, sizeof(time_str), "%02d:%02d:%02d", 
+                time.hour, time.min, time.sec);
+        lcd_putsAt(time_str, FONT_16x26, 120, 100, BLACK);
+        
+        char date_str[20];
+        snprintf(date_str, sizeof(date_str), "%02d/%02d/20%02d", 
+                date.day, date.month, date.year);
+        lcd_putsAt(date_str, FONT_16x26, 120, 130, BLACK);
     }
     if (count == 6)
     {
