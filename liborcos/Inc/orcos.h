@@ -4,6 +4,9 @@
 //
 // That header file is distributed under BSD-3
 
+#ifndef __ORCOS_H
+#define __ORCOS_H
+
 #include <stdbool.h>
 
 int get_vbat(void);
@@ -60,7 +63,26 @@ void orcos_init();
 void switch_input();
 uint16_t scan_keyboard(void);
 
+// RTC
+typedef struct {
+  uint16_t year;
+  uint8_t  month;
+  uint8_t  day;
+} dt_t;
+
+typedef struct {
+  uint8_t hour;
+  uint8_t min;
+  uint8_t sec;
+  uint8_t csec;
+  uint8_t dow;
+} tm_t;
+
+
+
 // Deprecated
 
 void calc_init(void);
 int calc_on_key(int);
+
+#endif /* __ORCOS_H */
