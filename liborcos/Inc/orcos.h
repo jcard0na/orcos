@@ -4,6 +4,8 @@
 //
 // That header file is distributed under BSD-3
 
+#include <stdbool.h>
+
 int get_vbat(void);
 
 #define LCD_WIDTH   400
@@ -24,6 +26,7 @@ int get_vbat(void);
 
 void LCD_power_on(void);
 void LCD_power_off(int clear);
+bool LCD_is_on(void);
 
 
 // Sends one line data to LCD

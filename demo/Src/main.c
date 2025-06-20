@@ -7,7 +7,6 @@
  */
 int main(void)
 {
-  int off = 0;
   orcos_init();
 
   uint16_t keycode = scan_keyboard();
@@ -33,15 +32,14 @@ int main(void)
 
     keycode = scan_keyboard();
 
-    if (keycode == 54 && off && last_keycode == 0)
+    if (keycode == 54 && !LCD_is_on() && last_keycode == 0)
     { // Calculator was OFF and the ON button was pressed
       LCD_power_on();
       keycode = 0;
-      off = 0;
     }
     int ret = 1;
 
-    if (!off)
+    if (LCD_is_on())
     {
 
       if (keycode)
@@ -52,7 +50,6 @@ int main(void)
       if (!ret)
       { // OFF command received
         LCD_power_off(1);
-        off = 1;
       }
     }
 
@@ -62,6 +59,6 @@ int main(void)
     // https://community.st.com/t5/stm32-mcus-products/how-to-get-segger-rtt-to-work-with-sleep-modes-on-stm32l0/m-p/121639
     __HAL_RCC_GPDMA1_CLK_ENABLE();
 #endif
-    sys_sleep(off);
+    sys_sleep(!LCD_is_on());
   }
 }

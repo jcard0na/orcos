@@ -33,8 +33,8 @@ static uint8_t reverse_bits(uint8_t b);
 
 // 1bpp packed buffer (400x240 / 8 = 12,000 bytes)
 static uint8_t g_framebuffer[LCD_HEIGHT][LCD_WIDTH / 8];
-extern int off;
 static int timeout_counter = 0;
+static bool lcd_is_on = false;
 #define OFF_TIMEOUT (5 * 60) // 5 min timeout before switching off
 
 static void LCD_Error_Handler(void)
@@ -588,17 +588,10 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
     // Do not skip reading the date: This triggers an update to the shadow registers!
     HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);
     SEGGER_RTT_printf(0, "wake up timer event %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
-    if (!off)
+    timeout_counter++;
+    if (timeout_counter > OFF_TIMEOUT)
     {
-        timeout_counter++;
-        if (timeout_counter > OFF_TIMEOUT)
-        {
-            LCD_power_off(1);
-            off = 1;
-        }
-
-        // DEBUG_PRINT("\n--- EXTIN toggle ---\n");
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9); // Toggle LCD refresh signal (EXTIN)
+        LCD_power_off(1);
     }
 }
 
@@ -618,6 +611,7 @@ void LCD_power_on()
         LCD_Error_Handler();
     }
     HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 2047, RTC_WAKEUPCLOCK_RTCCLK_DIV16, 0);
+    lcd_is_on = true;
 }
 
 void LCD_power_off(int clear)
@@ -632,6 +626,11 @@ void LCD_power_off(int clear)
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);  // EXTCOMIN signal of "OFF"
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // 5V booster disable
     HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
+    lcd_is_on = false;
+}
+
+bool LCD_is_on() {
+    return lcd_is_on;
 }
 
 /* Send the entire frame buffer content to the display via SPI interface.
