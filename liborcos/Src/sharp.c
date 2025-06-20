@@ -36,6 +36,7 @@ static uint8_t reverse_bits(uint8_t b);
 static uint8_t g_framebuffer[LCD_HEIGHT][LCD_WIDTH / 8];
 static int timeout_counter = 0;
 static bool lcd_is_on = false;
+static int current_test_screen = 0;
 #define OFF_TIMEOUT (5 * 60) // 5 min timeout before switching off
 
 static void LCD_Error_Handler(void)
@@ -589,6 +590,12 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
     // Do not skip reading the date: This triggers an update to the shadow registers!
     HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);
     SEGGER_RTT_printf(0, "wake up timer event %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
+
+    // If we are showng the RTC test screen, update the time
+    if (current_test_screen == 5) {
+        LCD_test_screen(current_test_screen);
+    }
+
     timeout_counter++;
     if (timeout_counter > OFF_TIMEOUT)
     {
@@ -901,6 +908,7 @@ void LCD_test_screen(uint16_t count)
 {
 #define NUM_OF_TEST_SCREENS 9
     count = (count % NUM_OF_TEST_SCREENS);
+    current_test_screen = count;
     DEBUG_PRINT("Test screen %d\n", count);
     if (count == 0)
     {
@@ -946,8 +954,8 @@ void LCD_test_screen(uint16_t count)
         lcd_clear_buffer();
         lcd_draw_img(test_img, 32, 32, 0, 0, BLACK);
         lcd_draw_img(test_img, 32, 32, 50, 0, BLACK);
-        lcd_draw_img(test_img, 32, 32, 350, 200, BLACK);
-        lcd_draw_img(test_img, 32, 32, 300, 200, BLACK);
+        lcd_draw_img(test_img, 32, 32, 370, 200, BLACK);
+        lcd_draw_img(test_img, 32, 32, 320, 200, BLACK);
 
         // Get and display RTC time
         tm_t time;
