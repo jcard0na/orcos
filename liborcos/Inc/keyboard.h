@@ -10,7 +10,4 @@
 extern const uint16_t row_pin_array[NUM_ROW_PINS];
 extern const uint16_t column_pin_array[NUM_COLUMN_PINS];
 
-void switch_input();
-uint16_t scan_keyboard(void);
-
 #endif // KEYBOARD_H

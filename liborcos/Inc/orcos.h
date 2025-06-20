@@ -53,3 +53,11 @@ void orcos_init();
 #else
     #define DEBUG_PRINT(...) 
 #endif
+
+void switch_input();
+uint16_t scan_keyboard(void);
+
+// Deprecated
+
+void calc_init(void);
+int calc_on_key(int);
