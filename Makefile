@@ -74,8 +74,10 @@ liborcos/Src/calc.c \
 liborcos/Src/fonts.c \
 liborcos/Src/func.c \
 liborcos/Src/io.c \
+liborcos/Src/keyboard.c \
 liborcos/Src/orcos.c \
 liborcos/Src/power.c \
+liborcos/Src/rtc.c \
 liborcos/Src/sharp.c
 
 # C sources
