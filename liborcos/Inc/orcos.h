@@ -17,8 +17,9 @@ int get_vbat(void);
 #define LCD_LINE_BUF_SIZE (LCD_LINE_SIZE + 4)
 
 /* Color Constants */
-#define BLACK 0 // '1' bits will set display pixels (black)
-#define WHITE 1 // '1' bits will clear display pixels (white)
+#define LCD_BLACK 0 // '1' bits in the given buffer will activate display pixels (black)
+
+#define LCD_WHITE ~(0) // '1' bits in the given buffer will clear display pixels (white)
 
 /* Font identifiers */
 #define FONT_6x8 0
