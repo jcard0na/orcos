@@ -47,7 +47,6 @@ void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint
 // off: if zero, wake on any key
 void sys_sleep(int off);
 
-void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc) __attribute__((used, noinline));
 
 // Main library init function
 void orcos_init();

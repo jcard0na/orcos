@@ -1,8 +1,7 @@
 #include "stm32u3xx.h"
 #include "stm32u3xx_hal_rtc_ex.h"
+#include "rtc.h"
 #include "orcos.h"
-
-extern RTC_HandleTypeDef hrtc;
 
 // implement rtc_read()
 void rtc_read( 	tm_t * tm, dt_t * dt)
