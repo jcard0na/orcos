@@ -22,6 +22,7 @@
 #include "stm32u3xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "SEGGER_RTT.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -348,9 +349,27 @@ void RTC_IRQHandler(void)
   /* USER CODE BEGIN RTC_IRQn 0 */
 
   /* USER CODE END RTC_IRQn 0 */
-  HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
   /* USER CODE BEGIN RTC_IRQn 1 */
-
+  if(__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF)) {
+    HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
+    __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&hrtc, RTC_FLAG_WUTF);
+  }
+  if(__HAL_RTC_ALARM_GET_FLAG(&hrtc, RTC_FLAG_ALRAF)) {
+    SEGGER_RTT_printf(0, "RTC Alarm A IRQ\n");
+    __HAL_RTC_ALARM_CLEAR_FLAG(&hrtc, RTC_FLAG_ALRAF);
+  }
+  if(__HAL_RTC_ALARM_GET_FLAG(&hrtc, RTC_FLAG_ALRBF)) {
+    SEGGER_RTT_printf(0, "RTC Alarm B IRQ\n");
+    __HAL_RTC_ALARM_CLEAR_FLAG(&hrtc, RTC_FLAG_ALRBF);
+  }
+  if(__HAL_RTC_TAMPER_GET_FLAG(&hrtc, RTC_FLAG_TAMP_1)) {
+    SEGGER_RTT_printf(0, "RTC Tamper 1 IRQ\n");
+    __HAL_RTC_TAMPER_CLEAR_FLAG(&hrtc, RTC_FLAG_TAMP_1);
+  }
+  if(__HAL_RTC_TIMESTAMP_GET_FLAG(&hrtc, RTC_FLAG_TSF)) {
+    SEGGER_RTT_printf(0, "RTC Timestamp IRQ\n");
+    __HAL_RTC_TIMESTAMP_CLEAR_FLAG(&hrtc, RTC_FLAG_TSF);
+  }
   /* USER CODE END RTC_IRQn 1 */
 }
 

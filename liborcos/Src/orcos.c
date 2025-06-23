@@ -22,15 +22,12 @@ void SystemClock_Config(void)
         Error_Handler();
     }
 
-    HAL_PWR_EnableBkUpAccess(); // Required for LSE configuration
-    __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
-
     /** Initializes the CPU, AHB and APB buses clocks
      */
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSE;
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI;
     RCC_OscInitStruct.HSIState = RCC_HSI_ON;
     RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-    RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+    RCC_OscInitStruct.LSIState = RCC_LSI_ON;
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
     {
         DEBUG_PRINT("Failed to HAL_RCC_OscConfig\n");
@@ -48,13 +45,6 @@ void SystemClock_Config(void)
 
     if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
     {
-        Error_Handler();
-    }
-
-    // Verify LSE is running
-    if (__HAL_RCC_GET_FLAG(RCC_FLAG_LSERDY) == RESET)
-    {
-        DEBUG_PRINT("LSE failed to start\n");
         Error_Handler();
     }
 }
@@ -292,26 +282,6 @@ static void MX_GPIO_Init(void)
 }
 
 /**
- * @brief  RTC Configuration
- *         RTC Clocked by LSE (see HAL_RTC_MspInit)
- * @param  None
- * @retval None
- */
-static void RTC_Config(void)
-{
-    /* Configure RTC */
-    /* after MX_RTC_Init : this not done in the MX_RTC_Init*/
-
-    /*##-2- Enable the RTC peripheral Clock ####################################*/
-    /* Enable RTC Clock */
-    __HAL_RCC_RTC_ENABLE();
-    __HAL_RCC_RTCAPB_CLK_ENABLE();
-
-    /*##-3- Configure the NVIC for RTC Alarm ###################################*/
-    HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(RTC_IRQn);
-}
-/**
  * @brief RTC Initialization Function
  * @param None
  * @retval None
@@ -400,14 +370,7 @@ void orcos_init()
     MX_RTC_Init();
     MX_ADC1_Init();
 
-    // Verify RTC is running
-    if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR0) != 0x32F2)
-    {
-        DEBUG_PRINT("RTC not initialized properly\n");
-        Error_Handler();
-    }
     __lcd_init();
 
-    RTC_Config();
     LCD_power_on();
 }
