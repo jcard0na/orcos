@@ -1,25 +1,28 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    stm32u3xx_it.c
-  * @brief   Interrupt Service Routines.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    stm32u3xx_it.c
+ * @brief   Interrupt Service Routines.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32u3xx_it.h"
+#include "orcos.h"
+#include "SEGGER_RTT.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -66,23 +69,23 @@ extern RTC_HandleTypeDef hrtc;
 /*           Cortex Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
-  * @brief This function handles Non maskable interrupt.
-  */
+ * @brief This function handles Non maskable interrupt.
+ */
 void NMI_Handler(void)
 {
   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
 
   /* USER CODE END NonMaskableInt_IRQn 0 */
   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
-   while (1)
+  while (1)
   {
   }
   /* USER CODE END NonMaskableInt_IRQn 1 */
 }
 
 /**
-  * @brief This function handles Hard fault interrupt.
-  */
+ * @brief This function handles Hard fault interrupt.
+ */
 void HardFault_Handler(void)
 {
   /* USER CODE BEGIN HardFault_IRQn 0 */
@@ -96,8 +99,8 @@ void HardFault_Handler(void)
 }
 
 /**
-  * @brief This function handles Memory management fault.
-  */
+ * @brief This function handles Memory management fault.
+ */
 void MemManage_Handler(void)
 {
   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
@@ -111,8 +114,8 @@ void MemManage_Handler(void)
 }
 
 /**
-  * @brief This function handles Prefetch fault, memory access fault.
-  */
+ * @brief This function handles Prefetch fault, memory access fault.
+ */
 void BusFault_Handler(void)
 {
   /* USER CODE BEGIN BusFault_IRQn 0 */
@@ -126,8 +129,8 @@ void BusFault_Handler(void)
 }
 
 /**
-  * @brief This function handles Undefined instruction or illegal state.
-  */
+ * @brief This function handles Undefined instruction or illegal state.
+ */
 void UsageFault_Handler(void)
 {
   /* USER CODE BEGIN UsageFault_IRQn 0 */
@@ -141,8 +144,8 @@ void UsageFault_Handler(void)
 }
 
 /**
-  * @brief This function handles System service call via SWI instruction.
-  */
+ * @brief This function handles System service call via SWI instruction.
+ */
 void SVC_Handler(void)
 {
   /* USER CODE BEGIN SVCall_IRQn 0 */
@@ -154,8 +157,8 @@ void SVC_Handler(void)
 }
 
 /**
-  * @brief This function handles Debug monitor.
-  */
+ * @brief This function handles Debug monitor.
+ */
 void DebugMon_Handler(void)
 {
   /* USER CODE BEGIN DebugMonitor_IRQn 0 */
@@ -167,8 +170,8 @@ void DebugMon_Handler(void)
 }
 
 /**
-  * @brief This function handles Pendable request for system service.
-  */
+ * @brief This function handles Pendable request for system service.
+ */
 void PendSV_Handler(void)
 {
   /* USER CODE BEGIN PendSV_IRQn 0 */
@@ -180,8 +183,8 @@ void PendSV_Handler(void)
 }
 
 /**
-  * @brief This function handles System tick timer.
-  */
+ * @brief This function handles System tick timer.
+ */
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
@@ -201,8 +204,8 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles EXTI Line0 interrupt.
-  */
+ * @brief This function handles EXTI Line0 interrupt.
+ */
 void EXTI0_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI0_IRQn 0 */
@@ -215,8 +218,8 @@ void EXTI0_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles EXTI Line1 interrupt.
-  */
+ * @brief This function handles EXTI Line1 interrupt.
+ */
 void EXTI1_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI1_IRQn 0 */
@@ -229,8 +232,8 @@ void EXTI1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles EXTI Line2 interrupt.
-  */
+ * @brief This function handles EXTI Line2 interrupt.
+ */
 void EXTI2_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI2_IRQn 0 */
@@ -243,8 +246,8 @@ void EXTI2_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles EXTI Line3 interrupt.
-  */
+ * @brief This function handles EXTI Line3 interrupt.
+ */
 void EXTI3_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI3_IRQn 0 */
@@ -257,8 +260,8 @@ void EXTI3_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles EXTI Line4 interrupt.
-  */
+ * @brief This function handles EXTI Line4 interrupt.
+ */
 void EXTI4_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI4_IRQn 0 */
@@ -271,8 +274,8 @@ void EXTI4_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles EXTI Line5 interrupt.
-  */
+ * @brief This function handles EXTI Line5 interrupt.
+ */
 void EXTI5_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI5_IRQn 0 */
@@ -285,8 +288,8 @@ void EXTI5_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles EXTI Line13 interrupt.
-  */
+ * @brief This function handles EXTI Line13 interrupt.
+ */
 void EXTI13_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI13_IRQn 0 */
@@ -299,8 +302,8 @@ void EXTI13_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles EXTI Line14 interrupt.
-  */
+ * @brief This function handles EXTI Line14 interrupt.
+ */
 void EXTI14_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI14_IRQn 0 */
@@ -313,8 +316,8 @@ void EXTI14_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles EXTI Line15 interrupt.
-  */
+ * @brief This function handles EXTI Line15 interrupt.
+ */
 void EXTI15_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI15_IRQn 0 */
@@ -327,8 +330,8 @@ void EXTI15_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles LPTIM1 global interrupt.
-  */
+ * @brief This function handles LPTIM1 global interrupt.
+ */
 void LPTIM1_IRQHandler(void)
 {
   /* USER CODE BEGIN LPTIM1_IRQn 0 */
@@ -341,17 +344,36 @@ void LPTIM1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles RTC non-secure interrupt.
-  */
+ * @brief This function handles RTC non-secure interrupt.
+ */
 void RTC_IRQHandler(void)
 {
-  /* USER CODE BEGIN RTC_IRQn 0 */
 
-  /* USER CODE END RTC_IRQn 0 */
-  HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
-  /* USER CODE BEGIN RTC_IRQn 1 */
-
-  /* USER CODE END RTC_IRQn 1 */
+  if (__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF))
+  {
+    HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
+    __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&hrtc, RTC_FLAG_WUTF);
+  }
+  if (__HAL_RTC_ALARM_GET_FLAG(&hrtc, RTC_FLAG_ALRAF))
+  {
+    DEBUG_PRINT("RTC Alarm A IRQ\n");
+    __HAL_RTC_ALARM_CLEAR_FLAG(&hrtc, RTC_FLAG_ALRAF);
+  }
+  if (__HAL_RTC_ALARM_GET_FLAG(&hrtc, RTC_FLAG_ALRBF))
+  {
+    DEBUG_PRINT("RTC Alarm B IRQ\n");
+    __HAL_RTC_ALARM_CLEAR_FLAG(&hrtc, RTC_FLAG_ALRBF);
+  }
+  if (__HAL_RTC_TAMPER_GET_FLAG(&hrtc, RTC_FLAG_TAMP_1))
+  {
+    DEBUG_PRINT("RTC Tamper 1 IRQ\n");
+    __HAL_RTC_TAMPER_CLEAR_FLAG(&hrtc, RTC_FLAG_TAMP_1);
+  }
+  if (__HAL_RTC_TIMESTAMP_GET_FLAG(&hrtc, RTC_FLAG_TSF))
+  {
+    DEBUG_PRINT("RTC Timestamp IRQ\n");
+    __HAL_RTC_TIMESTAMP_CLEAR_FLAG(&hrtc, RTC_FLAG_TSF);
+  }
 }
 
 /* USER CODE BEGIN 1 */

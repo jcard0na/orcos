@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "orcos_private.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -152,7 +153,13 @@ void HAL_LPTIM_MspInit(LPTIM_HandleTypeDef* hlptim)
   /** Initializes the peripherals clock
   */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_LPTIM1;
+    #if SELECTED_LOW_SPEED_CRYSTAL == LOW_SPEED_CRYSTAL_EXTERNAL
     PeriphClkInit.Lptim1ClockSelection = RCC_LPTIM1CLKSOURCE_LSE;
+    #elif SELECTED_LOW_SPEED_CRYSTAL == LOW_SPEED_CRYSTAL_INTERNAL
+    PeriphClkInit.Lptim1ClockSelection = RCC_LPTIM1CLKSOURCE_LSI;
+    #else
+    #error "Set LOW_SPEED_CRYSTAL to internal or external"
+    #endif
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
     {
       Error_Handler();
@@ -352,7 +359,14 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef* hrtc)
   /** Initializes the peripherals clock
   */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC;
+
+    #if SELECTED_LOW_SPEED_CRYSTAL == LOW_SPEED_CRYSTAL_EXTERNAL
     PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+    #elif SELECTED_LOW_SPEED_CRYSTAL == LOW_SPEED_CRYSTAL_INTERNAL
+    PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
+    #else
+    #error "Set LOW_SPEED_CRYSTAL to internal or external"
+    #endif
 
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
     {
@@ -362,10 +376,9 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef* hrtc)
     /* Peripheral clock enable */
     __HAL_RCC_RTC_ENABLE();
     __HAL_RCC_RTCAPB_CLK_ENABLE();
-    /* USER CODE BEGIN RTC_MspInit 1 */
 
-    /* USER CODE END RTC_MspInit 1 */
-
+    HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(RTC_IRQn);
   }
 
 }

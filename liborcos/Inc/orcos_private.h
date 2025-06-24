@@ -29,39 +29,15 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32u3xx_hal.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+#define LOW_SPEED_CRYSTAL_INTERNAL 0
+#define LOW_SPEED_CRYSTAL_EXTERNAL 1
+#define SELECTED_LOW_SPEED_CRYSTAL LOW_SPEED_CRYSTAL_INTERNAL
 
-/* USER CODE END Includes */
-
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
-
-/* USER CODE END ET */
-
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
 #define RTC_ASYNCH_PREDIV    0x7F
 #define RTC_SYNCH_PREDIV     0x00F9  /* 32 kHz RC/128 - 1 */
-/* USER CODE END EC */
-
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }
