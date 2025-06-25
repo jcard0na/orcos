@@ -323,411 +323,50 @@ void set_trigconv()
  */
 void draw_char(int x, int pos, char ch)
 {
-	if (context == CONTEXT_REAL)
-	{
-		if (x < 0)
-		{
-			// sharp_string(str, &font_24x40, 288+24*x, 0);
-			sharp_char_fast_24x40(ch, 36 + 3 * x, 0);
-		}
-		else
-		{
-			if (x == 0 && ch == 0)
-			{
-				sharp_char('\x9e', &font_12x20, 288, 12);
-				sharp_string("10", &font_16x26, 300, 10);
-			}
-			else
-			{
-				sharp_char(ch, &font_16x26, 316 + 16 * x, 0);
-			}
-		}
-	}
-	else if (context == CONTEXT_UNCERT)
-	{
-		int pos2 = pos / 4;
-		if (precision_uncert > 6)
-		{
-			if (x < 0)
-			{
-				sharp_char(ch, &font_12x20, 152 + 12 * x + 192 * pos2, 10);
-			}
-			else
-			{
-				if (x == 0 && ch == 0)
-				{
-					sharp_char('\x9e', &font_6x8, 154 + 192 * pos2, 20);
-					sharp_string("10", &font_6x8, 160 + 192 * pos2, 20);
-				}
-				else
-				{
-					sharp_char(ch, &font_12x20, 148 + 12 * x + 192 * pos2, 0);
-				}
-			}
-		}
-		else
-		{
-			if (x < 0)
-			{
-				sharp_char(ch, &font_16x26, 132 + 16 * x + 192 * pos2, 10);
-			}
-			else
-			{
-				if (x == 0 && ch == 0)
-				{
-					sharp_char('\x9e', &font_12x20, 132 + 192 * pos2, 15);
-					sharp_string("10", &font_12x20, 144 + 192 * pos2, 15);
-				}
-				else
-				{
-					sharp_char(ch, &font_12x20, 148 + 12 * x + 192 * pos2, 0);
-				}
-			}
-		}
-	}
 }
 
 void draw_decpoint(int x, int pos)
 {
-	if (context == CONTEXT_REAL)
-	{
-		sharp_char('.', &font_24x40, 288 + 24 * x - 13, 4);
-	}
-	else if (context == CONTEXT_UNCERT)
-	{
-		int pos2 = pos / 4;
-		if (precision_uncert > 6)
-		{
-			sharp_char('.', &font_12x20, 152 + 12 * x - 6 + 192 * pos2, 13);
-		}
-		else
-		{
-			sharp_char('.', &font_16x26, 132 + 16 * x - 8 + 192 * pos2, 14);
-		}
-	}
 }
 
 void clear_cursor()
 {
-	sharp_clear_buffer(4, 0xFF);
-	sharp_send_buffer(BOTTOM_YPOS + 42, 4);
 }
 
 void draw_cursor()
 {
-	sharp_clear_buffer(4, 0xFF);
-	if (context == CONTEXT_UNCERT)
-	{
-		if (precision_uncert > 6)
-		{
-			if (input.expentry)
-			{
-				sharp_filled_rectangle(160 + input_uncert * 192, 0, 46, 4, 0);
-			}
-			else
-			{
-				sharp_filled_rectangle(20 + input_uncert * (192 + 12), 0, 130 - input_uncert * 12, 4, 0);
-			}
-		}
-		else
-		{
-			if (input.expentry)
-			{
-				sharp_filled_rectangle(146 + input_uncert * 192, 0, 56, 4, 0);
-			}
-			else
-			{
-				sharp_filled_rectangle(20 + input_uncert * (192 + 12), 0, 110 - input_uncert * 12, 4, 0);
-			}
-		}
-	}
-	else
-	{
-		if (input.expentry)
-		{
-			sharp_filled_rectangle(300, 0, 95, 4, 0);
-		}
-		else
-		{
-			sharp_filled_rectangle(20, 0, 288 - 20, 4, 0);
-		}
-	}
-	sharp_send_buffer(BOTTOM_YPOS + 42, 4);
 }
 
 /* Draw stack register name for the position "pos" (pos=0...3) for "X"..."T"
  * in the string buffer. */
 void draw_stack_register_name(int pos)
 {
-	uint8_t reg[4] = {'x', 'y', 'z', 't'};
-	sharp_char(reg[pos], &font_16x26, 1, 1);
 }
 
 /* Draw status string (status of modifier keys, voltage, etc.)
  * in the buffer and send it to display. */
 void draw_status()
 {
-	char v[34];
-	/* Paint 2 top lines black */
-	sharp_clear_buffer(2, 0x00);
-	sharp_send_buffer(0, 2);
-	/* Prepare empty buffer for status string */
-	sharp_clear_buffer(20, 0xFF);
-
-	for (int i = 0; i < 33; i++)
-		v[i] = ' ';
-	v[33] = 0x00;
-
-	if (shift == 1)
-	{
-		v[0] = 'F';
-	}
-	else if (shift == 2)
-	{
-		v[0] = 'G';
-	}
-
-	sprintf(&(v[2]), "S%d", stack_size);
-
-	if (dispmode == 1)
-	{
-		memcpy(&(v[6]), "SCI", 3);
-	}
-	else if (dispmode == 2)
-	{
-		memcpy(&(v[6]), "ENG", 3);
-	}
-	if (trigmode == 0)
-	{
-		memcpy(&(v[10]), "DEG", 3);
-	}
-	else if (trigmode == 1)
-	{
-		memcpy(&(v[10]), "RAD", 3);
-	}
-	if (context == CONTEXT_UNCERT)
-	{
-		memcpy(&(v[14]), "UNC", 3);
-	}
-	if (variables[0] != 0.)
-	{
-		v[18] = 'M';
-	}
-	if (context == CONTEXT_REAL)
-		sprintf(&(v[20]), "N%d", precision);
-	if (context == CONTEXT_UNCERT)
-		sprintf(&(v[20]), "N%d", precision_uncert);
-
-	if (program_entry)
-		sprintf(&(v[24]), "P%d", program_size);
-	else if (program_step)
-		sprintf(&(v[24]), "R%d", program_step);
-	else if (program_size > 0)
-		memcpy(&(v[24]), "P  ", 3);
-
-	int voltage = get_vbat();
-	if (voltage > 0 && voltage < 9000)
-	{
-		// sprintf(&(v[28]), "%d", voltage/1000);
-		// v[29] = '.';
-		// sprintf(&(v[30]), "%02dV", (voltage%1000)/10);
-		sprintf(&(v[28]), "%d", voltage);
-	}
-	for (int i = 0; i < 33; i++)
-		if (v[i] == 0x00)
-			v[i] = ' ';
-
-	sharp_string(v, &font_12x20, 2, 0);
-	sharp_invert_buffer(20);
-	sharp_send_buffer(2, 20);
 }
 
 void draw_number_split(int pos, int64_t _mantissa, int _exponent, int pointpos, int hideexp)
 {
-	int i;
-	int64_t mantissa = _mantissa;
-	int32_t exponent = _exponent;
-
-	draw_stack_register_name(pos % 4);
-	int prec = precision;
-	if (context == CONTEXT_UNCERT)
-	{
-		sharp_char('\xf1', &font_12x20, 212, 11);
-		prec = precision_uncert;
-	}
-
-	if (mantissa < 0)
-		mantissa = -mantissa;
-	// mantissa = abs(mantissa);
-	for (i = 0; i < prec; i++)
-	{
-		uint8_t ch = mantissa % 10;
-		mantissa = mantissa / 10;
-		draw_char(-(i + 1), pos, ch + '0');
-		if (mantissa == 0 && pointpos + i >= prec)
-			break;
-	}
-	if (_mantissa < 0)
-		draw_char(-(i + 2), pos, '-');
-	draw_decpoint(-(prec - pointpos), pos);
-
-	if (exponent != 0 || !hideexp)
-	{
-		draw_char(0, pos, 0);
-		if (exponent < 0)
-			draw_char(1, pos, '-');
-		if (exponent < 0)
-			exponent = -exponent;
-		for (i = 0; i < 3; i++)
-		{
-			uint8_t ch = exponent % 10;
-			exponent = exponent / 10;
-			draw_char((4 - i), pos, ch + '0');
-		}
-	}
 }
 
 void draw_error(int pos, int code)
 {
-	char *message;
-	if (code == 1)
-	{
-		message = "Error";
-	}
-	sharp_clear_buffer(40, 0xFF);
-	sharp_string(message, &font_24x40, 288 - 24 * 6, 0);
-	sharp_send_buffer(BOTTOM_YPOS - pos * LINE_INTERVAL, 40);
-	clear_cursor();
 }
 
 void draw_number_sci(int pos, double num)
 {
-	int exponent;
-	int64_t mantissa;
-	int prec = precision;
-	if (context == CONTEXT_UNCERT)
-		prec = precision_uncert;
-	if (num != 0)
-	{
-		exponent = (int)floor(log10(fabs(num)));
-		mantissa = (int64_t)round(fabs(num) / pow(10, exponent - prec + 1));
-		if (mantissa > max_mantissa[prec])
-		{
-			mantissa /= 10;
-			exponent += 1;
-		}
-		if (num < 0)
-			mantissa = -mantissa;
-	}
-	else
-	{
-		mantissa = 0;
-		exponent = 0;
-	}
-	draw_number_split(pos, mantissa, exponent, 1, 0);
 }
 
 void draw_number_eng(int pos, double num)
 {
-	int exponent;
-	int64_t mantissa;
-	const char si_prefix[] = "yzafpn"
-							 "\xe6"
-							 "m kMGTPEZY";
-	int prec = precision;
-	if (context == CONTEXT_UNCERT)
-		prec = precision_uncert;
-	if (num != 0)
-	{
-		exponent = (int)floor(log10(fabs(num)));
-		mantissa = (int64_t)round(fabs(num) / pow(10, exponent - prec + 1));
-		if (mantissa > max_mantissa[prec])
-		{
-			mantissa /= 10;
-			exponent += 1;
-		}
-		if (num < 0)
-			mantissa = -mantissa;
-	}
-	else
-	{
-		mantissa = 0;
-		exponent = 0;
-	}
-	int exp2;
-	if (exponent >= 0)
-		exp2 = 3 * (exponent / 3);
-	else
-		exp2 = -3 * (1 - (exponent + 1) / 3);
-	draw_number_split(pos, mantissa, exp2, exponent - exp2 + 1, 0);
-	int npref = exp2 / 3;
-	if (npref >= -8 && npref <= 8 && npref != 0)
-	{
-		char str[4] = "[ ]";
-		str[1] = si_prefix[npref + 8];
-		if (context == CONTEXT_REAL)
-		{
-			sharp_string(str, &font_12x20, 364, 22);
-		}
-		else
-		{
-			int pos2 = pos / 4;
-			sharp_string(str, &font_12x20, 174 + 192 * pos2, 21);
-		}
-	}
 }
 
 void draw_number_normal(int pos, double num)
 {
-	int i;
-	int exponent;
-	int64_t mantissa;
-	int pointpos = 1;
-	int prec = precision;
-	if (context == CONTEXT_UNCERT)
-		prec = precision_uncert;
-	if (num != 0)
-	{
-		exponent = (int)floor(log10(fabs(num)));
-		mantissa = (int64_t)round(fabs(num) / pow(10, exponent - prec + 1));
-		if (mantissa > max_mantissa[prec])
-		{
-			mantissa /= 10;
-			exponent += 1;
-		}
-		if (exponent < prec && exponent > 0)
-		{
-			pointpos = exponent + 1;
-			exponent = 0;
-		}
-		if (exponent < 0 && exponent > -4)
-		{
-			mantissa = (int64_t)round(fabs(num) * pow(10, prec - 1));
-			pointpos = 1;
-			exponent = 0;
-		}
-		for (i = 0; i < prec; i++)
-		{
-			if (mantissa % 10 == 0 && pointpos < prec)
-			{
-				mantissa /= 10;
-				pointpos++;
-			}
-			else
-			{
-				break;
-			}
-		}
-		if (num < 0)
-			mantissa = -mantissa;
-	}
-	else
-	{
-		mantissa = 0;
-		exponent = 0;
-		pointpos = prec;
-	}
-	draw_number_split(pos, mantissa, exponent, pointpos, 1);
 }
 
 #define DRAWMODE_CLEAR 1
@@ -735,115 +374,14 @@ void draw_number_normal(int pos, double num)
 
 void draw_number(int pos, double num, int mode)
 {
-	int pos2 = pos % 4;
-	if (mode & DRAWMODE_CLEAR)
-		sharp_clear_buffer(44, 0xFF);
-	if (stack_size > pos2)
-	{
-		// Only draw if stack is deep enough
-		if (dispmode == 0)
-			draw_number_normal(pos, num);
-		if (dispmode == 1)
-			draw_number_sci(pos, num);
-		if (dispmode == 2)
-			draw_number_eng(pos, num);
-	}
-	if (mode & DRAWMODE_FLUSH)
-		sharp_send_buffer(BOTTOM_YPOS - (pos % 4) * LINE_INTERVAL, 44);
 }
 
 void draw_stack()
 {
-	if (context == CONTEXT_REAL)
-	{
-		int cat = finite(stack[0]);
-		if (!cat && stack_size > 0)
-		{
-			draw_error(0, 1);
-			error_flag = 1;
-		}
-		else
-		{
-			draw_number(0, stack[0], DRAWMODE_CLEAR | DRAWMODE_FLUSH);
-		}
-		draw_number(1, stack[1], DRAWMODE_CLEAR | DRAWMODE_FLUSH);
-		draw_number(2, stack[2], DRAWMODE_CLEAR | DRAWMODE_FLUSH);
-		draw_number(3, stack[3], DRAWMODE_CLEAR | DRAWMODE_FLUSH);
-	}
-	else if (context == CONTEXT_UNCERT)
-	{
-		int cat = finite(stack[0]) && finite(stack2[0]);
-		if (!cat && stack_size > 0)
-		{
-			draw_error(0, 1);
-			error_flag = 1;
-		}
-		else
-		{
-			draw_number(0, stack[0], DRAWMODE_CLEAR);
-			draw_number(4, stack2[0], DRAWMODE_FLUSH);
-		}
-		draw_number(1, stack[1], DRAWMODE_CLEAR);
-		draw_number(5, stack2[1], DRAWMODE_FLUSH);
-		draw_number(2, stack[2], DRAWMODE_CLEAR);
-		draw_number(6, stack2[2], DRAWMODE_FLUSH);
-		draw_number(3, stack[3], DRAWMODE_CLEAR);
-		draw_number(7, stack2[3], DRAWMODE_FLUSH);
-	}
-	// clear_cursor();
 }
 
 void draw_input()
 {
-	int i;
-	sharp_clear_buffer(44, 0xFF);
-	int pos = 0;
-	if (context == CONTEXT_UNCERT)
-	{
-		if (input_uncert)
-		{
-			pos = 4;
-			draw_number(0, stack[0], 0);
-		}
-		else
-		{
-			pos = 0;
-			draw_number(4, stack2[0], 0);
-		}
-	}
-
-	draw_stack_register_name(0);
-	if (input.mpos == 0)
-	{
-		draw_char(-1, pos, '0');
-		if (input.sign)
-			draw_char(-2, pos, '-');
-	}
-	else
-	{
-		for (i = 0; i < input.mpos; i++)
-		{
-			draw_char((i - input.mpos), pos, input.mantissa[i] + '0');
-		}
-		if (input.point > 0)
-		{
-			draw_decpoint((input.point - input.mpos), pos);
-		}
-		if (input.sign)
-			draw_char(-(input.mpos + 1), pos, '-');
-		if (input.expentry == 1)
-		{
-			draw_char(0, pos, 0);
-			for (i = 0; i < 3; i++)
-			{
-				draw_char((4 - i), pos, input.exponent[i] + '0');
-			}
-			if (input.expsign)
-				draw_char(1, pos, '-');
-		}
-	}
-	sharp_send_buffer(BOTTOM_YPOS, 44);
-	// draw_cursor();
 }
 
 void enter_number(char c)
@@ -1120,7 +658,6 @@ void enter_clear()
 		clear_input();
 	}
 	input.replace_x = 0;
-	sharp_clear();
 	clear_stack();
 }
 
@@ -1847,25 +1384,18 @@ void apply_test(uint16_t code)
 	switch (code)
 	{
 	case OP_TEST_1:
-		sharp_test_font(&font_6x8, 0);
 		break;
 	case OP_TEST_2:
-		sharp_test_font(&font_7x12b, 0);
 		break;
 	case OP_TEST_3:
-		sharp_test_font(&font_12x20, 0);
 		break;
 	case OP_TEST_4:
-		sharp_test_font(&font_16x26, 0);
 		break;
 	case OP_TEST_5:
-		sharp_test_font(&font_24x40, 0);
 		break;
 	case OP_TEST_6:
-		sharp_test_font(&font_24x40, 96);
 		break;
 	case OP_TEST_7:
-		sharp_test_font(NULL, 0);
 		break;
 	case OP_TEST_8:
 		LCD_test_screen(++counter);

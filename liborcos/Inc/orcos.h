@@ -28,10 +28,12 @@ int get_vbat(void);
 #define FONT_24x40 3
 #define FONT_16x26 4
 
+// LCD peripheral control
 void LCD_power_on(void);
 void LCD_power_off(int clear);
 bool LCD_is_on(void);
 
+// LCD and draw functions
 // Sends one line data to LCD
 void LCD_write_line(uint8_t *buf);
 void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
@@ -42,6 +44,29 @@ void lcd_fill(uint8_t fill_pattern);
 void lcd_clear_buffer(void);
 void lcd_invert_framebuffer(void);
 void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint8_t color);
+int lcd_for_calc(int what);
+
+#define 	DISP_CALC   0
+#define 	DISP_SYS_MENU   2
+#define 	DISP_BOOTLOADER   4
+#define 	DISP_UNIMPLEMENTED   5
+#define 	DISP_USB_WRITE   6
+#define 	DISP_MSC_CONNECT_USB   7
+#define 	DISP_ABOUT   8
+#define 	DISP_FAT_FORMAT   9
+#define 	DISP_FAULT   11
+#define 	DISP_QSPI_BAD_CRC   12
+#define 	DISP_QSPI_CHECK   13
+#define 	DISP_MARK_REGION   15
+#define 	DISP_DISK_TEST   16
+#define 	DISP_DSKTST_CONNECT_USB   17
+#define 	DISP_QSPI_CONNECT_USB   18
+#define 	DISP_OFF_IMAGE_ERR   19
+#define 	DISP_HELP   21
+#define 	DISP_BOOTLDR_CON_USB   22
+#define 	DISP_PROD_DIAG   23
+#define 	DISP_POWER_CHECK   24
+#define 	DISP_FLASH_CONNECT_USB   26
 
 // Put calculator to sleep
 // off: if non-zero, only wake on ON key
@@ -61,7 +86,7 @@ void orcos_init();
 void switch_input();
 uint16_t scan_keyboard(void);
 
-// RTC
+// Date/Time functions 
 typedef struct
 {
   uint16_t year;
@@ -81,7 +106,6 @@ typedef struct
 void rtc_read(tm_t *tm, dt_t *dt);
 
 // Deprecated
-
 void calc_init(void);
 int calc_on_key(int);
 
