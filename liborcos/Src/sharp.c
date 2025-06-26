@@ -212,7 +212,8 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
     SEGGER_RTT_printf(0, "wake up timer event %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
 
     // If we are showng the RTC test screen, update the time
-    if (current_test_screen == 5) {
+    if (current_test_screen == 5)
+    {
         LCD_test_screen(current_test_screen);
     }
 
@@ -257,7 +258,8 @@ void LCD_power_off(int clear)
     lcd_is_on = false;
 }
 
-bool LCD_is_on() {
+bool LCD_is_on()
+{
     return lcd_is_on;
 }
 
@@ -524,6 +526,41 @@ void __lcd_init()
     lcd_fill(LCD_WHITE);
 }
 
+int lcd_for_calc(int what_screen)
+{
+    switch (what_screen)
+    {
+    case DISP_SYS_MENU:
+        lcd_clear_buffer();
+
+        // Get and display RTC time
+        tm_t time;
+        dt_t date;
+        rtc_read(&time, &date);
+
+        char time_str[20];
+        snprintf(time_str, sizeof(time_str), "%02d:%02d:%02d",
+                 time.hour, time.min, time.sec);
+        lcd_putsAt(time_str, FONT_16x26, 120, 100, LCD_BLACK);
+
+        char date_str[20];
+        snprintf(date_str, sizeof(date_str), "%02d/%02d/20%02d",
+                 date.day, date.month, date.year);
+        lcd_putsAt(date_str, FONT_16x26, 120, 130, LCD_BLACK);
+
+        char voltage_str[20];
+        uint16_t vbat = (uint16_t) get_vbat();
+        snprintf(voltage_str, sizeof(voltage_str), "bat: %01d.%03dV",
+                 vbat / 1000, vbat % 1000);
+        lcd_putsAt(voltage_str, FONT_16x26, 0, 0, LCD_BLACK);
+
+        break;
+    default:
+        lcd_draw_test_pattern(8);
+    }
+    return LCD_HEIGHT;
+}
+
 void LCD_test_screen(uint16_t count)
 {
 #define NUM_OF_TEST_SCREENS 9
@@ -571,26 +608,7 @@ void LCD_test_screen(uint16_t count)
     }
     if (count == 5)
     {
-        lcd_clear_buffer();
-        lcd_draw_img(test_img, 32, 32, 0, 0, LCD_BLACK);
-        lcd_draw_img(test_img, 32, 32, 50, 0, LCD_BLACK);
-        lcd_draw_img(test_img, 32, 32, 370, 200, LCD_BLACK);
-        lcd_draw_img(test_img, 32, 32, 320, 200, LCD_BLACK);
-
-        // Get and display RTC time
-        tm_t time;
-        dt_t date;
-        rtc_read(&time, &date);
-        
-        char time_str[20];
-        snprintf(time_str, sizeof(time_str), "%02d:%02d:%02d", 
-                time.hour, time.min, time.sec);
-        lcd_putsAt(time_str, FONT_16x26, 120, 100, LCD_BLACK);
-        
-        char date_str[20];
-        snprintf(date_str, sizeof(date_str), "%02d/%02d/20%02d", 
-                date.day, date.month, date.year);
-        lcd_putsAt(date_str, FONT_16x26, 120, 130, LCD_BLACK);
+        lcd_for_calc(DISP_SYS_MENU);
     }
     if (count == 6)
     {

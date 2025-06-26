@@ -37,15 +37,15 @@ bool LCD_is_on(void);
 // Sends one line data to LCD
 void LCD_write_line(uint8_t *buf);
 void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
-void lcd_draw_img_msb(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
 void lcd_refresh(void);
 void lcd_draw_test_pattern(uint8_t square_size);
 void lcd_fill(uint8_t fill_pattern);
 void lcd_clear_buffer(void);
 void lcd_invert_framebuffer(void);
 void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint8_t color);
-int lcd_for_calc(int what);
+int lcd_for_calc(int what_screen);
 
+// Screens
 #define 	DISP_CALC   0
 #define 	DISP_SYS_MENU   2
 #define 	DISP_BOOTLOADER   4
