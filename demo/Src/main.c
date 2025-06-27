@@ -1,5 +1,6 @@
 #include "main.h"
 #include "orcos.h"
+#include <stdint.h>
 
 /**
  * @brief  The application entry point.

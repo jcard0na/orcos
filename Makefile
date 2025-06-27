@@ -238,7 +238,16 @@ clean:
 #######################################
 -include $(wildcard $(BUILD_DIR)/*.d)
 
-.PHONY: probe-rs
+.PHONY: probe-rs docs
+
+.PHONY: docs
+docs:
+	doxygen Doxyfile
+	@echo "Docs generated in docs/html/index.html"
+
+clean-docs:
+	rm -rf docs/
+
 probe-rs:
 	(cd probe-rs && cargo build --release)
 

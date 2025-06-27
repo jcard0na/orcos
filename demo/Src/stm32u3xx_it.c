@@ -19,6 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stm32u3xx.h"
 #include "stm32u3xx_it.h"
 #include "orcos.h"
 #include "SEGGER_RTT.h"
