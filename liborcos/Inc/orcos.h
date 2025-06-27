@@ -18,7 +18,6 @@ int get_vbat(void);
 
 /* Color Constants */
 #define LCD_SET_VALUE 0 // '1' bits in the given buffer will activate display pixels (black)
-
 #define LCD_EMPTY_VALUE ~(0) // '1' bits in the given buffer will clear display pixels (white)
 
 /* Font identifiers */

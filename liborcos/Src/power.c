@@ -27,6 +27,15 @@ void sys_sleep(int off) {
 		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 		GPIO_InitStruct.Pull = GPIO_PULLUP; // Use external 1M pull-up to minimise current draw
 		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+		// Disable interrupts for all other keyboard pins
+        HAL_NVIC_DisableIRQ(EXTI0_IRQn);
+        HAL_NVIC_DisableIRQ(EXTI1_IRQn);
+        HAL_NVIC_DisableIRQ(EXTI2_IRQn);
+        HAL_NVIC_DisableIRQ(EXTI3_IRQn);
+        HAL_NVIC_DisableIRQ(EXTI4_IRQn);
+        HAL_NVIC_DisableIRQ(EXTI5_IRQn);
+        HAL_NVIC_DisableIRQ(EXTI13_IRQn);
+        HAL_NVIC_DisableIRQ(EXTI14_IRQn);
 	} else {
 		GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
 				|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
@@ -58,6 +67,17 @@ void sys_sleep(int off) {
 	DEBUG_PRINT("--- sleep (off = %d)---\n", off);
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERMODE_STOP2, PWR_STOPENTRY_WFI);
 	DEBUG_PRINT("--- wake up --- \n");
+	// After wakeup, re-enable all interrupts if they were disabled
+    if (off) {
+        HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+        HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+        HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+        HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+        HAL_NVIC_EnableIRQ(EXTI4_IRQn);
+        HAL_NVIC_EnableIRQ(EXTI5_IRQn);
+        HAL_NVIC_EnableIRQ(EXTI13_IRQn);
+        HAL_NVIC_EnableIRQ(EXTI14_IRQn);
+    }
 }
 
 /**
