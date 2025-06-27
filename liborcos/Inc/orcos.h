@@ -209,8 +209,14 @@ typedef struct
 
 void rtc_read(tm_t *tm, dt_t *dt);
 
-// Deprecated
+/** @brief calc_init
+ * @deprecated Not to be used.
+ */
 void calc_init(void);
+
+/** @brief calc_on_key
+ * @deprecated Not to be used.
+ */
 int calc_on_key(int);
 
 #endif /* __ORCOS_H */
