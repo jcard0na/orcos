@@ -83,6 +83,7 @@ int lcd_for_calc(int what_screen);
 // off: if non-zero, only wake on ON key
 // off: if zero, wake on any key
 void sys_sleep(int off);
+void sys_reset(void);
 
 
 // Main library init function

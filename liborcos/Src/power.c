@@ -59,3 +59,12 @@ void sys_sleep(int off) {
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERMODE_STOP2, PWR_STOPENTRY_WFI);
 	DEBUG_PRINT("--- wake up --- \n");
 }
+
+/**
+ * @brief Performs a system reset by triggering the CPU's reset
+ */
+void sys_reset(void)
+{
+    DEBUG_PRINT("System reset requested\n");
+    HAL_NVIC_SystemReset();
+}
