@@ -15,8 +15,6 @@ int main(void)
     uint16_t keycode = 0;
     uint16_t last_keycode = 0;
 
-    HAL_Delay(10); // Debouncing delay in ms
-
     wait_for_key_press();
     keycode = key_pop();
 

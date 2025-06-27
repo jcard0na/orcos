@@ -105,6 +105,8 @@ void wait_for_key_press();
 #define KEY_0 1
 #define KEY_SIGN 2
 #define KEY_ENTER 29
+#define KEY_F 49
+#define KEY_ON 54
 #define MULTIPLE_KEYS_PRESSED(x)  ((x) > 0xff)
 #define FIRST_KEYCODE(x)  ((x) & 0xff)
 #define SECOND_KEYCODE(x)  ((x) >> 8)
