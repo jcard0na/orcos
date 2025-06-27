@@ -10,14 +10,16 @@
 
 #include "stm32u3xx_hal.h"
 #include "fonts.h"
+#include "sharp_lowlevel.h"
+#include "sharp_graphics.h"
 
+// #define LCD_WIDTH 400
+// #define LCD_HEIGHT 240
 #define BUFFER_WIDTH 400
 #define BUFFER_LINES 64
 #define BUFFER_SIZE (3+BUFFER_LINES*52)
 
 extern uint8_t buffer[BUFFER_SIZE];
-
-void delay_us (uint16_t us);
 
 void sharp_clear(void);
 

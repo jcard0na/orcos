@@ -22,10 +22,7 @@ TARGET = orcos
 # debug build?
 DEBUG = 1
 # optimization
-# With this optimization, display updates using LCD_write_line() will not work.
-# lcd_update(), on the other hand, works just fine.
-#OPT = -Og
-OPT = -O0
+OPT = -Og
 
 
 #######################################
@@ -78,7 +75,9 @@ liborcos/Src/keyboard.c \
 liborcos/Src/orcos.c \
 liborcos/Src/power.c \
 liborcos/Src/rtc.c \
-liborcos/Src/sharp.c
+liborcos/Src/sharp.c \
+liborcos/Src/sharp_graphics.c \
+liborcos/Src/sharp_lowlevel.c
 
 # C sources
 C_SOURCES =  \

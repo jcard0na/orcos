@@ -2,6 +2,7 @@
 #include "main.h"
 #include "orcos.h"
 #include "sharp.h" // For LCD functions
+#include "sharp_lowlevel.h" // For delay_us()
 #include "SEGGER_RTT.h"
 
 #define KEY_QUEUE_SIZE 16

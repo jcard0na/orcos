@@ -13,11 +13,15 @@
 #include "stm32u3xx_hal.h"
 #include "fonts.h"
 #include "sharp.h"
-#include "orcos.h"
+#include "sharp_graphics.h"
+#include "sharp_lowlevel.h"
 #include "stm32u3xx_hal_rtc_ex.h"
 #include "openrpncalc.h"
+#include "orcos.h"
+
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 #if DEBUG
 #include "SEGGER_RTT.h"
@@ -28,130 +32,16 @@ TIM_HandleTypeDef htim1;
 SPI_HandleTypeDef hspi2;
 LPTIM_HandleTypeDef hlptim1;
 
-static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb);
-static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb);
-static uint8_t reverse_bits(uint8_t b);
 
 // 1bpp packed buffer (400x240 / 8 = 12,000 bytes)
-static uint8_t g_framebuffer[LCD_HEIGHT][LCD_WIDTH / 8];
+uint8_t g_framebuffer[LCD_HEIGHT][LCD_WIDTH / 8];
+
+// Power management variables
 static int timeout_counter = 0;
 static bool lcd_is_on = false;
 static int current_test_screen = 0;
 #define OFF_TIMEOUT (5 * 60) // 5 min timeout before switching off
 
-static void LCD_Error_Handler(void)
-{
-    __disable_irq();
-    while (1)
-    {
-    }
-}
-
-static void TIM1_Init(void)
-{
-    TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-    TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-    htim1.Instance = TIM1;
-    htim1.Init.Prescaler = 15; // 16MHz/(15+1) = 1MHz → 1µs per tick (ideal for delay_us)
-    htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim1.Init.Period = 65535;
-    htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    htim1.Init.RepetitionCounter = 0;
-    htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-    {
-        LCD_Error_Handler();
-    }
-    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-    if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-    {
-        LCD_Error_Handler();
-    }
-    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-    sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
-    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-    if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-    {
-        LCD_Error_Handler();
-    }
-}
-
-static void SPI2_Init(void)
-{
-
-    SPI_AutonomousModeConfTypeDef HAL_SPI_AutonomousMode_Cfg_Struct = {0};
-
-    /* SPI2 parameter configuration*/
-    hspi2.Instance = SPI2;
-    hspi2.Init.Mode = SPI_MODE_MASTER;
-    hspi2.Init.Direction = SPI_DIRECTION_1LINE;
-    hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
-    hspi2.Init.CLKPolarity = SPI_POLARITY_HIGH;
-    hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-    hspi2.Init.NSS = SPI_NSS_SOFT;
-    hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
-    hspi2.Init.FirstBit = SPI_FIRSTBIT_LSB;
-    hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-    hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-    hspi2.Init.CRCPolynomial = 0x7;
-    hspi2.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
-    hspi2.Init.NSSPolarity = SPI_NSS_POLARITY_LOW;
-    hspi2.Init.FifoThreshold = SPI_FIFO_THRESHOLD_01DATA;
-    hspi2.Init.MasterSSIdleness = SPI_MASTER_SS_IDLENESS_00CYCLE;
-    hspi2.Init.MasterInterDataIdleness = SPI_MASTER_INTERDATA_IDLENESS_00CYCLE;
-    hspi2.Init.MasterReceiverAutoSusp = SPI_MASTER_RX_AUTOSUSP_DISABLE;
-    hspi2.Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_DISABLE;
-    hspi2.Init.IOSwap = SPI_IO_SWAP_DISABLE;
-    hspi2.Init.ReadyMasterManagement = SPI_RDY_MASTER_MANAGEMENT_INTERNALLY;
-    hspi2.Init.ReadyPolarity = SPI_RDY_POLARITY_HIGH;
-    if (HAL_SPI_Init(&hspi2) != HAL_OK)
-    {
-        LCD_Error_Handler();
-    }
-    HAL_SPI_AutonomousMode_Cfg_Struct.TriggerState = SPI_AUTO_MODE_DISABLE;
-    HAL_SPI_AutonomousMode_Cfg_Struct.TriggerSelection = SPI_GRP1_GPDMA_CH0_TCF_TRG;
-    HAL_SPI_AutonomousMode_Cfg_Struct.TriggerPolarity = SPI_TRIG_POLARITY_RISING;
-    if (HAL_SPIEx_SetConfigAutonomousMode(&hspi2, &HAL_SPI_AutonomousMode_Cfg_Struct) != HAL_OK)
-    {
-        LCD_Error_Handler();
-    }
-}
-
-/* String buffer (maximum 64 pixels high) */
-uint8_t buffer[BUFFER_SIZE];
-
-/* Microsecond delay */
-void delay_us(uint16_t us)
-{
-    __HAL_TIM_SET_COUNTER(&htim1, 0); // set the counter value a 0
-    while (__HAL_TIM_GET_COUNTER(&htim1) < us)
-        ; // wait for the counter to reach the us input in the parameter
-}
-
-void lcd_keep_alive()
-{
-    timeout_counter = 0;
-}
-
-static FontDef_t *font_lookup(uint8_t font_id)
-{
-    switch (font_id)
-    {
-    case FONT_6x8:
-        return &font_6x8;
-    case FONT_7x12b:
-        return &font_7x12b;
-    case FONT_12x20:
-        return &font_12x20;
-    case FONT_16x26:
-        return &font_16x26;
-    case FONT_24x40:
-        return &font_24x40;
-    default:
-        return NULL; // Invalid font ID
-    }
-}
 
 /**
  * @brief Draws a string directly to the LCD framebuffer
@@ -163,42 +53,6 @@ static FontDef_t *font_lookup(uint8_t font_id)
  *
  * Note: dx will be rounded to the closest byte-aligned address
  */
-void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint8_t color)
-{
-
-    FontDef_t *font = font_lookup(font_id);
-    if (font == NULL)
-        return;
-
-    uint16_t width = font->FontWidth;
-    uint16_t height = font->FontHeight;
-    uint16_t bytes_per_char = (width + 7) / 8;
-    const char (*font_data)[bytes_per_char * height] = font->data;
-
-    if (dy >= LCD_HEIGHT)
-        return;
-
-    uint16_t xpos = ((dx + 7) / 8) << 3;
-    int char_idx = 0;
-
-    // Temporary buffer for one character
-    uint8_t char_buffer[bytes_per_char * height];
-
-    while (xpos < LCD_WIDTH && str[char_idx] != '\0')
-    {
-        uint8_t current_char = str[char_idx];
-        const char *char_data = font_data[current_char];
-
-        // Copy character data directly (already in MSB format)
-        memcpy(char_buffer, char_data, bytes_per_char * height);
-
-        // Draw character using MSB-optimized function
-        lcd_draw_img_unaligned(char_buffer, width, height, xpos, dy, color, true);
-
-        xpos += width;
-        char_idx++;
-    }
-}
 
 void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
@@ -224,6 +78,11 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
     {
         LCD_power_off(1);
     }
+}
+
+void lcd_keep_alive()
+{
+    timeout_counter = 0;
 }
 
 void LCD_power_on()
@@ -265,340 +124,12 @@ bool LCD_is_on()
     return lcd_is_on;
 }
 
-/* Send the entire frame buffer content to the display via SPI interface.
- * Uses a configurable number of SPI transfers in case we need to reduce RAM usage.
- * Reference: https://www.embeddedartists.com/wp-content/uploads/2018/06/Memory_LCD_Programming.pdf
- */
-void lcd_refresh()
-{
-// This should be a divisor of 240.  240 means a single transfer, which would mean fastest
-// speed but highest RAM usage
-#define CHUNK_SIZE_IN_LINES 240
 
-// Calculate buffer size based on chunk size
-#define CHUNK_BUFFER_SIZE (1 + CHUNK_SIZE_IN_LINES * (1 + LCD_WIDTH / 8 + 1) + 1)
-    static uint8_t frame_buffer[CHUNK_BUFFER_SIZE];
 
-    const int total_lines = LCD_HEIGHT;
-    const int chunk_size = CHUNK_SIZE_IN_LINES;
-    const int num_chunks = (total_lines + chunk_size - 1) / chunk_size; // Round up
-
-    // Send NOP command to initialize interface
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
-    delay_us(10);
-    uint8_t nop = 0x00;
-    HAL_SPI_Transmit(&hspi2, &nop, 1, HAL_MAX_DELAY);
-    delay_us(10);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
-    delay_us(10);
-
-    for (int chunk = 0; chunk < num_chunks; chunk++)
-    {
-        int pos = 0;
-        int start_line = chunk * chunk_size;
-        int lines_in_chunk = (chunk == num_chunks - 1) ? (total_lines - start_line) : chunk_size;
-
-        // Command byte
-        frame_buffer[pos++] = 0x01; // Write command
-
-        // Fill chunk data
-        for (int y = 0; y < lines_in_chunk; y++)
-        {
-            frame_buffer[pos++] = start_line + y + 1; // 1-based line number
-            memcpy(&frame_buffer[pos], g_framebuffer[start_line + y], LCD_WIDTH / 8);
-            pos += LCD_WIDTH / 8;
-            frame_buffer[pos++] = 0x00; // Line trailer
-        }
-
-        // Chunk trailer
-        frame_buffer[pos++] = 0x00;
-
-        // Send chunk
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
-        delay_us(12);
-        HAL_SPI_Transmit(&hspi2, frame_buffer, pos, HAL_MAX_DELAY);
-        delay_us(4);
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
-        delay_us(4);
-    }
-}
-
-void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color)
-{
-    if (img == NULL || x >= LCD_WIDTH || y >= LCD_HEIGHT)
-        return;
-
-    if ((x % 8) == 0 && (w % 8) == 0)
-    {
-        lcd_draw_img_aligned(img, w, h, x, y, color, false);
-    }
-    else
-    {
-        lcd_draw_img_unaligned(img, w, h, x, y, color, false);
-    }
-}
-
-/* Optimized aligned version */
-static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb)
-{
-    uint32_t img_stride = w / 8;
-    uint32_t dest_x = x / 8;
-
-    for (uint32_t dy = 0; dy < h; dy++)
-    {
-        uint32_t dest_y = y + dy;
-        if (dest_y >= LCD_HEIGHT)
-            break;
-
-        for (uint32_t sx = 0; sx < img_stride; sx++)
-        {
-            uint8_t src_byte = msb ? img[dy * img_stride + sx] : reverse_bits(img[dy * img_stride + sx]);
-            if (src_byte)
-            {
-                uint32_t dx = dest_x + sx;
-                if (dx < (LCD_WIDTH / 8))
-                {
-                    if (color == LCD_SET_VALUE)
-                    {
-                        g_framebuffer[dest_y][dx] &= ~src_byte; // Clear bits for white
-                    }
-                    else
-                    {
-                        g_framebuffer[dest_y][dx] |= src_byte; // Set bits for black
-                    }
-                }
-            }
-        }
-    }
-}
-
-/* General unaligned version */
-static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color, bool msb)
-{
-    uint32_t img_stride = (w + 7) / 8;
-    uint8_t x_align = x % 8;
-
-    for (uint32_t dy = 0; dy < h; dy++)
-    {
-        uint32_t dest_y = y + dy;
-        if (dest_y >= LCD_HEIGHT)
-            continue;
-
-        for (uint32_t sx = 0; sx < img_stride; sx++)
-        {
-            uint8_t img_byte = msb ? img[dy * img_stride + sx] : reverse_bits(img[dy * img_stride + sx]);
-            if (img_byte == 0)
-                continue;
-
-            uint32_t dest_byte = (x / 8) + sx;
-            uint8_t shift = x_align;
-
-            if (dest_byte < (LCD_WIDTH / 8))
-            {
-                uint8_t mask = img_byte << shift;
-                if (color == LCD_SET_VALUE)
-                {
-                    g_framebuffer[dest_y][dest_byte] &= ~mask; // Clear bits
-                }
-                else
-                {
-                    g_framebuffer[dest_y][dest_byte] |= mask; // Set bits
-                }
-            }
-
-            if (shift != 0 && dest_byte + 1 < (LCD_WIDTH / 8))
-            {
-                uint8_t mask = img_byte >> (8 - shift);
-                if (color == LCD_SET_VALUE)
-                {
-                    g_framebuffer[dest_y][dest_byte + 1] &= ~mask;
-                }
-                else
-                {
-                    g_framebuffer[dest_y][dest_byte + 1] |= mask;
-                }
-            }
-        }
-    }
-}
-
-/**
- * @brief Blits dx bits from val at position x, y
- * @param x Position x (0-399)
- * @param dx Width in bits (1-24)
- * @param y Position y (0-239)
- * @param val Value to blit (right-aligned)
- * @param blt_op BLT_OR, BLT_ANDN or BLT_XOR
- * @param fill BLT_SET or BLT_NONE
- */
-void bitblt24(uint32_t x, uint32_t dx, uint32_t y, uint32_t val, int blt_op, int fill)
-{
-    if (x >= LCD_WIDTH || y >= LCD_HEIGHT || dx == 0 || dx > 24)
-        return;
-
-    // Clamp dx to remaining width
-    if (x + dx > LCD_WIDTH)
-        dx = LCD_WIDTH - x;
-
-    // Apply fill mode to source value
-    if (fill == BLT_SET)
-    {
-        if (blt_op == BLT_OR)
-        {
-            val = 0;
-        }
-        else if (blt_op == BLT_ANDN)
-        {
-            val = ~0;
-        }
-    }
-
-    // Process each bit
-    for (uint32_t i = 0; i < dx; i++)
-    {
-        uint32_t bit_pos = x + i;
-        uint8_t bit_val = (val >> (dx - 1 - i)) & 1;
-        uint8_t *byte_ptr = &g_framebuffer[y][bit_pos / 8];
-        uint8_t bit_mask = 1 << bit_pos % 8;
-
-        switch (blt_op)
-        {
-        case BLT_OR:
-            if (bit_val)
-            {
-                *byte_ptr |= bit_mask; // Set bit (black pixel)
-            }
-            else if (fill == BLT_SET)
-            {
-                *byte_ptr &= ~bit_mask; // Clear bit (white pixel)
-            }
-            break;
-        case BLT_ANDN:
-            if (!bit_val)
-            {
-                *byte_ptr &= ~bit_mask;
-            }
-            else if (fill == BLT_SET)
-            {
-                *byte_ptr |= bit_mask;
-            }
-            break;
-        case BLT_XOR:
-            if (bit_val)
-            {
-                *byte_ptr ^= bit_mask;
-            }
-            break;
-        }
-    }
-}
-
-/* Bit reversal helper */
-uint8_t reverse_bits(uint8_t b)
-{
-    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-    return b;
-}
 
 /**
  * Inverts all pixels in the global framebuffer (black becomes white and vice versa)
  */
-/**
- * @brief Fills a rectangular area of the LCD
- * @param x Left position (0-399)
- * @param y Top position (0-239)
- * @param dx Width in pixels
- * @param dy Height in pixels
- * @param val LCD_SET_VALUE (black) or LCD_EMPTY_VALUE (white)
- */
-void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t dy, int val)
-{
-    // Clamp to screen bounds
-    if (x >= LCD_WIDTH || y >= LCD_HEIGHT)
-        return;
-    if (x + dx > LCD_WIDTH)
-        dx = LCD_WIDTH - x;
-    if (y + dy > LCD_HEIGHT)
-        dy = LCD_HEIGHT - y;
-
-    for (uint32_t curr_y = y; curr_y < y + dy; curr_y++)
-    {
-        for (uint32_t curr_x = x; curr_x < x + dx; curr_x++)
-        {
-            uint8_t *byte_ptr = &g_framebuffer[curr_y][curr_x / 8];
-            uint8_t bit_mask = 1 << (curr_x % 8);
-
-            if (val == LCD_SET_VALUE)
-            {
-                *byte_ptr &= ~bit_mask; // Clear bit (black pixel)
-            }
-            else
-            {
-                *byte_ptr |= bit_mask; // Set bit (white pixel)
-            }
-        }
-    }
-}
-
-void lcd_invert_framebuffer(void)
-{
-    for (int y = 0; y < LCD_HEIGHT; y++)
-    {
-        for (int x_byte = 0; x_byte < (LCD_WIDTH / 8); x_byte++)
-        {
-            g_framebuffer[y][x_byte] = ~g_framebuffer[y][x_byte];
-        }
-    }
-}
-
-void lcd_draw_test_pattern(uint8_t square_size)
-{
-    // Ensure square_size is at least 1 and not too large
-    if (square_size < 1)
-        square_size = 1;
-    if (square_size > 32)
-        square_size = 32;
-
-    for (int y = 0; y < LCD_HEIGHT; y++)
-    {
-        for (int x = 0; x < LCD_WIDTH; x++)
-        {
-            // Calculate checkerboard pattern
-            uint8_t x_block = x / square_size;
-            uint8_t y_block = y / square_size;
-            uint8_t pattern = (x_block + y_block) % 2;
-
-            // Set pixel in framebuffer
-            if (pattern)
-            {
-                g_framebuffer[y][x / 8] |= (1 << (7 - (x % 8))); // Set pixel white
-            }
-            else
-            {
-                g_framebuffer[y][x / 8] &= ~(1 << (7 - (x % 8))); // Set pixel black
-            }
-        }
-    }
-}
-
-void lcd_fill(uint8_t color)
-{
-    if (color == LCD_SET_VALUE)
-    {
-        memset(g_framebuffer, 0x00, sizeof(g_framebuffer));
-    }
-    else
-    {
-        memset(g_framebuffer, 0xff, sizeof(g_framebuffer));
-    }
-}
-
-void lcd_clear_buffer(void)
-{
-    lcd_fill(LCD_EMPTY_VALUE);
-}
 
 // Sends line data to LCD.
 //
@@ -615,26 +146,7 @@ void lcd_clear_buffer(void)
 //     [52..53] - padding required by LCD hw
 //
 // Only line number and line data have to by filled by user.
-void LCD_write_line(uint8_t *buf)
-{
-    buf[0] = 0x1; // Write Line command
-    buf[52] = buf[53] = 0;
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
-    delay_us(12);
-    HAL_SPI_Transmit(&hspi2, buf, LCD_LINE_BUF_SIZE, HAL_MAX_DELAY);
-    delay_us(4);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
-    delay_us(4);
-}
 
-void __lcd_init()
-{
-    SPI2_Init();
-    TIM1_Init();
-    HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 4095, RTC_WAKEUPCLOCK_RTCCLK_DIV8, 0);
-
-    lcd_fill(LCD_EMPTY_VALUE);
-}
 
 int lcd_for_calc(int what_screen)
 {
