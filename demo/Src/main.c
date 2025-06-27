@@ -26,8 +26,6 @@ int main(void)
   {
     uint16_t keycode = 0;
 
-    switch_input();
-
     HAL_Delay(10); // Debouncing delay in ms
 
     keycode = scan_keyboard();

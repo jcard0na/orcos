@@ -95,7 +95,6 @@ void orcos_init();
 #define DEBUG_PRINT(...)
 #endif
 
-void switch_input();
 uint16_t scan_keyboard(void);
 
 // Date/Time functions 
