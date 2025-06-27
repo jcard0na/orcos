@@ -1,0 +1,628 @@
+\doxysection{liborcos/\+Inc/orcos.h File Reference}
+\hypertarget{orcos_8h}{}\label{orcos_8h}\index{liborcos/Inc/orcos.h@{liborcos/Inc/orcos.h}}
+
+
+Open\+RPNCalc Operating System (ORCOS) library header.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structdt__t}{dt\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structtm__t}{tm\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{orcos_8h_a19693eac3018d3e7800fde141921b812}{LCD\+\_\+\+WIDTH}}~400
+\begin{DoxyCompactList}\small\item\em Display width in pixels. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{orcos_8h_a53a8b2a971de4b88047192655a48b651}{LCD\+\_\+\+HEIGHT}}~240
+\begin{DoxyCompactList}\small\item\em Display height in pixels. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{orcos_8h_a255f8f449eb40d98f658ffa52d54fa78}{LCD\+\_\+\+LINE\+\_\+\+SIZE}}~50
+\begin{DoxyCompactList}\small\item\em Bytes per line in framebuffer. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{orcos_8h_a973bd5015219a5c99f7979a890562566}{LCD\+\_\+\+LINE\+\_\+\+BUF\+\_\+\+SIZE}}~(\mbox{\hyperlink{orcos_8h_a255f8f449eb40d98f658ffa52d54fa78}{LCD\+\_\+\+LINE\+\_\+\+SIZE}} + 4)
+\begin{DoxyCompactList}\small\item\em Buffer size for line transfers. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{orcos_8h_a980035bff511f90ae6bc5049b5241fe9}{LCD\+\_\+\+SET\+\_\+\+VALUE}}~0
+\item 
+\#define \mbox{\hyperlink{orcos_8h_a3c4e504f5a78c51844332e6c83072ff5}{LCD\+\_\+\+EMPTY\+\_\+\+VALUE}}~\texorpdfstring{$\sim$}{\string~}(0)
+\item 
+\#define \mbox{\hyperlink{orcos_8h_ad9cf1c0c1ca7e14432407d70a0067d64}{FONT\+\_\+6x8}}~0
+\item 
+\#define \mbox{\hyperlink{orcos_8h_ab2c354c684986042751e7f37e3ea7d4a}{FONT\+\_\+7x12b}}~1
+\item 
+\#define \mbox{\hyperlink{orcos_8h_ad7c84cd4182b2f0eaac9d94bbcb2ef0d}{FONT\+\_\+12x20}}~2
+\item 
+\#define \mbox{\hyperlink{orcos_8h_ad16b14de0017c25fa802756a0850e475}{FONT\+\_\+24x40}}~3
+\item 
+\#define \mbox{\hyperlink{orcos_8h_ab74ec0119f7a9e90bf0c68ce0a929c66}{FONT\+\_\+16x26}}~4
+\item 
+\#define \mbox{\hyperlink{orcos_8h_a0712f92195365a2cc3eefd7f8aed38b2}{BLT\+\_\+\+OR}}~0
+\begin{DoxyCompactList}\small\item\em Blit operation types. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{orcos_8h_a557af1e3c8bc0c757f1c96b382a82309}{BLT\+\_\+\+ANDN}}~1
+\begin{DoxyCompactList}\small\item\em AND-\/\+NOT operation (clear pixels) \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{orcos_8h_a23ef2056157d2ef07d3c838c14fe4f31}{BLT\+\_\+\+XOR}}~2
+\begin{DoxyCompactList}\small\item\em XOR operation (toggle pixels) \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{orcos_8h_a74925e7df36116705bfbf74d2e8563cf}{BLT\+\_\+\+NONE}}~0
+\begin{DoxyCompactList}\small\item\em Fill modes for blit operations. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{orcos_8h_a5590ca6fc878ce1b64f2c2194f9f0841}{BLT\+\_\+\+SET}}~1
+\begin{DoxyCompactList}\small\item\em Fill with constant value. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga454bf8c361b927de8117617aab615aa1}{DISP\+\_\+\+CALC}}~0
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga61567c9a783d955d08c7e2e6b4ea4976}{DISP\+\_\+\+SYS\+\_\+\+MENU}}~2
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga2487a91e4b802b0c365113b1f89a1136}{DISP\+\_\+\+BOOTLOADER}}~4
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga361a34f900fd635d0ece66f84ecf0233}{DISP\+\_\+\+UNIMPLEMENTED}}~5
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_gaf48a010ee66bd46809c16561e81b22c7}{DISP\+\_\+\+USB\+\_\+\+WRITE}}~6
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga26cc8534d9e447ffbfb3a5555d0fe4be}{DISP\+\_\+\+MSC\+\_\+\+CONNECT\+\_\+\+USB}}~7
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_gae03e76eedb1deafd1a51544d88f77f10}{DISP\+\_\+\+ABOUT}}~8
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga0e4f0c0401f422a680b1e0814b4b4751}{DISP\+\_\+\+FAT\+\_\+\+FORMAT}}~9
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_gac13965aca30d7a3bebef72e091bb222a}{DISP\+\_\+\+FAULT}}~11
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_gab553c6eb6bfd3405c474b8c2d159bb84}{DISP\+\_\+\+QSPI\+\_\+\+BAD\+\_\+\+CRC}}~12
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga9b04b89f7b32dd7d6ce712f3090ebbbe}{DISP\+\_\+\+QSPI\+\_\+\+CHECK}}~13
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga803c9058e79f0989f8d7f379092e07e5}{DISP\+\_\+\+MARK\+\_\+\+REGION}}~15
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga61dabc8cf9d98db1c7dbd8c2d55aafb9}{DISP\+\_\+\+DISK\+\_\+\+TEST}}~16
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga75b4db1c4e0027e9d5e7818d8b005699}{DISP\+\_\+\+DSKTST\+\_\+\+CONNECT\+\_\+\+USB}}~17
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_gaa1a503c84628dccdcc0081e3e0679912}{DISP\+\_\+\+QSPI\+\_\+\+CONNECT\+\_\+\+USB}}~18
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga65af5eb864671c2286148ae50e295edd}{DISP\+\_\+\+OFF\+\_\+\+IMAGE\+\_\+\+ERR}}~19
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga0f4b53a0b313f941625d228c9585ac20}{DISP\+\_\+\+HELP}}~21
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga5938d2e3c67fd6a398c4aa4691b1d0f0}{DISP\+\_\+\+BOOTLDR\+\_\+\+CON\+\_\+\+USB}}~22
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_ga92fa3355894c537bbb55a1447b0e4593}{DISP\+\_\+\+PROD\+\_\+\+DIAG}}~23
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_gaa583a3359bf095db14efcef2b1ecfb6a}{DISP\+\_\+\+POWER\+\_\+\+CHECK}}~24
+\item 
+\#define \mbox{\hyperlink{group___s_c_r_e_e_n_s_gae63a3e60794f152af70ffe586ffc3d11}{DISP\+\_\+\+FLASH\+\_\+\+CONNECT\+\_\+\+USB}}~26
+\item 
+\#define \mbox{\hyperlink{orcos_8h_a88edd2aa4feabff4af21a997d5d8aa23}{DEBUG\+\_\+\+PRINT}}(...)
+\item 
+\#define \mbox{\hyperlink{group___k_e_y_c_o_d_e_s_ga51ca76d1508339b071a974798b90474b}{KEY\+\_\+0}}~1
+\item 
+\#define \mbox{\hyperlink{group___k_e_y_c_o_d_e_s_ga493549a47eea62a36d0a11cc214e8b30}{KEY\+\_\+\+SIGN}}~2
+\item 
+\#define \mbox{\hyperlink{group___k_e_y_c_o_d_e_s_gabaee5edb96e542206ae6c8102ac228af}{KEY\+\_\+\+ENTER}}~29
+\item 
+\#define \mbox{\hyperlink{group___k_e_y_c_o_d_e_s_gacc696937f28ef5bdd90eeb8addd0ef82}{KEY\+\_\+F}}~49
+\item 
+\#define \mbox{\hyperlink{group___k_e_y_c_o_d_e_s_gac2491095a425d82ae937bb194de40961}{KEY\+\_\+\+ON}}~54
+\item 
+\#define \mbox{\hyperlink{orcos_8h_ab900b50508b14dab5b798b755dec2cc4}{MULTIPLE\+\_\+\+KEYS\+\_\+\+PRESSED}}(x)
+\item 
+\#define \mbox{\hyperlink{orcos_8h_a6612a8b8d4681218cadebb4dbe9a7286}{FIRST\+\_\+\+KEYCODE}}(x)
+\item 
+\#define \mbox{\hyperlink{orcos_8h_a4d5dabfae41d6f5321cb07698e127b71}{SECOND\+\_\+\+KEYCODE}}(x)
+\item 
+\#define \mbox{\hyperlink{orcos_8h_a9de9f94752ada361ad4fcb5a821c194e}{TOO\+\_\+\+MANY\+\_\+\+KEYS\+\_\+\+PRESSED}}(x)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{orcos_8h_ae2b9f81fcd7ab4bd30b2d9f6eecc9f52}{get\+\_\+vbat}} (void)
+\begin{DoxyCompactList}\small\item\em Get battery voltage in millivolts. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_aa8030c4fb5ccb058b96047cbb98420f3}{LCD\+\_\+power\+\_\+on}} (void)
+\begin{DoxyCompactList}\small\item\em Power on the LCD display Enables power supply and initializes display controller. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a62f147db55f878fadcba3ffdb7acf29b}{LCD\+\_\+power\+\_\+off}} (int clear)
+\begin{DoxyCompactList}\small\item\em Power off the LCD display. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{orcos_8h_acf548d651a5da654437aea5b7390ce27}{LCD\+\_\+is\+\_\+on}} (void)
+\begin{DoxyCompactList}\small\item\em Check if LCD is powered on. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_aefbfdc2f65e2457837906fee3a220795}{bitblt24}} (uint32\+\_\+t x, uint32\+\_\+t dx, uint32\+\_\+t y, uint32\+\_\+t val, int blt\+\_\+op, int fill)
+\begin{DoxyCompactList}\small\item\em Draw a 24-\/bit wide bitblt operation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_ab7fa6fde4b3851f3588e9f0283bcaf1d}{LCD\+\_\+write\+\_\+line}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}buf)
+\begin{DoxyCompactList}\small\item\em Write a line buffer to LCD. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a2386c6889d426206dc5dbd80c0c663de}{lcd\+\_\+draw\+\_\+img}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}img, uint32\+\_\+t w, uint32\+\_\+t h, uint32\+\_\+t x, uint32\+\_\+t y, uint8\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Draw an image to the framebuffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a3609753f6033b8b107bc2d8501000aed}{lcd\+\_\+refresh}} (void)
+\begin{DoxyCompactList}\small\item\em Refresh the LCD with current framebuffer contents. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a4a833b87e7eeda2a135aae831119b46d}{lcd\+\_\+draw\+\_\+test\+\_\+pattern}} (uint8\+\_\+t square\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Fill screen with test pattern of given square size. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_af6a333a498139c48cee9b2edb80d3dc4}{lcd\+\_\+fill}} (uint8\+\_\+t fill\+\_\+pattern)
+\begin{DoxyCompactList}\small\item\em Fill entire framebuffer with pattern. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a9c23a1b3d3761615c36ab26fa56622bd}{lcd\+\_\+clear\+\_\+buffer}} (void)
+\begin{DoxyCompactList}\small\item\em Clear framebuffer (fill with LCD\+\_\+\+EMPTY\+\_\+\+VALUE) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_af4e8f71530d83bd4921919e95328cade}{lcd\+\_\+invert\+\_\+framebuffer}} (void)
+\begin{DoxyCompactList}\small\item\em Invert all pixels in framebuffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_aabb305b0ad5b22f985d678c07403a693}{lcd\+\_\+puts\+At}} (const char \texorpdfstring{$\ast$}{*}str, uint8\+\_\+t font\+\_\+id, uint16\+\_\+t dx, uint16\+\_\+t dy, uint8\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Draw text string at specified position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a7135bad65cb4fe75489bf991dcc59b22}{lcd\+\_\+fill\+\_\+rect}} (uint32\+\_\+t x, uint32\+\_\+t y, uint32\+\_\+t dx, uint32\+\_\+t dy, int val)
+\begin{DoxyCompactList}\small\item\em Draw filled rectangle. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{orcos_8h_aaaa4d5adc8a09003ea4fb05ec55a1e9c}{lcd\+\_\+for\+\_\+calc}} (int what\+\_\+screen)
+\begin{DoxyCompactList}\small\item\em Draw calculator screen based on mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_abfb3a43ffa132292fca23ef2cd6535ab}{sys\+\_\+sleep}} (int off)
+\begin{DoxyCompactList}\small\item\em Put calculator into low-\/power sleep mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a2b1ed233a180d3991b4832e9de38e176}{sys\+\_\+reset}} (void)
+\begin{DoxyCompactList}\small\item\em Perform system reset Immediately resets the microcontroller. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a9b34c73adeff06a8b4a11fbc0cfdc659}{orcos\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Initialize ORCOS library Sets up hardware peripherals, clocks, and display. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{orcos_8h_acd7b45442ea54bd555176e5cfc891413}{scan\+\_\+keyboard}} (void)
+\begin{DoxyCompactList}\small\item\em Scan keyboard matrix. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{orcos_8h_ac7dc1595df4c87b0d629406c3862b50f}{key\+\_\+pop}} (void)
+\begin{DoxyCompactList}\small\item\em Pop keycode from input queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a9517c0e0622b0109ec92b0465b667570}{key\+\_\+push}} (uint16\+\_\+t keycode)
+\begin{DoxyCompactList}\small\item\em Push keycode to input queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_a95753604948d9a314fab9322d9da30a2}{wait\+\_\+for\+\_\+key\+\_\+press}} ()
+\begin{DoxyCompactList}\small\item\em Wait until a key is pressed Puts system to sleep until key press detected Use \doxylink{orcos_8h_ac7dc1595df4c87b0d629406c3862b50f}{key\+\_\+pop()} to retrieve the keycode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{orcos_8h_ae1400f2618332aec937a37843c434709}{rtc\+\_\+read}} (\mbox{\hyperlink{structtm__t}{tm\+\_\+t}} \texorpdfstring{$\ast$}{*}tm, \mbox{\hyperlink{structdt__t}{dt\+\_\+t}} \texorpdfstring{$\ast$}{*}dt)
+\item 
+void \mbox{\hyperlink{orcos_8h_ad214981cfe5b8b5b33ba640d76263ae5}{calc\+\_\+init}} (void)
+\item 
+int \mbox{\hyperlink{orcos_8h_a71f7623ee5758a1fc69beb4959aa1d43}{calc\+\_\+on\+\_\+key}} (int)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Open\+RPNCalc Operating System (ORCOS) library header. 
+
+This is a subset of functions from dmcp.\+h, distributed under BSD-\/3 license. Provides hardware abstraction and core functionality for Open\+RPNCalc. Original source\+: \href{https://github.com/swissmicros/DMCP5_SDK/blob/master/dmcp/dmcp.h}{\texttt{https\+://github.\+com/swissmicros/\+DMCP5\+\_\+\+SDK/blob/master/dmcp/dmcp.\+h}} 
+
+\label{doc-define-members}
+\Hypertarget{orcos_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{orcos_8h_a557af1e3c8bc0c757f1c96b382a82309}\index{orcos.h@{orcos.h}!BLT\_ANDN@{BLT\_ANDN}}
+\index{BLT\_ANDN@{BLT\_ANDN}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{BLT\_ANDN}{BLT\_ANDN}}
+{\footnotesize\ttfamily \label{orcos_8h_a557af1e3c8bc0c757f1c96b382a82309} 
+\#define BLT\+\_\+\+ANDN~1}
+
+
+
+AND-\/\+NOT operation (clear pixels) 
+
+\Hypertarget{orcos_8h_a74925e7df36116705bfbf74d2e8563cf}\index{orcos.h@{orcos.h}!BLT\_NONE@{BLT\_NONE}}
+\index{BLT\_NONE@{BLT\_NONE}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{BLT\_NONE}{BLT\_NONE}}
+{\footnotesize\ttfamily \label{orcos_8h_a74925e7df36116705bfbf74d2e8563cf} 
+\#define BLT\+\_\+\+NONE~0}
+
+
+
+Fill modes for blit operations. 
+
+No fill -\/ use source value \Hypertarget{orcos_8h_a0712f92195365a2cc3eefd7f8aed38b2}\index{orcos.h@{orcos.h}!BLT\_OR@{BLT\_OR}}
+\index{BLT\_OR@{BLT\_OR}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{BLT\_OR}{BLT\_OR}}
+{\footnotesize\ttfamily \label{orcos_8h_a0712f92195365a2cc3eefd7f8aed38b2} 
+\#define BLT\+\_\+\+OR~0}
+
+
+
+Blit operation types. 
+
+OR operation (set pixels) \Hypertarget{orcos_8h_a5590ca6fc878ce1b64f2c2194f9f0841}\index{orcos.h@{orcos.h}!BLT\_SET@{BLT\_SET}}
+\index{BLT\_SET@{BLT\_SET}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{BLT\_SET}{BLT\_SET}}
+{\footnotesize\ttfamily \label{orcos_8h_a5590ca6fc878ce1b64f2c2194f9f0841} 
+\#define BLT\+\_\+\+SET~1}
+
+
+
+Fill with constant value. 
+
+\Hypertarget{orcos_8h_a23ef2056157d2ef07d3c838c14fe4f31}\index{orcos.h@{orcos.h}!BLT\_XOR@{BLT\_XOR}}
+\index{BLT\_XOR@{BLT\_XOR}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{BLT\_XOR}{BLT\_XOR}}
+{\footnotesize\ttfamily \label{orcos_8h_a23ef2056157d2ef07d3c838c14fe4f31} 
+\#define BLT\+\_\+\+XOR~2}
+
+
+
+XOR operation (toggle pixels) 
+
+\Hypertarget{orcos_8h_a88edd2aa4feabff4af21a997d5d8aa23}\index{orcos.h@{orcos.h}!DEBUG\_PRINT@{DEBUG\_PRINT}}
+\index{DEBUG\_PRINT@{DEBUG\_PRINT}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{DEBUG\_PRINT}{DEBUG\_PRINT}}
+{\footnotesize\ttfamily \label{orcos_8h_a88edd2aa4feabff4af21a997d5d8aa23} 
+\#define DEBUG\+\_\+\+PRINT(\begin{DoxyParamCaption}\item[{}]{}...{}\end{DoxyParamCaption})}
+
+\Hypertarget{orcos_8h_a6612a8b8d4681218cadebb4dbe9a7286}\index{orcos.h@{orcos.h}!FIRST\_KEYCODE@{FIRST\_KEYCODE}}
+\index{FIRST\_KEYCODE@{FIRST\_KEYCODE}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{FIRST\_KEYCODE}{FIRST\_KEYCODE}}
+{\footnotesize\ttfamily \label{orcos_8h_a6612a8b8d4681218cadebb4dbe9a7286} 
+\#define FIRST\+\_\+\+KEYCODE(\begin{DoxyParamCaption}\item[{}]{x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((x)\ \&\ 0xff)}
+
+\end{DoxyCode}
+\Hypertarget{orcos_8h_ad7c84cd4182b2f0eaac9d94bbcb2ef0d}\index{orcos.h@{orcos.h}!FONT\_12x20@{FONT\_12x20}}
+\index{FONT\_12x20@{FONT\_12x20}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{FONT\_12x20}{FONT\_12x20}}
+{\footnotesize\ttfamily \label{orcos_8h_ad7c84cd4182b2f0eaac9d94bbcb2ef0d} 
+\#define FONT\+\_\+12x20~2}
+
+\Hypertarget{orcos_8h_ab74ec0119f7a9e90bf0c68ce0a929c66}\index{orcos.h@{orcos.h}!FONT\_16x26@{FONT\_16x26}}
+\index{FONT\_16x26@{FONT\_16x26}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{FONT\_16x26}{FONT\_16x26}}
+{\footnotesize\ttfamily \label{orcos_8h_ab74ec0119f7a9e90bf0c68ce0a929c66} 
+\#define FONT\+\_\+16x26~4}
+
+\Hypertarget{orcos_8h_ad16b14de0017c25fa802756a0850e475}\index{orcos.h@{orcos.h}!FONT\_24x40@{FONT\_24x40}}
+\index{FONT\_24x40@{FONT\_24x40}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{FONT\_24x40}{FONT\_24x40}}
+{\footnotesize\ttfamily \label{orcos_8h_ad16b14de0017c25fa802756a0850e475} 
+\#define FONT\+\_\+24x40~3}
+
+\Hypertarget{orcos_8h_ad9cf1c0c1ca7e14432407d70a0067d64}\index{orcos.h@{orcos.h}!FONT\_6x8@{FONT\_6x8}}
+\index{FONT\_6x8@{FONT\_6x8}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{FONT\_6x8}{FONT\_6x8}}
+{\footnotesize\ttfamily \label{orcos_8h_ad9cf1c0c1ca7e14432407d70a0067d64} 
+\#define FONT\+\_\+6x8~0}
+
+\Hypertarget{orcos_8h_ab2c354c684986042751e7f37e3ea7d4a}\index{orcos.h@{orcos.h}!FONT\_7x12b@{FONT\_7x12b}}
+\index{FONT\_7x12b@{FONT\_7x12b}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{FONT\_7x12b}{FONT\_7x12b}}
+{\footnotesize\ttfamily \label{orcos_8h_ab2c354c684986042751e7f37e3ea7d4a} 
+\#define FONT\+\_\+7x12b~1}
+
+\Hypertarget{orcos_8h_a3c4e504f5a78c51844332e6c83072ff5}\index{orcos.h@{orcos.h}!LCD\_EMPTY\_VALUE@{LCD\_EMPTY\_VALUE}}
+\index{LCD\_EMPTY\_VALUE@{LCD\_EMPTY\_VALUE}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_EMPTY\_VALUE}{LCD\_EMPTY\_VALUE}}
+{\footnotesize\ttfamily \label{orcos_8h_a3c4e504f5a78c51844332e6c83072ff5} 
+\#define LCD\+\_\+\+EMPTY\+\_\+\+VALUE~\texorpdfstring{$\sim$}{\string~}(0)}
+
+\Hypertarget{orcos_8h_a53a8b2a971de4b88047192655a48b651}\index{orcos.h@{orcos.h}!LCD\_HEIGHT@{LCD\_HEIGHT}}
+\index{LCD\_HEIGHT@{LCD\_HEIGHT}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_HEIGHT}{LCD\_HEIGHT}}
+{\footnotesize\ttfamily \label{orcos_8h_a53a8b2a971de4b88047192655a48b651} 
+\#define LCD\+\_\+\+HEIGHT~240}
+
+
+
+Display height in pixels. 
+
+\Hypertarget{orcos_8h_a973bd5015219a5c99f7979a890562566}\index{orcos.h@{orcos.h}!LCD\_LINE\_BUF\_SIZE@{LCD\_LINE\_BUF\_SIZE}}
+\index{LCD\_LINE\_BUF\_SIZE@{LCD\_LINE\_BUF\_SIZE}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_LINE\_BUF\_SIZE}{LCD\_LINE\_BUF\_SIZE}}
+{\footnotesize\ttfamily \label{orcos_8h_a973bd5015219a5c99f7979a890562566} 
+\#define LCD\+\_\+\+LINE\+\_\+\+BUF\+\_\+\+SIZE~(\mbox{\hyperlink{orcos_8h_a255f8f449eb40d98f658ffa52d54fa78}{LCD\+\_\+\+LINE\+\_\+\+SIZE}} + 4)}
+
+
+
+Buffer size for line transfers. 
+
+\Hypertarget{orcos_8h_a255f8f449eb40d98f658ffa52d54fa78}\index{orcos.h@{orcos.h}!LCD\_LINE\_SIZE@{LCD\_LINE\_SIZE}}
+\index{LCD\_LINE\_SIZE@{LCD\_LINE\_SIZE}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_LINE\_SIZE}{LCD\_LINE\_SIZE}}
+{\footnotesize\ttfamily \label{orcos_8h_a255f8f449eb40d98f658ffa52d54fa78} 
+\#define LCD\+\_\+\+LINE\+\_\+\+SIZE~50}
+
+
+
+Bytes per line in framebuffer. 
+
+\Hypertarget{orcos_8h_a980035bff511f90ae6bc5049b5241fe9}\index{orcos.h@{orcos.h}!LCD\_SET\_VALUE@{LCD\_SET\_VALUE}}
+\index{LCD\_SET\_VALUE@{LCD\_SET\_VALUE}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_SET\_VALUE}{LCD\_SET\_VALUE}}
+{\footnotesize\ttfamily \label{orcos_8h_a980035bff511f90ae6bc5049b5241fe9} 
+\#define LCD\+\_\+\+SET\+\_\+\+VALUE~0}
+
+\Hypertarget{orcos_8h_a19693eac3018d3e7800fde141921b812}\index{orcos.h@{orcos.h}!LCD\_WIDTH@{LCD\_WIDTH}}
+\index{LCD\_WIDTH@{LCD\_WIDTH}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_WIDTH}{LCD\_WIDTH}}
+{\footnotesize\ttfamily \label{orcos_8h_a19693eac3018d3e7800fde141921b812} 
+\#define LCD\+\_\+\+WIDTH~400}
+
+
+
+Display width in pixels. 
+
+\Hypertarget{orcos_8h_ab900b50508b14dab5b798b755dec2cc4}\index{orcos.h@{orcos.h}!MULTIPLE\_KEYS\_PRESSED@{MULTIPLE\_KEYS\_PRESSED}}
+\index{MULTIPLE\_KEYS\_PRESSED@{MULTIPLE\_KEYS\_PRESSED}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{MULTIPLE\_KEYS\_PRESSED}{MULTIPLE\_KEYS\_PRESSED}}
+{\footnotesize\ttfamily \label{orcos_8h_ab900b50508b14dab5b798b755dec2cc4} 
+\#define MULTIPLE\+\_\+\+KEYS\+\_\+\+PRESSED(\begin{DoxyParamCaption}\item[{}]{x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((x)\ >\ 0xff)}
+
+\end{DoxyCode}
+\Hypertarget{orcos_8h_a4d5dabfae41d6f5321cb07698e127b71}\index{orcos.h@{orcos.h}!SECOND\_KEYCODE@{SECOND\_KEYCODE}}
+\index{SECOND\_KEYCODE@{SECOND\_KEYCODE}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{SECOND\_KEYCODE}{SECOND\_KEYCODE}}
+{\footnotesize\ttfamily \label{orcos_8h_a4d5dabfae41d6f5321cb07698e127b71} 
+\#define SECOND\+\_\+\+KEYCODE(\begin{DoxyParamCaption}\item[{}]{x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((x)\ >>\ 8)}
+
+\end{DoxyCode}
+\Hypertarget{orcos_8h_a9de9f94752ada361ad4fcb5a821c194e}\index{orcos.h@{orcos.h}!TOO\_MANY\_KEYS\_PRESSED@{TOO\_MANY\_KEYS\_PRESSED}}
+\index{TOO\_MANY\_KEYS\_PRESSED@{TOO\_MANY\_KEYS\_PRESSED}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{TOO\_MANY\_KEYS\_PRESSED}{TOO\_MANY\_KEYS\_PRESSED}}
+{\footnotesize\ttfamily \label{orcos_8h_a9de9f94752ada361ad4fcb5a821c194e} 
+\#define TOO\+\_\+\+MANY\+\_\+\+KEYS\+\_\+\+PRESSED(\begin{DoxyParamCaption}\item[{}]{x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((x)\ ==\ 0xffff)}
+
+\end{DoxyCode}
+
+
+\label{doc-func-members}
+\Hypertarget{orcos_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{orcos_8h_aefbfdc2f65e2457837906fee3a220795}\index{orcos.h@{orcos.h}!bitblt24@{bitblt24}}
+\index{bitblt24@{bitblt24}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{bitblt24()}{bitblt24()}}
+{\footnotesize\ttfamily \label{orcos_8h_aefbfdc2f65e2457837906fee3a220795} 
+void bitblt24 (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{x}{, }\item[{uint32\+\_\+t}]{dx}{, }\item[{uint32\+\_\+t}]{y}{, }\item[{uint32\+\_\+t}]{val}{, }\item[{int}]{blt\+\_\+op}{, }\item[{int}]{fill}{}\end{DoxyParamCaption})}
+
+
+
+Draw a 24-\/bit wide bitblt operation. 
+
+\Hypertarget{orcos_8h_ad214981cfe5b8b5b33ba640d76263ae5}\index{orcos.h@{orcos.h}!calc\_init@{calc\_init}}
+\index{calc\_init@{calc\_init}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{calc\_init()}{calc\_init()}}
+{\footnotesize\ttfamily \label{orcos_8h_ad214981cfe5b8b5b33ba640d76263ae5} 
+void calc\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{orcos_8h_a71f7623ee5758a1fc69beb4959aa1d43}\index{orcos.h@{orcos.h}!calc\_on\_key@{calc\_on\_key}}
+\index{calc\_on\_key@{calc\_on\_key}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{calc\_on\_key()}{calc\_on\_key()}}
+{\footnotesize\ttfamily \label{orcos_8h_a71f7623ee5758a1fc69beb4959aa1d43} 
+int calc\+\_\+on\+\_\+key (\begin{DoxyParamCaption}\item[{int}]{c}{}\end{DoxyParamCaption})}
+
+\Hypertarget{orcos_8h_ae2b9f81fcd7ab4bd30b2d9f6eecc9f52}\index{orcos.h@{orcos.h}!get\_vbat@{get\_vbat}}
+\index{get\_vbat@{get\_vbat}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{get\_vbat()}{get\_vbat()}}
+{\footnotesize\ttfamily \label{orcos_8h_ae2b9f81fcd7ab4bd30b2d9f6eecc9f52} 
+int get\+\_\+vbat (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Get battery voltage in millivolts. 
+
+\begin{DoxyReturn}{Returns}
+Battery voltage in mV 
+\end{DoxyReturn}
+\Hypertarget{orcos_8h_ac7dc1595df4c87b0d629406c3862b50f}\index{orcos.h@{orcos.h}!key\_pop@{key\_pop}}
+\index{key\_pop@{key\_pop}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{key\_pop()}{key\_pop()}}
+{\footnotesize\ttfamily \label{orcos_8h_ac7dc1595df4c87b0d629406c3862b50f} 
+uint16\+\_\+t key\+\_\+pop (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Pop keycode from input queue. 
+
+\begin{DoxyReturn}{Returns}
+Next keycode in queue, 0 if empty 
+\end{DoxyReturn}
+\Hypertarget{orcos_8h_a9517c0e0622b0109ec92b0465b667570}\index{orcos.h@{orcos.h}!key\_push@{key\_push}}
+\index{key\_push@{key\_push}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{key\_push()}{key\_push()}}
+{\footnotesize\ttfamily \label{orcos_8h_a9517c0e0622b0109ec92b0465b667570} 
+void key\+\_\+push (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{keycode}{}\end{DoxyParamCaption})}
+
+
+
+Push keycode to input queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em keycode} & Keycode to enqueue \\
+\hline
+\end{DoxyParams}
+\Hypertarget{orcos_8h_a9c23a1b3d3761615c36ab26fa56622bd}\index{orcos.h@{orcos.h}!lcd\_clear\_buffer@{lcd\_clear\_buffer}}
+\index{lcd\_clear\_buffer@{lcd\_clear\_buffer}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_clear\_buffer()}{lcd\_clear\_buffer()}}
+{\footnotesize\ttfamily \label{orcos_8h_a9c23a1b3d3761615c36ab26fa56622bd} 
+void lcd\+\_\+clear\+\_\+buffer (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Clear framebuffer (fill with LCD\+\_\+\+EMPTY\+\_\+\+VALUE) 
+
+\Hypertarget{orcos_8h_a2386c6889d426206dc5dbd80c0c663de}\index{orcos.h@{orcos.h}!lcd\_draw\_img@{lcd\_draw\_img}}
+\index{lcd\_draw\_img@{lcd\_draw\_img}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_draw\_img()}{lcd\_draw\_img()}}
+{\footnotesize\ttfamily \label{orcos_8h_a2386c6889d426206dc5dbd80c0c663de} 
+void lcd\+\_\+draw\+\_\+img (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{img}{, }\item[{uint32\+\_\+t}]{w}{, }\item[{uint32\+\_\+t}]{h}{, }\item[{uint32\+\_\+t}]{x}{, }\item[{uint32\+\_\+t}]{y}{, }\item[{uint8\+\_\+t}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Draw an image to the framebuffer. 
+
+\Hypertarget{orcos_8h_a4a833b87e7eeda2a135aae831119b46d}\index{orcos.h@{orcos.h}!lcd\_draw\_test\_pattern@{lcd\_draw\_test\_pattern}}
+\index{lcd\_draw\_test\_pattern@{lcd\_draw\_test\_pattern}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_draw\_test\_pattern()}{lcd\_draw\_test\_pattern()}}
+{\footnotesize\ttfamily \label{orcos_8h_a4a833b87e7eeda2a135aae831119b46d} 
+void lcd\+\_\+draw\+\_\+test\+\_\+pattern (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{square\+\_\+size}{}\end{DoxyParamCaption})}
+
+
+
+Fill screen with test pattern of given square size. 
+
+\Hypertarget{orcos_8h_af6a333a498139c48cee9b2edb80d3dc4}\index{orcos.h@{orcos.h}!lcd\_fill@{lcd\_fill}}
+\index{lcd\_fill@{lcd\_fill}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_fill()}{lcd\_fill()}}
+{\footnotesize\ttfamily \label{orcos_8h_af6a333a498139c48cee9b2edb80d3dc4} 
+void lcd\+\_\+fill (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{fill\+\_\+pattern}{}\end{DoxyParamCaption})}
+
+
+
+Fill entire framebuffer with pattern. 
+
+\Hypertarget{orcos_8h_a7135bad65cb4fe75489bf991dcc59b22}\index{orcos.h@{orcos.h}!lcd\_fill\_rect@{lcd\_fill\_rect}}
+\index{lcd\_fill\_rect@{lcd\_fill\_rect}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_fill\_rect()}{lcd\_fill\_rect()}}
+{\footnotesize\ttfamily \label{orcos_8h_a7135bad65cb4fe75489bf991dcc59b22} 
+void lcd\+\_\+fill\+\_\+rect (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{x}{, }\item[{uint32\+\_\+t}]{y}{, }\item[{uint32\+\_\+t}]{dx}{, }\item[{uint32\+\_\+t}]{dy}{, }\item[{int}]{val}{}\end{DoxyParamCaption})}
+
+
+
+Draw filled rectangle. 
+
+\Hypertarget{orcos_8h_aaaa4d5adc8a09003ea4fb05ec55a1e9c}\index{orcos.h@{orcos.h}!lcd\_for\_calc@{lcd\_for\_calc}}
+\index{lcd\_for\_calc@{lcd\_for\_calc}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_for\_calc()}{lcd\_for\_calc()}}
+{\footnotesize\ttfamily \label{orcos_8h_aaaa4d5adc8a09003ea4fb05ec55a1e9c} 
+int lcd\+\_\+for\+\_\+calc (\begin{DoxyParamCaption}\item[{int}]{what\+\_\+screen}{}\end{DoxyParamCaption})}
+
+
+
+Draw calculator screen based on mode. 
+
+Inverts all pixels in the global framebuffer (black becomes white and vice versa) \Hypertarget{orcos_8h_af4e8f71530d83bd4921919e95328cade}\index{orcos.h@{orcos.h}!lcd\_invert\_framebuffer@{lcd\_invert\_framebuffer}}
+\index{lcd\_invert\_framebuffer@{lcd\_invert\_framebuffer}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_invert\_framebuffer()}{lcd\_invert\_framebuffer()}}
+{\footnotesize\ttfamily \label{orcos_8h_af4e8f71530d83bd4921919e95328cade} 
+void lcd\+\_\+invert\+\_\+framebuffer (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Invert all pixels in framebuffer. 
+
+\Hypertarget{orcos_8h_acf548d651a5da654437aea5b7390ce27}\index{orcos.h@{orcos.h}!LCD\_is\_on@{LCD\_is\_on}}
+\index{LCD\_is\_on@{LCD\_is\_on}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_is\_on()}{LCD\_is\_on()}}
+{\footnotesize\ttfamily \label{orcos_8h_acf548d651a5da654437aea5b7390ce27} 
+bool LCD\+\_\+is\+\_\+on (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Check if LCD is powered on. 
+
+\begin{DoxyReturn}{Returns}
+true if LCD is powered on, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{orcos_8h_a62f147db55f878fadcba3ffdb7acf29b}\index{orcos.h@{orcos.h}!LCD\_power\_off@{LCD\_power\_off}}
+\index{LCD\_power\_off@{LCD\_power\_off}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_power\_off()}{LCD\_power\_off()}}
+{\footnotesize\ttfamily \label{orcos_8h_a62f147db55f878fadcba3ffdb7acf29b} 
+void LCD\+\_\+power\+\_\+off (\begin{DoxyParamCaption}\item[{int}]{clear}{}\end{DoxyParamCaption})}
+
+
+
+Power off the LCD display. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em clear} & If non-\/zero, clears display before power off \\
+\hline
+\end{DoxyParams}
+\Hypertarget{orcos_8h_aa8030c4fb5ccb058b96047cbb98420f3}\index{orcos.h@{orcos.h}!LCD\_power\_on@{LCD\_power\_on}}
+\index{LCD\_power\_on@{LCD\_power\_on}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_power\_on()}{LCD\_power\_on()}}
+{\footnotesize\ttfamily \label{orcos_8h_aa8030c4fb5ccb058b96047cbb98420f3} 
+void LCD\+\_\+power\+\_\+on (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Power on the LCD display Enables power supply and initializes display controller. 
+
+\Hypertarget{orcos_8h_aabb305b0ad5b22f985d678c07403a693}\index{orcos.h@{orcos.h}!lcd\_putsAt@{lcd\_putsAt}}
+\index{lcd\_putsAt@{lcd\_putsAt}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_putsAt()}{lcd\_putsAt()}}
+{\footnotesize\ttfamily \label{orcos_8h_aabb305b0ad5b22f985d678c07403a693} 
+void lcd\+\_\+puts\+At (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{str}{, }\item[{uint8\+\_\+t}]{font\+\_\+id}{, }\item[{uint16\+\_\+t}]{dx}{, }\item[{uint16\+\_\+t}]{dy}{, }\item[{uint8\+\_\+t}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Draw text string at specified position. 
+
+\Hypertarget{orcos_8h_a3609753f6033b8b107bc2d8501000aed}\index{orcos.h@{orcos.h}!lcd\_refresh@{lcd\_refresh}}
+\index{lcd\_refresh@{lcd\_refresh}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{lcd\_refresh()}{lcd\_refresh()}}
+{\footnotesize\ttfamily \label{orcos_8h_a3609753f6033b8b107bc2d8501000aed} 
+void lcd\+\_\+refresh (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Refresh the LCD with current framebuffer contents. 
+
+\Hypertarget{orcos_8h_ab7fa6fde4b3851f3588e9f0283bcaf1d}\index{orcos.h@{orcos.h}!LCD\_write\_line@{LCD\_write\_line}}
+\index{LCD\_write\_line@{LCD\_write\_line}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{LCD\_write\_line()}{LCD\_write\_line()}}
+{\footnotesize\ttfamily \label{orcos_8h_ab7fa6fde4b3851f3588e9f0283bcaf1d} 
+void LCD\+\_\+write\+\_\+line (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{buf}{}\end{DoxyParamCaption})}
+
+
+
+Write a line buffer to LCD. 
+
+\Hypertarget{orcos_8h_a9b34c73adeff06a8b4a11fbc0cfdc659}\index{orcos.h@{orcos.h}!orcos\_init@{orcos\_init}}
+\index{orcos\_init@{orcos\_init}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{orcos\_init()}{orcos\_init()}}
+{\footnotesize\ttfamily \label{orcos_8h_a9b34c73adeff06a8b4a11fbc0cfdc659} 
+void orcos\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initialize ORCOS library Sets up hardware peripherals, clocks, and display. 
+
+\Hypertarget{orcos_8h_ae1400f2618332aec937a37843c434709}\index{orcos.h@{orcos.h}!rtc\_read@{rtc\_read}}
+\index{rtc\_read@{rtc\_read}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{rtc\_read()}{rtc\_read()}}
+{\footnotesize\ttfamily \label{orcos_8h_ae1400f2618332aec937a37843c434709} 
+void rtc\+\_\+read (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtm__t}{tm\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{tm}{, }\item[{\mbox{\hyperlink{structdt__t}{dt\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dt}{}\end{DoxyParamCaption})}
+
+\Hypertarget{orcos_8h_acd7b45442ea54bd555176e5cfc891413}\index{orcos.h@{orcos.h}!scan\_keyboard@{scan\_keyboard}}
+\index{scan\_keyboard@{scan\_keyboard}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{scan\_keyboard()}{scan\_keyboard()}}
+{\footnotesize\ttfamily \label{orcos_8h_acd7b45442ea54bd555176e5cfc891413} 
+uint16\+\_\+t scan\+\_\+keyboard (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Scan keyboard matrix. 
+
+\begin{DoxyReturn}{Returns}
+Keycode of pressed key, 0 if none, 0x\+FFFF if multiple keys 
+\end{DoxyReturn}
+\Hypertarget{orcos_8h_a2b1ed233a180d3991b4832e9de38e176}\index{orcos.h@{orcos.h}!sys\_reset@{sys\_reset}}
+\index{sys\_reset@{sys\_reset}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{sys\_reset()}{sys\_reset()}}
+{\footnotesize\ttfamily \label{orcos_8h_a2b1ed233a180d3991b4832e9de38e176} 
+void sys\+\_\+reset (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Perform system reset Immediately resets the microcontroller. 
+
+Perform system reset Immediately resets the microcontroller. \Hypertarget{orcos_8h_abfb3a43ffa132292fca23ef2cd6535ab}\index{orcos.h@{orcos.h}!sys\_sleep@{sys\_sleep}}
+\index{sys\_sleep@{sys\_sleep}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{sys\_sleep()}{sys\_sleep()}}
+{\footnotesize\ttfamily \label{orcos_8h_abfb3a43ffa132292fca23ef2cd6535ab} 
+void sys\+\_\+sleep (\begin{DoxyParamCaption}\item[{int}]{off}{}\end{DoxyParamCaption})}
+
+
+
+Put calculator into low-\/power sleep mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em off} & If non-\/zero, only wake on ON key. If zero, wake on any key. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{orcos_8h_a95753604948d9a314fab9322d9da30a2}\index{orcos.h@{orcos.h}!wait\_for\_key\_press@{wait\_for\_key\_press}}
+\index{wait\_for\_key\_press@{wait\_for\_key\_press}!orcos.h@{orcos.h}}
+\doxysubsubsection{\texorpdfstring{wait\_for\_key\_press()}{wait\_for\_key\_press()}}
+{\footnotesize\ttfamily \label{orcos_8h_a95753604948d9a314fab9322d9da30a2} 
+void wait\+\_\+for\+\_\+key\+\_\+press (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Wait until a key is pressed Puts system to sleep until key press detected Use \doxylink{orcos_8h_ac7dc1595df4c87b0d629406c3862b50f}{key\+\_\+pop()} to retrieve the keycode. 
+

@@ -1,0 +1,117 @@
+\doxysection{liborcos/\+Src/sharp\+\_\+lowlevel.c File Reference}
+\hypertarget{sharp__lowlevel_8c}{}\label{sharp__lowlevel_8c}\index{liborcos/Src/sharp\_lowlevel.c@{liborcos/Src/sharp\_lowlevel.c}}
+{\ttfamily \#include "{}sharp\+\_\+lowlevel.\+h"{}}\newline
+{\ttfamily \#include "{}sharp.\+h"{}}\newline
+{\ttfamily \#include "{}stm32u3xx\+\_\+hal.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{sharp__lowlevel_8c_ad5c4c1082669f910322a8326aee96bfe}{CHUNK\+\_\+\+SIZE\+\_\+\+IN\+\_\+\+LINES}}~240
+\item 
+\#define \mbox{\hyperlink{sharp__lowlevel_8c_a55a789356aadc4876301633dc721c856}{CHUNK\+\_\+\+BUFFER\+\_\+\+SIZE}}~(1 + \mbox{\hyperlink{sharp__lowlevel_8c_ad5c4c1082669f910322a8326aee96bfe}{CHUNK\+\_\+\+SIZE\+\_\+\+IN\+\_\+\+LINES}} \texorpdfstring{$\ast$}{*} (1 + \mbox{\hyperlink{orcos_8h_a19693eac3018d3e7800fde141921b812}{LCD\+\_\+\+WIDTH}} / 8 + 1) + 1)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{sharp__lowlevel_8c_a9d542c46c2588a88955b8546689c5e53}{LCD\+\_\+\+Error\+\_\+\+Handler}} (void)
+\item 
+void \mbox{\hyperlink{sharp__lowlevel_8c_a2019014b11eb4c332c32586e078018d5}{TIM1\+\_\+\+Init}} (void)
+\item 
+void \mbox{\hyperlink{sharp__lowlevel_8c_a5b870155c01678a2480ede985cc4383f}{SPI2\+\_\+\+Init}} (void)
+\item 
+void \mbox{\hyperlink{sharp__lowlevel_8c_a770bf8b1ee77e02b3bc79fcfa81e8938}{\+\_\+\+\_\+lcd\+\_\+init}} ()
+\item 
+void \mbox{\hyperlink{sharp__lowlevel_8c_ab7fa6fde4b3851f3588e9f0283bcaf1d}{LCD\+\_\+write\+\_\+line}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}buf)
+\begin{DoxyCompactList}\small\item\em Write a line buffer to LCD. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sharp__lowlevel_8c_a46dfe7a679174f36e6462e8267aa9b81}{lcd\+\_\+refresh}} ()
+\begin{DoxyCompactList}\small\item\em Refresh the LCD with current framebuffer contents. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sharp__lowlevel_8c_a58f9378c36dbb864c00f8c964c652173}{delay\+\_\+us}} (uint16\+\_\+t us)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+RTC\+\_\+\+Handle\+Type\+Def \mbox{\hyperlink{sharp__lowlevel_8c_aa0c7fca836406ade332e1e3f1039d8ab}{hrtc}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-define-members}
+\Hypertarget{sharp__lowlevel_8c_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{sharp__lowlevel_8c_a55a789356aadc4876301633dc721c856}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!CHUNK\_BUFFER\_SIZE@{CHUNK\_BUFFER\_SIZE}}
+\index{CHUNK\_BUFFER\_SIZE@{CHUNK\_BUFFER\_SIZE}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{CHUNK\_BUFFER\_SIZE}{CHUNK\_BUFFER\_SIZE}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_a55a789356aadc4876301633dc721c856} 
+\#define CHUNK\+\_\+\+BUFFER\+\_\+\+SIZE~(1 + \mbox{\hyperlink{sharp__lowlevel_8c_ad5c4c1082669f910322a8326aee96bfe}{CHUNK\+\_\+\+SIZE\+\_\+\+IN\+\_\+\+LINES}} \texorpdfstring{$\ast$}{*} (1 + \mbox{\hyperlink{orcos_8h_a19693eac3018d3e7800fde141921b812}{LCD\+\_\+\+WIDTH}} / 8 + 1) + 1)}
+
+\Hypertarget{sharp__lowlevel_8c_ad5c4c1082669f910322a8326aee96bfe}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!CHUNK\_SIZE\_IN\_LINES@{CHUNK\_SIZE\_IN\_LINES}}
+\index{CHUNK\_SIZE\_IN\_LINES@{CHUNK\_SIZE\_IN\_LINES}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{CHUNK\_SIZE\_IN\_LINES}{CHUNK\_SIZE\_IN\_LINES}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_ad5c4c1082669f910322a8326aee96bfe} 
+\#define CHUNK\+\_\+\+SIZE\+\_\+\+IN\+\_\+\+LINES~240}
+
+
+
+\label{doc-func-members}
+\Hypertarget{sharp__lowlevel_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{sharp__lowlevel_8c_a770bf8b1ee77e02b3bc79fcfa81e8938}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!\_\_lcd\_init@{\_\_lcd\_init}}
+\index{\_\_lcd\_init@{\_\_lcd\_init}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{\_\_lcd\_init()}{\_\_lcd\_init()}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_a770bf8b1ee77e02b3bc79fcfa81e8938} 
+void \+\_\+\+\_\+lcd\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{sharp__lowlevel_8c_a58f9378c36dbb864c00f8c964c652173}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!delay\_us@{delay\_us}}
+\index{delay\_us@{delay\_us}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{delay\_us()}{delay\_us()}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_a58f9378c36dbb864c00f8c964c652173} 
+void delay\+\_\+us (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{us}{}\end{DoxyParamCaption})}
+
+\Hypertarget{sharp__lowlevel_8c_a9d542c46c2588a88955b8546689c5e53}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!LCD\_Error\_Handler@{LCD\_Error\_Handler}}
+\index{LCD\_Error\_Handler@{LCD\_Error\_Handler}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{LCD\_Error\_Handler()}{LCD\_Error\_Handler()}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_a9d542c46c2588a88955b8546689c5e53} 
+void LCD\+\_\+\+Error\+\_\+\+Handler (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{sharp__lowlevel_8c_a46dfe7a679174f36e6462e8267aa9b81}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!lcd\_refresh@{lcd\_refresh}}
+\index{lcd\_refresh@{lcd\_refresh}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_refresh()}{lcd\_refresh()}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_a46dfe7a679174f36e6462e8267aa9b81} 
+void lcd\+\_\+refresh (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Refresh the LCD with current framebuffer contents. 
+
+\Hypertarget{sharp__lowlevel_8c_ab7fa6fde4b3851f3588e9f0283bcaf1d}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!LCD\_write\_line@{LCD\_write\_line}}
+\index{LCD\_write\_line@{LCD\_write\_line}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{LCD\_write\_line()}{LCD\_write\_line()}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_ab7fa6fde4b3851f3588e9f0283bcaf1d} 
+void LCD\+\_\+write\+\_\+line (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{buf}{}\end{DoxyParamCaption})}
+
+
+
+Write a line buffer to LCD. 
+
+\Hypertarget{sharp__lowlevel_8c_a5b870155c01678a2480ede985cc4383f}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!SPI2\_Init@{SPI2\_Init}}
+\index{SPI2\_Init@{SPI2\_Init}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{SPI2\_Init()}{SPI2\_Init()}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_a5b870155c01678a2480ede985cc4383f} 
+void SPI2\+\_\+\+Init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{sharp__lowlevel_8c_a2019014b11eb4c332c32586e078018d5}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!TIM1\_Init@{TIM1\_Init}}
+\index{TIM1\_Init@{TIM1\_Init}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{TIM1\_Init()}{TIM1\_Init()}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_a2019014b11eb4c332c32586e078018d5} 
+void TIM1\+\_\+\+Init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+\label{doc-var-members}
+\Hypertarget{sharp__lowlevel_8c_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{sharp__lowlevel_8c_aa0c7fca836406ade332e1e3f1039d8ab}\index{sharp\_lowlevel.c@{sharp\_lowlevel.c}!hrtc@{hrtc}}
+\index{hrtc@{hrtc}!sharp\_lowlevel.c@{sharp\_lowlevel.c}}
+\doxysubsubsection{\texorpdfstring{hrtc}{hrtc}}
+{\footnotesize\ttfamily \label{sharp__lowlevel_8c_aa0c7fca836406ade332e1e3f1039d8ab} 
+RTC\+\_\+\+Handle\+Type\+Def hrtc\hspace{0.3cm}{\ttfamily [extern]}}
+

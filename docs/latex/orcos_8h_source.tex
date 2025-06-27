@@ -1,0 +1,149 @@
+\doxysection{orcos.\+h}
+\hypertarget{orcos_8h_source}{}\label{orcos_8h_source}\index{liborcos/Inc/orcos.h@{liborcos/Inc/orcos.h}}
+\mbox{\hyperlink{orcos_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#ifndef\ \_\_ORCOS\_H}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ \_\_ORCOS\_H}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{orcos_8h_ae2b9f81fcd7ab4bd30b2d9f6eecc9f52}{get\_vbat}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ LCD\ dimensions\ and\ buffer\ sizes}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ LCD\_WIDTH\ 400\ \ \ \ }}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ LCD\_HEIGHT\ 240\ \ \ }}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ LCD\_LINE\_SIZE\ 50\ }}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ LCD\_LINE\_BUF\_SIZE\ (LCD\_LINE\_SIZE\ +\ 4)\ }}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/*\ Color\ Constants\ */}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ LCD\_SET\_VALUE\ 0\ }\textcolor{comment}{//\ '1'\ bits\ in\ the\ given\ buffer\ will\ activate\ display\ pixels\ (black)}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ LCD\_EMPTY\_VALUE\ \string~(0)\ }\textcolor{comment}{//\ '1'\ bits\ in\ the\ given\ buffer\ will\ clear\ display\ pixels\ (white)}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{/*\ Font\ identifiers\ */}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ FONT\_6x8\ 0}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ FONT\_7x12b\ 1}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ FONT\_12x20\ 2}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ FONT\_24x40\ 3}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ FONT\_16x26\ 4}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00043\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_aa8030c4fb5ccb058b96047cbb98420f3}{LCD\_power\_on}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00049\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a62f147db55f878fadcba3ffdb7acf29b}{LCD\_power\_off}}(\textcolor{keywordtype}{int}\ clear);}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{orcos_8h_acf548d651a5da654437aea5b7390ce27}{LCD\_is\_on}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ BLT\_OR\ \ \ \ 0\ \ }}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ BLT\_ANDN\ \ 1\ \ }}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ BLT\_XOR\ \ \ 2\ \ }}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ BLT\_NONE\ \ 0\ \ }}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ BLT\_SET\ \ \ 1\ \ }}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{comment}{//\ Note:\ Most\ drawing\ functions\ are\ well-\/documented\ in\ sharp\_graphics.c}}
+\DoxyCodeLine{00067\ \textcolor{comment}{//\ Only\ adding\ brief\ descriptions\ here\ to\ avoid\ duplication}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_aefbfdc2f65e2457837906fee3a220795}{bitblt24}}(uint32\_t\ x,\ uint32\_t\ dx,\ uint32\_t\ y,\ uint32\_t\ val,\ \textcolor{keywordtype}{int}\ blt\_op,\ \textcolor{keywordtype}{int}\ fill);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00073\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_ab7fa6fde4b3851f3588e9f0283bcaf1d}{LCD\_write\_line}}(uint8\_t\ *buf);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00076\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a2386c6889d426206dc5dbd80c0c663de}{lcd\_draw\_img}}(\textcolor{keyword}{const}\ uint8\_t\ *img,\ uint32\_t\ w,\ uint32\_t\ h,\ uint32\_t\ x,\ uint32\_t\ y,\ uint8\_t\ color);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00079\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a3609753f6033b8b107bc2d8501000aed}{lcd\_refresh}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00082\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a4a833b87e7eeda2a135aae831119b46d}{lcd\_draw\_test\_pattern}}(uint8\_t\ square\_size);}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00085\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_af6a333a498139c48cee9b2edb80d3dc4}{lcd\_fill}}(uint8\_t\ fill\_pattern);}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00088\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a9c23a1b3d3761615c36ab26fa56622bd}{lcd\_clear\_buffer}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00091\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_af4e8f71530d83bd4921919e95328cade}{lcd\_invert\_framebuffer}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00094\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_aabb305b0ad5b22f985d678c07403a693}{lcd\_putsAt}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str,\ uint8\_t\ font\_id,\ uint16\_t\ dx,\ uint16\_t\ dy,\ uint8\_t\ color);}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00097\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a7135bad65cb4fe75489bf991dcc59b22}{lcd\_fill\_rect}}(uint32\_t\ x,\ uint32\_t\ y,\ uint32\_t\ dx,\ uint32\_t\ dy,\ \textcolor{keywordtype}{int}\ val);}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00100\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{orcos_8h_aaaa4d5adc8a09003ea4fb05ec55a1e9c}{lcd\_for\_calc}}(\textcolor{keywordtype}{int}\ what\_screen);}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_CALC\ \ \ 0}}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_SYS\_MENU\ \ \ 2}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_BOOTLOADER\ \ \ 4}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_UNIMPLEMENTED\ \ \ 5}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_USB\_WRITE\ \ \ 6}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_MSC\_CONNECT\_USB\ \ \ 7}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_ABOUT\ \ \ 8}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_FAT\_FORMAT\ \ \ 9}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_FAULT\ \ \ 11}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_QSPI\_BAD\_CRC\ \ \ 12}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_QSPI\_CHECK\ \ \ 13}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_MARK\_REGION\ \ \ 15}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_DISK\_TEST\ \ \ 16}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_DSKTST\_CONNECT\_USB\ \ \ 17}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_QSPI\_CONNECT\_USB\ \ \ 18}}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_OFF\_IMAGE\_ERR\ \ \ 19}}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_HELP\ \ \ 21}}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_BOOTLDR\_CON\_USB\ \ \ 22}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_PROD\_DIAG\ \ \ 23}}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_POWER\_CHECK\ \ \ 24}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#define\ \ \ \ \ DISP\_FLASH\_CONNECT\_USB\ \ \ 26}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00132\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_abfb3a43ffa132292fca23ef2cd6535ab}{sys\_sleep}}(\textcolor{keywordtype}{int}\ off);}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00138\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a2b1ed233a180d3991b4832e9de38e176}{sys\_reset}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00144\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a9b34c73adeff06a8b4a11fbc0cfdc659}{orcos\_init}}();}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{preprocessor}{\#if\ DEBUG}}
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#define\ DEBUG\_PRINT(...)\ SEGGER\_RTT\_printf(0,\ \_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#define\ DEBUG\_PRINT(...)}}
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00156\ uint16\_t\ \mbox{\hyperlink{orcos_8h_acd7b45442ea54bd555176e5cfc891413}{scan\_keyboard}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00162\ uint16\_t\ \mbox{\hyperlink{orcos_8h_ac7dc1595df4c87b0d629406c3862b50f}{key\_pop}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00168\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a9517c0e0622b0109ec92b0465b667570}{key\_push}}(uint16\_t\ keycode);}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00175\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_a95753604948d9a314fab9322d9da30a2}{wait\_for\_key\_press}}();}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00180\ \textcolor{preprocessor}{\#define\ KEY\_0\ 1}}
+\DoxyCodeLine{00181\ \textcolor{preprocessor}{\#define\ KEY\_SIGN\ 2}}
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\#define\ KEY\_ENTER\ 29}}
+\DoxyCodeLine{00183\ \textcolor{preprocessor}{\#define\ KEY\_F\ 49}}
+\DoxyCodeLine{00184\ \textcolor{preprocessor}{\#define\ KEY\_ON\ 54}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \textcolor{preprocessor}{\#define\ MULTIPLE\_KEYS\_PRESSED(x)\ \ ((x)\ >\ 0xff)}}
+\DoxyCodeLine{00188\ \textcolor{preprocessor}{\#define\ FIRST\_KEYCODE(x)\ \ ((x)\ \&\ 0xff)}}
+\DoxyCodeLine{00189\ \textcolor{preprocessor}{\#define\ SECOND\_KEYCODE(x)\ \ ((x)\ >>\ 8)}}
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#define\ TOO\_MANY\_KEYS\_PRESSED(x)\ \ ((x)\ ==\ 0xffff)}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \textcolor{comment}{//\ Date/Time\ functions\ }}
+\DoxyCodeLine{00194\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00195\ \{}
+\DoxyCodeLine{00196\ \ \ uint16\_t\ \mbox{\hyperlink{structdt__t_ac553e41e9e70fb659bbc2e8b1ed03da4}{year}};}
+\DoxyCodeLine{00197\ \ \ uint8\_t\ \mbox{\hyperlink{structdt__t_a01d2ffa4a0964a9a1a1476a38a48ba54}{month}};}
+\DoxyCodeLine{00198\ \ \ uint8\_t\ \mbox{\hyperlink{structdt__t_a219effc690a1123354f9e9399f05e87a}{day}};}
+\DoxyCodeLine{00199\ \}\ \mbox{\hyperlink{structdt__t}{dt\_t}};}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00202\ \{}
+\DoxyCodeLine{00203\ \ \ uint8\_t\ \mbox{\hyperlink{structtm__t_a1005ef5d06f2239e30300679ed8e860b}{hour}};}
+\DoxyCodeLine{00204\ \ \ uint8\_t\ \mbox{\hyperlink{structtm__t_ab7e4bc75b76c7af1ddf58adbb6db33d9}{min}};}
+\DoxyCodeLine{00205\ \ \ uint8\_t\ \mbox{\hyperlink{structtm__t_aab94d0df559cf3b9fe24fdf148b409aa}{sec}};}
+\DoxyCodeLine{00206\ \ \ uint8\_t\ \mbox{\hyperlink{structtm__t_a6b8abeae30b8c057ae78a425ee907494}{csec}};}
+\DoxyCodeLine{00207\ \ \ uint8\_t\ \mbox{\hyperlink{structtm__t_a2ac20f85cc45d914e15ce6d358a87b96}{dow}};}
+\DoxyCodeLine{00208\ \}\ \mbox{\hyperlink{structtm__t}{tm\_t}};}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_ae1400f2618332aec937a37843c434709}{rtc\_read}}(\mbox{\hyperlink{structtm__t}{tm\_t}}\ *tm,\ \mbox{\hyperlink{structdt__t}{dt\_t}}\ *dt);}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{comment}{//\ Deprecated}}
+\DoxyCodeLine{00213\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{orcos_8h_ad214981cfe5b8b5b33ba640d76263ae5}{calc\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00214\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{orcos_8h_a71f7623ee5758a1fc69beb4959aa1d43}{calc\_on\_key}}(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_ORCOS\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['lastx_0',['lastx',['../calc_8c.html#a8d1cffc725548ba8b07443ca10756557',1,'calc.c']]],
+  ['lastx2_1',['lastx2',['../calc_8c.html#a4507fee6acd1c054022b79e4bdcf6682',1,'calc.c']]],
+  ['lcd_5fclear_5fbuffer_2',['lcd_clear_buffer',['../sharp__graphics_8c.html#a9c23a1b3d3761615c36ab26fa56622bd',1,'lcd_clear_buffer(void):&#160;sharp_graphics.c'],['../orcos_8h.html#a9c23a1b3d3761615c36ab26fa56622bd',1,'lcd_clear_buffer(void):&#160;sharp_graphics.c']]],
+  ['lcd_5fdraw_5fimg_3',['lcd_draw_img',['../sharp__graphics_8c.html#a2386c6889d426206dc5dbd80c0c663de',1,'lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color):&#160;sharp_graphics.c'],['../orcos_8h.html#a2386c6889d426206dc5dbd80c0c663de',1,'lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color):&#160;sharp_graphics.c']]],
+  ['lcd_5fdraw_5ftest_5fpattern_4',['lcd_draw_test_pattern',['../sharp__graphics_8c.html#a4a833b87e7eeda2a135aae831119b46d',1,'lcd_draw_test_pattern(uint8_t square_size):&#160;sharp_graphics.c'],['../orcos_8h.html#a4a833b87e7eeda2a135aae831119b46d',1,'lcd_draw_test_pattern(uint8_t square_size):&#160;sharp_graphics.c']]],
+  ['lcd_5fempty_5fvalue_5',['LCD_EMPTY_VALUE',['../orcos_8h.html#a3c4e504f5a78c51844332e6c83072ff5',1,'orcos.h']]],
+  ['lcd_5ferror_5fhandler_6',['LCD_Error_Handler',['../sharp__lowlevel_8c.html#a9d542c46c2588a88955b8546689c5e53',1,'sharp_lowlevel.c']]],
+  ['lcd_5ffill_7',['lcd_fill',['../sharp__graphics_8c.html#a23ad5bac40f8bfd2ac3ec3772c33a4ed',1,'lcd_fill(uint8_t color):&#160;sharp_graphics.c'],['../orcos_8h.html#af6a333a498139c48cee9b2edb80d3dc4',1,'lcd_fill(uint8_t fill_pattern):&#160;sharp_graphics.c']]],
+  ['lcd_5ffill_5frect_8',['lcd_fill_rect',['../sharp__graphics_8c.html#a7135bad65cb4fe75489bf991dcc59b22',1,'lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t dy, int val):&#160;sharp_graphics.c'],['../orcos_8h.html#a7135bad65cb4fe75489bf991dcc59b22',1,'lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t dy, int val):&#160;sharp_graphics.c']]],
+  ['lcd_5ffor_5fcalc_9',['lcd_for_calc',['../sharp_8c.html#aaaa4d5adc8a09003ea4fb05ec55a1e9c',1,'lcd_for_calc(int what_screen):&#160;sharp.c'],['../orcos_8h.html#aaaa4d5adc8a09003ea4fb05ec55a1e9c',1,'lcd_for_calc(int what_screen):&#160;sharp.c']]],
+  ['lcd_5fheight_10',['LCD_HEIGHT',['../orcos_8h.html#a53a8b2a971de4b88047192655a48b651',1,'orcos.h']]],
+  ['lcd_5finvert_5fframebuffer_11',['lcd_invert_framebuffer',['../sharp__graphics_8c.html#af4e8f71530d83bd4921919e95328cade',1,'lcd_invert_framebuffer(void):&#160;sharp_graphics.c'],['../orcos_8h.html#af4e8f71530d83bd4921919e95328cade',1,'lcd_invert_framebuffer(void):&#160;sharp_graphics.c']]],
+  ['lcd_5fis_5fon_12',['LCD_is_on',['../sharp_8c.html#a7db02e55c427894ec13cbd0de3cccaee',1,'LCD_is_on():&#160;sharp.c'],['../orcos_8h.html#acf548d651a5da654437aea5b7390ce27',1,'LCD_is_on(void):&#160;sharp.c']]],
+  ['lcd_5fkeep_5falive_13',['lcd_keep_alive',['../sharp_8c.html#afdd52acf2e2f027169b012f29f1bcdfe',1,'sharp.c']]],
+  ['lcd_5fline_5fbuf_5fsize_14',['LCD_LINE_BUF_SIZE',['../orcos_8h.html#a973bd5015219a5c99f7979a890562566',1,'orcos.h']]],
+  ['lcd_5fline_5fsize_15',['LCD_LINE_SIZE',['../orcos_8h.html#a255f8f449eb40d98f658ffa52d54fa78',1,'orcos.h']]],
+  ['lcd_5fpower_5foff_16',['LCD_power_off',['../sharp_8c.html#a62f147db55f878fadcba3ffdb7acf29b',1,'LCD_power_off(int clear):&#160;sharp.c'],['../orcos_8h.html#a62f147db55f878fadcba3ffdb7acf29b',1,'LCD_power_off(int clear):&#160;sharp.c']]],
+  ['lcd_5fpower_5fon_17',['LCD_power_on',['../sharp_8c.html#a974793f3b67a06e42f2d2220085d6450',1,'LCD_power_on():&#160;sharp.c'],['../orcos_8h.html#aa8030c4fb5ccb058b96047cbb98420f3',1,'LCD_power_on(void):&#160;sharp.c']]],
+  ['lcd_5fputsat_18',['lcd_putsAt',['../sharp__graphics_8c.html#aabb305b0ad5b22f985d678c07403a693',1,'lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint8_t color):&#160;sharp_graphics.c'],['../orcos_8h.html#aabb305b0ad5b22f985d678c07403a693',1,'lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint8_t color):&#160;sharp_graphics.c']]],
+  ['lcd_5frefresh_19',['lcd_refresh',['../sharp__lowlevel_8c.html#a46dfe7a679174f36e6462e8267aa9b81',1,'lcd_refresh():&#160;sharp_lowlevel.c'],['../orcos_8h.html#a3609753f6033b8b107bc2d8501000aed',1,'lcd_refresh(void):&#160;sharp_lowlevel.c']]],
+  ['lcd_5fset_5fvalue_20',['LCD_SET_VALUE',['../orcos_8h.html#a980035bff511f90ae6bc5049b5241fe9',1,'orcos.h']]],
+  ['lcd_5ftest_5fscreen_21',['LCD_test_screen',['../sharp_8c.html#ae05f0ca3bff52d8189c94274e2488cba',1,'sharp.c']]],
+  ['lcd_5fwidth_22',['LCD_WIDTH',['../orcos_8h.html#a19693eac3018d3e7800fde141921b812',1,'orcos.h']]],
+  ['lcd_5fwrite_5fline_23',['LCD_write_line',['../sharp__lowlevel_8c.html#ab7fa6fde4b3851f3588e9f0283bcaf1d',1,'LCD_write_line(uint8_t *buf):&#160;sharp_lowlevel.c'],['../orcos_8h.html#ab7fa6fde4b3851f3588e9f0283bcaf1d',1,'LCD_write_line(uint8_t *buf):&#160;sharp_lowlevel.c']]],
+  ['line_5finterval_24',['LINE_INTERVAL',['../calc_8c.html#a64836ca42eaa0e249ea8f25f21a43a2b',1,'calc.c']]]
+];

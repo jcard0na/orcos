@@ -1,0 +1,41 @@
+\doxysection{liborcos/\+Src/power.c File Reference}
+\hypertarget{power_8c}{}\label{power_8c}\index{liborcos/Src/power.c@{liborcos/Src/power.c}}
+{\ttfamily \#include "{}stm32u3xx\+\_\+hal.\+h"{}}\newline
+{\ttfamily \#include "{}orcos.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{power_8c_abfb3a43ffa132292fca23ef2cd6535ab}{sys\+\_\+sleep}} (int off)
+\begin{DoxyCompactList}\small\item\em Put calculator into low-\/power sleep mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{power_8c_a2b1ed233a180d3991b4832e9de38e176}{sys\+\_\+reset}} (void)
+\begin{DoxyCompactList}\small\item\em Performs a system reset by triggering the CPU\textquotesingle{}s reset. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{power_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{power_8c_a2b1ed233a180d3991b4832e9de38e176}\index{power.c@{power.c}!sys\_reset@{sys\_reset}}
+\index{sys\_reset@{sys\_reset}!power.c@{power.c}}
+\doxysubsubsection{\texorpdfstring{sys\_reset()}{sys\_reset()}}
+{\footnotesize\ttfamily \label{power_8c_a2b1ed233a180d3991b4832e9de38e176} 
+void sys\+\_\+reset (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Performs a system reset by triggering the CPU\textquotesingle{}s reset. 
+
+Perform system reset Immediately resets the microcontroller. \Hypertarget{power_8c_abfb3a43ffa132292fca23ef2cd6535ab}\index{power.c@{power.c}!sys\_sleep@{sys\_sleep}}
+\index{sys\_sleep@{sys\_sleep}!power.c@{power.c}}
+\doxysubsubsection{\texorpdfstring{sys\_sleep()}{sys\_sleep()}}
+{\footnotesize\ttfamily \label{power_8c_abfb3a43ffa132292fca23ef2cd6535ab} 
+void sys\+\_\+sleep (\begin{DoxyParamCaption}\item[{int}]{off}{}\end{DoxyParamCaption})}
+
+
+
+Put calculator into low-\/power sleep mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em off} & If non-\/zero, only wake on ON key. If zero, wake on any key. \\
+\hline
+\end{DoxyParams}

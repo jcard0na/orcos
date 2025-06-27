@@ -1,0 +1,1709 @@
+\doxysection{liborcos/\+Src/calc.c File Reference}
+\hypertarget{calc_8c}{}\label{calc_8c}\index{liborcos/Src/calc.c@{liborcos/Src/calc.c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include "{}sharp.\+h"{}}\newline
+{\ttfamily \#include "{}fonts.\+h"{}}\newline
+{\ttfamily \#include "{}func.\+h"{}}\newline
+{\ttfamily \#include "{}io.\+h"{}}\newline
+{\ttfamily \#include "{}orcos.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structt__input}{t\+\_\+input}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{calc_8c_accbb358028675c83675d8b34c386268d}{MAX\+\_\+\+STACK\+\_\+\+SIZE}}~99
+\item 
+\#define \mbox{\hyperlink{calc_8c_adea1bd3f15f0c62a2af912434193622e}{MAX\+\_\+\+MEMORY\+\_\+\+SIZE}}~99
+\item 
+\#define \mbox{\hyperlink{calc_8c_a0c5197950b670978fb265b78cf6d8c5c}{MAX\+\_\+\+PROGRAM\+\_\+\+SIZE}}~99
+\item 
+\#define \mbox{\hyperlink{calc_8c_abfb843d9e2dd714a7bc2d868ec9efcfd}{CONTEXT\+\_\+\+REAL}}~0
+\item 
+\#define \mbox{\hyperlink{calc_8c_ac8bc6356298684f7370d2f517309d100}{CONTEXT\+\_\+\+UNCERT}}~1
+\item 
+\#define \mbox{\hyperlink{calc_8c_a4c10b350657615fbc7a2139a3b85be37}{CONTEXT\+\_\+\+COMPLEX}}~2
+\item 
+\#define \mbox{\hyperlink{calc_8c_a62056fdbee5ce4fee41ef7d1c948d96d}{CONTEXT\+\_\+\+INTEGER}}~3
+\item 
+\#define \mbox{\hyperlink{calc_8c_aea4119b634760c2e561f7302e1232d10}{BOTTOM\+\_\+\+YPOS}}~190
+\item 
+\#define \mbox{\hyperlink{calc_8c_a64836ca42eaa0e249ea8f25f21a43a2b}{LINE\+\_\+\+INTERVAL}}~54
+\item 
+\#define \mbox{\hyperlink{calc_8c_a35b90a17b431bbb5bd31cf2d04050bf8}{DRAW\+\_\+\+STATUS}}~0x0001
+\item 
+\#define \mbox{\hyperlink{calc_8c_a294871c0beb5fd747190cdb8eae3ed9d}{DRAW\+\_\+\+STACK}}~0x0002
+\item 
+\#define \mbox{\hyperlink{calc_8c_aa6cd4c9289f0a536acaacbdb13af8ae4}{DRAW\+\_\+\+INPUT}}~0x0004
+\item 
+\#define \mbox{\hyperlink{calc_8c_a1bbf41b951fbfd25683d95a49f7e9287}{DRAW\+\_\+\+ERROR}}~0x0008
+\item 
+\#define \mbox{\hyperlink{calc_8c_a82e8a8b93f947b52497955303eed4805}{DRAW\+\_\+\+CURSOR}}~0x0010
+\item 
+\#define \mbox{\hyperlink{calc_8c_a34b7e2e7e069134d55bf2725f073cd7c}{OPMODE\+\_\+\+MASK}}~0x\+FF00
+\item 
+\#define \mbox{\hyperlink{calc_8c_ae487cae9a61bd851234ba945074973e2}{OPMODE\+\_\+1\+TO1}}~0x1000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a6831371c4b5f6f3720f49f95e1371b73}{OPMODE\+\_\+2\+TO1}}~0x2000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a8e42c90e66659e624c59f6195d5977e7}{OPMODE\+\_\+2\+TO2}}~0x3000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a37662b889d9a0f53b6111a05275cbbe5}{OPMODE\+\_\+\+CONST}}~0x4000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a64468a443ea13d6f49e6f79b121933f4}{OPMODE\+\_\+\+ENTER}}~0x5000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a590b2a65347eff329532c9eb1b20b5d9}{OPMODE\+\_\+\+STACK}}~0x6000
+\item 
+\#define \mbox{\hyperlink{calc_8c_ac52ef496dcf396d29c956b4b5055d45f}{OPMODE\+\_\+\+RCL}}~0x7000
+\item 
+\#define \mbox{\hyperlink{calc_8c_aa4c565d2b8b9c457269573f41e4d2e81}{OPMODE\+\_\+\+STO}}~0x7100
+\item 
+\#define \mbox{\hyperlink{calc_8c_a3d15f0acc8f30e184b1cbc50e393709f}{OPMODE\+\_\+\+MPLUS}}~0x7200
+\item 
+\#define \mbox{\hyperlink{calc_8c_a3af3fe2f39f45092b20b3684f148c7ab}{OPMODE\+\_\+\+MMINUS}}~0x7300
+\item 
+\#define \mbox{\hyperlink{calc_8c_a54ff84d9dc3969e2243e81393ba78a0d}{OPMODE\+\_\+\+RCLX}}~0x7400
+\item 
+\#define \mbox{\hyperlink{calc_8c_af77b4e2c46bfb8245f20f7e3e3124508}{OPMODE\+\_\+\+STOX}}~0x7500
+\item 
+\#define \mbox{\hyperlink{calc_8c_a5a5bd0e4b18f2a2947dbee1100a43cae}{OPMODE\+\_\+3\+TO1}}~0x8000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a251477ca6a302d17db4bb65aa90000ad}{OPMODE\+\_\+\+STAT}}~0x9000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a60ca9efffc3b5a2233efae0d3ed94019}{OPMODE\+\_\+\+PROG}}~0x\+A000
+\item 
+\#define \mbox{\hyperlink{calc_8c_af97b4d9a9b4b50c407a0e09be17302fc}{OPMODE\+\_\+\+TEST}}~0x\+FF00
+\item 
+\#define \mbox{\hyperlink{calc_8c_a59ae697ce7934797376ee1134c75e3df}{OP\+\_\+\+ENTER\+\_\+1}}~0x5001
+\item 
+\#define \mbox{\hyperlink{calc_8c_ae944b2f3d2bb5f9073d4c90dcf922249}{OP\+\_\+\+ENTER\+\_\+2}}~0x5002
+\item 
+\#define \mbox{\hyperlink{calc_8c_a737788397284c7aac719f474dc5abeb9}{OP\+\_\+\+ENTER\+\_\+3}}~0x5003
+\item 
+\#define \mbox{\hyperlink{calc_8c_a1529d49954e4ea6f13f9e539b5ba5f85}{OP\+\_\+\+ENTER\+\_\+4}}~0x5004
+\item 
+\#define \mbox{\hyperlink{calc_8c_a96f2124565463515a84773beaeda1b84}{OP\+\_\+\+ENTER\+\_\+5}}~0x5005
+\item 
+\#define \mbox{\hyperlink{calc_8c_a17c5b982a98b5760004af9d7997af115}{OP\+\_\+\+ENTER\+\_\+6}}~0x5006
+\item 
+\#define \mbox{\hyperlink{calc_8c_ae8009e1f0db3ec413f6989bb571c951b}{OP\+\_\+\+ENTER\+\_\+7}}~0x5007
+\item 
+\#define \mbox{\hyperlink{calc_8c_a342c2ef1ef68973329d272243adb8d45}{OP\+\_\+\+ENTER\+\_\+8}}~0x5008
+\item 
+\#define \mbox{\hyperlink{calc_8c_a41a21d121b4451fb0a06b22cf17d64ca}{OP\+\_\+\+ENTER\+\_\+9}}~0x5009
+\item 
+\#define \mbox{\hyperlink{calc_8c_a6c213bfdba5fcc3dff92e9f8e493fde7}{OP\+\_\+\+ENTER\+\_\+0}}~0x5000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a95658850ad5be543d4b22d7f944b06c3}{OP\+\_\+\+ENTER\+\_\+\+DECPOINT}}~0x500A
+\item 
+\#define \mbox{\hyperlink{calc_8c_aa12e1da56b8714e3dcfbd777b9356faf}{OP\+\_\+\+ENTER\+\_\+\+SIGN}}~0x500B
+\item 
+\#define \mbox{\hyperlink{calc_8c_a1ee4911e957f9d7eab090ebf9c1156fa}{OP\+\_\+\+ENTER\+\_\+\+EXP}}~0x500C
+\item 
+\#define \mbox{\hyperlink{calc_8c_aef24c5800e97aa73134ecfb2f1cc870e}{OP\+\_\+\+ENTER\+\_\+\+BACKSPACE}}~0x500D
+\item 
+\#define \mbox{\hyperlink{calc_8c_acf5893f764c148dbd13f5f1420073be5}{OP\+\_\+\+ENTER\+\_\+\+UNCERT}}~0x500E
+\item 
+\#define \mbox{\hyperlink{calc_8c_a3456423425d453d2d0de1f316d2f5951}{OP\+\_\+\+ENTER}}~0x500F
+\item 
+\#define \mbox{\hyperlink{calc_8c_ad6d5987d239c4af91bb5862d3d31cfa5}{OP\+\_\+\+DROP}}~0x6001
+\item 
+\#define \mbox{\hyperlink{calc_8c_a2193c19ef839c22a7d0c8fa8bf684aea}{OP\+\_\+\+SWAP}}~0x6002
+\item 
+\#define \mbox{\hyperlink{calc_8c_a31974649147717b6dcf1647f46f3e220}{OP\+\_\+\+LASTX}}~0x6003
+\item 
+\#define \mbox{\hyperlink{calc_8c_af47ff037939981fcf957c9bf31e73ef8}{OP\+\_\+\+CLEAR\+\_\+\+STACK}}~0x6004
+\item 
+\#define \mbox{\hyperlink{calc_8c_a8a209d88f2e43ab218c8447aeec711f5}{OP\+\_\+\+ROTUP}}~0x6007
+\item 
+\#define \mbox{\hyperlink{calc_8c_a82166b45c919217a9dbaf7477758e40e}{OP\+\_\+\+ROTDOWN}}~0x6008
+\item 
+\#define \mbox{\hyperlink{calc_8c_a35226d9a2726bb5993406b40bbe086e4}{OP\+\_\+\+CLEAR\+\_\+\+MEM}}~0x6009
+\item 
+\#define \mbox{\hyperlink{calc_8c_a470b039eb8cfe27a1810bb01c2f4ac30}{OP\+\_\+\+NOP}}~0x0000
+\item 
+\#define \mbox{\hyperlink{calc_8c_a75a9903938da31e530a136d37a839848}{OP\+\_\+\+PLUS}}~0x2001
+\item 
+\#define \mbox{\hyperlink{calc_8c_ab62390fc8d7f39a0edfd26f5c30df780}{OP\+\_\+\+MINUS}}~0x2002
+\item 
+\#define \mbox{\hyperlink{calc_8c_a371f53fb34126aa75001e968442f1a3d}{OP\+\_\+\+MULT}}~0x2003
+\item 
+\#define \mbox{\hyperlink{calc_8c_addec4be73478fb9243f0ea0087366641}{OP\+\_\+\+DIV}}~0x2004
+\item 
+\#define \mbox{\hyperlink{calc_8c_a896bbe976fbf33e85f49f650480f4a49}{OP\+\_\+\+POW}}~0x2008
+\item 
+\#define \mbox{\hyperlink{calc_8c_a24209994b3dc7b09aa9e96b451fddbf5}{OP\+\_\+\+ROOTX}}~0x2013
+\item 
+\#define \mbox{\hyperlink{calc_8c_a702e51b1d03563d73019f21a873109c9}{OP\+\_\+\+CYX}}~0x2014
+\item 
+\#define \mbox{\hyperlink{calc_8c_a549e22044cf483925197488c6934c00b}{OP\+\_\+\+PYX}}~0x2015
+\item 
+\#define \mbox{\hyperlink{calc_8c_ae2c46ed4abbd4097519f45a6a0c5eba0}{OP\+\_\+\+SIGNIF\+\_\+\+XY}}~0x2016
+\item 
+\#define \mbox{\hyperlink{calc_8c_a6fc75f51b29a43d74135d1cde98e0e53}{OP\+\_\+\+POISSON}}~0x2017
+\item 
+\#define \mbox{\hyperlink{calc_8c_a037edae16bdac7d50aa0055f552e7462}{OP\+\_\+\+CHI2\+\_\+\+PROB}}~0x2018
+\item 
+\#define \mbox{\hyperlink{calc_8c_acf617802406c5fa69628cf62525cf048}{OP\+\_\+\+INV}}~0x1005
+\item 
+\#define \mbox{\hyperlink{calc_8c_aa779eafd1cbcdf0abaa604c9a66a0c90}{OP\+\_\+\+SQR}}~0x1006
+\item 
+\#define \mbox{\hyperlink{calc_8c_ab69e544184d6633879b05e9408e7c4b4}{OP\+\_\+\+SQRT}}~0x1007
+\item 
+\#define \mbox{\hyperlink{calc_8c_a42bd982e2a40d1048d84f08647c68c73}{OP\+\_\+\+LN}}~0x1009
+\item 
+\#define \mbox{\hyperlink{calc_8c_aeafb17c42259855ca12f30e6521be285}{OP\+\_\+\+LG}}~0x100A
+\item 
+\#define \mbox{\hyperlink{calc_8c_a0032d60db5f714ec67b9d8a4d62ca511}{OP\+\_\+\+EXP}}~0x100B
+\item 
+\#define \mbox{\hyperlink{calc_8c_afa885931998fd06bdb6ff94271b1c03a}{OP\+\_\+\+POW10}}~0x100C
+\item 
+\#define \mbox{\hyperlink{calc_8c_ad469192ec7b0d24bdafe9154256bc8da}{OP\+\_\+\+SIN}}~0x100D
+\item 
+\#define \mbox{\hyperlink{calc_8c_a723137b28d131db6de68c6fdf931090a}{OP\+\_\+\+COS}}~0x100E
+\item 
+\#define \mbox{\hyperlink{calc_8c_abde55bbe80cb01b7201f944c2dd749f7}{OP\+\_\+\+TAN}}~0x100F
+\item 
+\#define \mbox{\hyperlink{calc_8c_a5ff22932a3b213d22b0a7c1fb18ea418}{OP\+\_\+\+ASIN}}~0x1010
+\item 
+\#define \mbox{\hyperlink{calc_8c_ae812b1073943cc1642d1f47b4f7a819e}{OP\+\_\+\+ACOS}}~0x1011
+\item 
+\#define \mbox{\hyperlink{calc_8c_a5fa1f8af68434578bdfb750a49ba58f2}{OP\+\_\+\+ATAN}}~0x1012
+\item 
+\#define \mbox{\hyperlink{calc_8c_a3fe9c452091095cc77e93607421e9258}{OP\+\_\+\+ERF}}~0x1014
+\item 
+\#define \mbox{\hyperlink{calc_8c_a4c733de79f6c2df41b5e3ae4d8f63f8b}{OP\+\_\+\+ERFINV}}~0x1015
+\item 
+\#define \mbox{\hyperlink{calc_8c_a0b7ae1bb46c60cccf8e77ad34ca2ff53}{OP\+\_\+\+GAMMA}}~0x1016
+\item 
+\#define \mbox{\hyperlink{calc_8c_a1e524ee476945ec4dd96ebd2e1447016}{OP\+\_\+\+LOGGAMMA}}~0x1017
+\item 
+\#define \mbox{\hyperlink{calc_8c_a3cbeea608a15ee578b5ad9077f678bc8}{OP\+\_\+\+GAMMABETA}}~0x1018
+\item 
+\#define \mbox{\hyperlink{calc_8c_a6fa66e58232f1accfd2eae481dc07168}{OP\+\_\+\+BETAGAMMA}}~0x1019
+\item 
+\#define \mbox{\hyperlink{calc_8c_aa4742aa3a9855a08296fb1b9877a5c3b}{OP\+\_\+\+ETATHETA}}~0x101A
+\item 
+\#define \mbox{\hyperlink{calc_8c_ab4b0e4c684fa11f77bfe704f0125c8e6}{OP\+\_\+\+THETAETA}}~0x101B
+\item 
+\#define \mbox{\hyperlink{calc_8c_ab5b64442599dc96db3ddffe43fa26a83}{OP\+\_\+\+SIGNIF\+\_\+X}}~0x101C
+\item 
+\#define \mbox{\hyperlink{calc_8c_a4cd2d8a8ec0bdf298f38b70ee405ea71}{OP\+\_\+\+GAUSS\+\_\+\+PVALUE}}~0x101D
+\item 
+\#define \mbox{\hyperlink{calc_8c_a6e7ff6bc304713fba07e35cb695e937c}{OP\+\_\+\+FACTORIAL}}~0x101E
+\item 
+\#define \mbox{\hyperlink{calc_8c_a188a1f08d33b486be8f3ff6aa6d87905}{OP\+\_\+\+POLAR}}~0x3001
+\item 
+\#define \mbox{\hyperlink{calc_8c_af21140099bbd967f8a19391b39c1e8a0}{OP\+\_\+\+DESCARTES}}~0x3002
+\item 
+\#define \mbox{\hyperlink{calc_8c_a975de5d938db5e60614569cc330d1bb9}{OP\+\_\+\+CONST\+\_\+\+PI}}~0x4013
+\item 
+\#define \mbox{\hyperlink{calc_8c_acf0d7b99440fd134a3769b9ec83dbcf0}{OP\+\_\+\+CONST\+\_\+E}}~0x4014
+\item 
+\#define \mbox{\hyperlink{calc_8c_a41b57b3bb4872b94d06f3b1f3bd489ab}{OP\+\_\+\+CONST\+\_\+\+PLANCK}}~0x4015
+\item 
+\#define \mbox{\hyperlink{calc_8c_a645ec85458c2b941d26962137f4fad14}{OP\+\_\+\+CONST\+\_\+\+PLANCKC}}~0x4016
+\item 
+\#define \mbox{\hyperlink{calc_8c_a4624e87dbc5947af35e558b93e8a9e89}{OP\+\_\+\+CONST\+\_\+\+NA}}~0x4017
+\item 
+\#define \mbox{\hyperlink{calc_8c_aef2bfb4dd56dc50bbd9fa9a560b727e1}{OP\+\_\+\+CONST\+\_\+K}}~0x4018
+\item 
+\#define \mbox{\hyperlink{calc_8c_ac3575ca843ae1e17cd92322e368f9972}{OP\+\_\+\+CONST\+\_\+C}}~0x4019
+\item 
+\#define \mbox{\hyperlink{calc_8c_a768dec51697bc08c902e0b5ffee16c8a}{OP\+\_\+\+PZXY}}~0x8001
+\item 
+\#define \mbox{\hyperlink{calc_8c_adae896e7a829e1718230bd3f53b93aa5}{OP\+\_\+\+STAT\+\_\+\+MEAN}}~0x9001
+\item 
+\#define \mbox{\hyperlink{calc_8c_a84420dd4ed2f83601c3b95af06ae61af}{OP\+\_\+\+STAT\+\_\+\+CHI2}}~0x9002
+\item 
+\#define \mbox{\hyperlink{calc_8c_aa08240df89a7ae61e836372994492c90}{OP\+\_\+\+PROG}}~0x\+A001
+\item 
+\#define \mbox{\hyperlink{calc_8c_a1350e5592ab3f400354c24c2f45079d2}{OP\+\_\+\+RUN}}~0x\+A002
+\item 
+\#define \mbox{\hyperlink{calc_8c_a1f273ac38885b311a89ca89846728c38}{OP\+\_\+\+STEP}}~0x\+A003
+\item 
+\#define \mbox{\hyperlink{calc_8c_a3b51757d5e75b628713a3dea90d88c71}{OP\+\_\+\+REWIND}}~0x\+A004
+\item 
+\#define \mbox{\hyperlink{calc_8c_af45a5499a23c79c9e35f6eec1a677133}{OP\+\_\+\+TEST\+\_\+1}}~0x\+FF01
+\item 
+\#define \mbox{\hyperlink{calc_8c_adcc803ba5ab99c20810dd1cdcb634051}{OP\+\_\+\+TEST\+\_\+2}}~0x\+FF02
+\item 
+\#define \mbox{\hyperlink{calc_8c_ad3f22fd5e815196a04bdacb42ffac3d9}{OP\+\_\+\+TEST\+\_\+3}}~0x\+FF03
+\item 
+\#define \mbox{\hyperlink{calc_8c_a701c45a4f900568bccd5d88bfe7f3af7}{OP\+\_\+\+TEST\+\_\+4}}~0x\+FF04
+\item 
+\#define \mbox{\hyperlink{calc_8c_ab7425dcab245bbd5a2abd3a2721880a3}{OP\+\_\+\+TEST\+\_\+5}}~0x\+FF05
+\item 
+\#define \mbox{\hyperlink{calc_8c_a07350978b88b4b858932b4fb06ffcc0c}{OP\+\_\+\+TEST\+\_\+6}}~0x\+FF06
+\item 
+\#define \mbox{\hyperlink{calc_8c_af84ef351bd7b46a3c263a4bb73f974dd}{OP\+\_\+\+TEST\+\_\+7}}~0x\+FF07
+\item 
+\#define \mbox{\hyperlink{calc_8c_a00a5ce84ae25617a23bdc12f2fb7d34d}{OP\+\_\+\+TEST\+\_\+8}}~0x\+FF08
+\item 
+\#define \mbox{\hyperlink{calc_8c_a0df51348a28745719c4a39f3d7702b50}{OP\+\_\+\+TEST\+\_\+9}}~0x\+FF09
+\item 
+\#define \mbox{\hyperlink{calc_8c_a315df5c7a8642f2cd2eb9d964bad3732}{DRAWMODE\+\_\+\+CLEAR}}~1
+\item 
+\#define \mbox{\hyperlink{calc_8c_aab5fade2cb30bcaf67c5ae9740c2e3b8}{DRAWMODE\+\_\+\+FLUSH}}~2
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{calc_8c_ad8e0eeb404b2b6efb899a530982b7070}{clear\+\_\+stack}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a97c353c23050b2faebd883435f73aa6e}{clear\+\_\+variables}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a5fed5e5d05ab07ac96ba3d483807da48}{clear\+\_\+input}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_acae0cd21985a8b9d95cae8017a0c949f}{stack\+\_\+push}} (double num, double err)
+\item 
+void \mbox{\hyperlink{calc_8c_ac94f8529470d75354ec866de60c44950}{stack\+\_\+drop}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a7646e969c9bca9d1687b6409b072f899}{stack\+\_\+rotate\+\_\+up}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a6a36cb5e47ae942918c885272af6b685}{stack\+\_\+rotate\+\_\+down}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a2f37c9b67bdf2459424652f57e6d294a}{set\+\_\+trigconv}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a82a1642045301ced730fb062b15a7358}{draw\+\_\+char}} (int x, int pos, char ch)
+\item 
+void \mbox{\hyperlink{calc_8c_ad9134dcc4e73c3bb4d4e7e8a243ea666}{draw\+\_\+decpoint}} (int x, int pos)
+\item 
+void \mbox{\hyperlink{calc_8c_aa330390c9651004cab49b4784103b728}{clear\+\_\+cursor}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a608343c0c4fb70cff0ccd951d5d98b2a}{draw\+\_\+cursor}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a2f806b0694a5724fbace18f87c69e7d5}{draw\+\_\+stack\+\_\+register\+\_\+name}} (int pos)
+\item 
+void \mbox{\hyperlink{calc_8c_a559338c59ca66c234f172046f8c16965}{draw\+\_\+status}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a2643010ca32f5e826333c5c722ab72e2}{draw\+\_\+number\+\_\+split}} (int pos, int64\+\_\+t \+\_\+mantissa, int \+\_\+exponent, int pointpos, int hideexp)
+\item 
+void \mbox{\hyperlink{calc_8c_a0b352461f81aeb6e734626d735fbeba1}{draw\+\_\+error}} (int pos, int code)
+\item 
+void \mbox{\hyperlink{calc_8c_af9ce627cafc83650ac4f639f6939942c}{draw\+\_\+number\+\_\+sci}} (int pos, double num)
+\item 
+void \mbox{\hyperlink{calc_8c_abfa3ade2514e01f4c3735e019f0ffbf3}{draw\+\_\+number\+\_\+eng}} (int pos, double num)
+\item 
+void \mbox{\hyperlink{calc_8c_aa38f445162d7c771cb57758e9b7b105a}{draw\+\_\+number\+\_\+normal}} (int pos, double num)
+\item 
+void \mbox{\hyperlink{calc_8c_a9b70b751176a324226c99d4464e10d33}{draw\+\_\+number}} (int pos, double num, int mode)
+\item 
+void \mbox{\hyperlink{calc_8c_a1414fdd2051ee3f78c933ab5a93a70b5}{draw\+\_\+stack}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a908fac0738994a25f09a605b01fba5c1}{draw\+\_\+input}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a4b9785a798b91002ec9f79306dafb895}{enter\+\_\+number}} (char c)
+\item 
+void \mbox{\hyperlink{calc_8c_a9708c9eee225b3fbd555981ad6516ee4}{enter\+\_\+backspace}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a19afaa6c14e73d5b339d20ea0d0a1444}{enter\+\_\+decpoint}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_abef67ccdef8a4d74b40c80f99ccb2b39}{enter\+\_\+exp}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a46337facc96467e28cb0e87187eca062}{enter\+\_\+sign}} ()
+\item 
+double \mbox{\hyperlink{calc_8c_a61783353b1c244432f87c87de3204847}{convert\+\_\+input}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_aee07a15cc1f42b7463e3c4b33f5834df}{maybe\+\_\+convert\+\_\+input}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_ab4b51c8bd65657708c4d5385beba146f}{enter\+\_\+enter}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a7ef52cc403855a5ccdf8a1df44559006}{enter\+\_\+uncert}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a638ef06b625031dd50b5216f680d35c7}{enter\+\_\+drop}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a3505fb8de09380bdc432144347660889}{enter\+\_\+rotate\+\_\+up}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a58afed509bbc3ee9a9a51919ddb15dd4}{enter\+\_\+rotate\+\_\+down}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a025ebf3ce567c52b35aa4ba32a230315}{enter\+\_\+clear}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a85ca3e8dbf4d61b7f33cc626bca315cf}{enter\+\_\+clear\+\_\+mem}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_af5fe5e6432d8ef703a7e75908885dfa8}{enter\+\_\+lastx}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a5544a6c43fd40c43c8c92d5c65889c74}{enter\+\_\+swap\+\_\+xy}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_af1d928e8c1ea116b991a18bab002db31}{change\+\_\+dispmode}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a740919d24748619466f129db8a53cef0}{change\+\_\+precision}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_ad6ab2c5ef37b9fb86015e0052ec47e23}{change\+\_\+trigmode}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_aa4b1d16b5248a2b3624e49b61ce395e8}{change\+\_\+context}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a768be9baa0e268907096abf0492c45a3}{clear\+\_\+shift}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a2799054fee014d5b2c80958c43fc82c5}{enter\+\_\+shift}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a4df8cda97a2bf1004612f114162a6998}{enter\+\_\+shift2}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a7bde9ca97dfc4379a95339f01f11d982}{calc\+\_\+init}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a4eeaec6aad1ea7c0a3d3e0c26d28908b}{calc\+\_\+refresh}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a8485fbb880c136ae15ee55b961352bb5}{apply\+\_\+enter}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_a2162cb7b664b638012f6b7d1ef8af648}{apply\+\_\+stack}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_a75bb46fca331fcdcf6218aacc8689619}{apply\+\_\+func\+\_\+1to1}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_aa79f31b4cc96969b5a09b2ecd77e2cd8}{apply\+\_\+func\+\_\+2to1}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_ae789f2145e2af47130abd02c2714d519}{apply\+\_\+func\+\_\+3to1}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_a560572d422d93271f2a6167fbe6c22e6}{apply\+\_\+func\+\_\+stat}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_ad2c93a6a9896b201fc046546c8a992fa}{apply\+\_\+func\+\_\+2to2}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_adbbd91fd144160e03cc29845207f806f}{apply\+\_\+const}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_a8894ecfbf758b939e5122c9f279be6e8}{apply\+\_\+memory\+\_\+rcl}} ()
+\item 
+int \mbox{\hyperlink{calc_8c_a87d2989ae7a4dfaba02641e0d255ee25}{get\+\_\+register\+\_\+number}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_a4d9c47116dcb6d4938c09ce75f0147da}{apply\+\_\+memory\+\_\+rcl\+\_\+x}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_ac70dc33f62b272f5da3589669b86e2ce}{apply\+\_\+memory\+\_\+sto}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_aeaa44989644967f123c2880a0354331d}{apply\+\_\+memory\+\_\+sto\+\_\+x}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_ac065bd7461a4fca71fd9e3c708ee11b7}{apply\+\_\+memory\+\_\+plus}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_ae914cca5bd413ed7c4fc8634f0b56107}{apply\+\_\+memory\+\_\+minus}} ()
+\item 
+void \mbox{\hyperlink{calc_8c_ab90752fd17645ed795932ab32e3092e3}{apply\+\_\+test}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_a1bab80d411d0774ae39cb13f68244e29}{apply\+\_\+op}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_a25683da676a6e47e69b1967be8073e5e}{apply\+\_\+prog}} (uint16\+\_\+t code)
+\item 
+void \mbox{\hyperlink{calc_8c_a88e3826469ecb6b4a328d75c7baf3010}{enter\+\_\+key}} (uint16\+\_\+t code, uint16\+\_\+t code1, uint16\+\_\+t code2)
+\item 
+int \mbox{\hyperlink{calc_8c_a75038911fbd95aa11f1c8241641918f9}{calc\+\_\+on\+\_\+key}} (int c)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{calc_8c_ac80d2e8d634bda960452fbb6e9f5f7d9}{stack\+\_\+size}}
+\item 
+int \mbox{\hyperlink{calc_8c_a660b7c5cdc346fd972cc60db0de71f85}{program\+\_\+size}}
+\item 
+double \mbox{\hyperlink{calc_8c_a2d64e405609b636747c45ca84a16be1b}{stack}} \mbox{[}\mbox{\hyperlink{calc_8c_accbb358028675c83675d8b34c386268d}{MAX\+\_\+\+STACK\+\_\+\+SIZE}}\mbox{]}
+\item 
+double \mbox{\hyperlink{calc_8c_a8d1cffc725548ba8b07443ca10756557}{lastx}}
+\item 
+int \mbox{\hyperlink{calc_8c_abc22a72d751fd7b9edfd17ce47da5651}{error\+\_\+flag}}
+\item 
+double \mbox{\hyperlink{calc_8c_a91ad8adb5f142149e19ac380526460a1}{stack2}} \mbox{[}\mbox{\hyperlink{calc_8c_accbb358028675c83675d8b34c386268d}{MAX\+\_\+\+STACK\+\_\+\+SIZE}}\mbox{]}
+\item 
+double \mbox{\hyperlink{calc_8c_a4507fee6acd1c054022b79e4bdcf6682}{lastx2}}
+\item 
+double \mbox{\hyperlink{calc_8c_a5441d6e9af244d7a66a51c3dbe9b316a}{variables}} \mbox{[}\mbox{\hyperlink{calc_8c_adea1bd3f15f0c62a2af912434193622e}{MAX\+\_\+\+MEMORY\+\_\+\+SIZE}}\mbox{]}
+\item 
+double \mbox{\hyperlink{calc_8c_a5d42aac99da5cd6f91bb5087b70b8f05}{variables2}} \mbox{[}\mbox{\hyperlink{calc_8c_adea1bd3f15f0c62a2af912434193622e}{MAX\+\_\+\+MEMORY\+\_\+\+SIZE}}\mbox{]}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{calc_8c_a1cdde34c7dec3175b4f302bf5598a15c}{program}} \mbox{[}\mbox{\hyperlink{calc_8c_a0c5197950b670978fb265b78cf6d8c5c}{MAX\+\_\+\+PROGRAM\+\_\+\+SIZE}}\mbox{]}
+\item 
+int \mbox{\hyperlink{calc_8c_a2d551cf4ec7298af2fe4ae7c5e470a22}{trigmode}}
+\item 
+int \mbox{\hyperlink{calc_8c_af556508e6838659023baa5501c6d77e3}{dispmode}}
+\item 
+double \mbox{\hyperlink{calc_8c_aea9efd150d84b390800238a854c88282}{trigconv}}
+\item 
+int \mbox{\hyperlink{calc_8c_afd8d704fff636cf0234e92c1eade927c}{shift}}
+\item 
+int \mbox{\hyperlink{calc_8c_a0cd0101a1be8237c7b4483660ba4bfae}{context}}
+\item 
+int \mbox{\hyperlink{calc_8c_aa95455ed52a8459fad69509a4a0411b5}{precision}}
+\item 
+int \mbox{\hyperlink{calc_8c_a618f9490a8aef36da1453d7f04e38048}{precision\+\_\+uncert}}
+\item 
+int \mbox{\hyperlink{calc_8c_a83c5412355881b5b1444421cb973a9dd}{input\+\_\+uncert}}
+\item 
+int \mbox{\hyperlink{calc_8c_ac38654c92339d9d2695bf9f5476af65f}{program\+\_\+entry}}
+\item 
+int \mbox{\hyperlink{calc_8c_a56f76ee691bd7fd8492fb86312428c51}{program\+\_\+step}}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{calc_8c_ae371ed515d6476430521763a0c155e9e}{draw\+\_\+flags}}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{calc_8c_a8f3b8f8e9927454ee93008a2780eef59}{max\+\_\+mantissa}} \mbox{[}10\mbox{]}
+\item 
+\mbox{\hyperlink{structt__input}{t\+\_\+input}} \mbox{\hyperlink{calc_8c_a79ef9860d57798efe65aeb1e7ff8ea01}{input}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-define-members}
+\Hypertarget{calc_8c_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{calc_8c_aea4119b634760c2e561f7302e1232d10}\index{calc.c@{calc.c}!BOTTOM\_YPOS@{BOTTOM\_YPOS}}
+\index{BOTTOM\_YPOS@{BOTTOM\_YPOS}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{BOTTOM\_YPOS}{BOTTOM\_YPOS}}
+{\footnotesize\ttfamily \label{calc_8c_aea4119b634760c2e561f7302e1232d10} 
+\#define BOTTOM\+\_\+\+YPOS~190}
+
+\Hypertarget{calc_8c_a4c10b350657615fbc7a2139a3b85be37}\index{calc.c@{calc.c}!CONTEXT\_COMPLEX@{CONTEXT\_COMPLEX}}
+\index{CONTEXT\_COMPLEX@{CONTEXT\_COMPLEX}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{CONTEXT\_COMPLEX}{CONTEXT\_COMPLEX}}
+{\footnotesize\ttfamily \label{calc_8c_a4c10b350657615fbc7a2139a3b85be37} 
+\#define CONTEXT\+\_\+\+COMPLEX~2}
+
+\Hypertarget{calc_8c_a62056fdbee5ce4fee41ef7d1c948d96d}\index{calc.c@{calc.c}!CONTEXT\_INTEGER@{CONTEXT\_INTEGER}}
+\index{CONTEXT\_INTEGER@{CONTEXT\_INTEGER}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{CONTEXT\_INTEGER}{CONTEXT\_INTEGER}}
+{\footnotesize\ttfamily \label{calc_8c_a62056fdbee5ce4fee41ef7d1c948d96d} 
+\#define CONTEXT\+\_\+\+INTEGER~3}
+
+\Hypertarget{calc_8c_abfb843d9e2dd714a7bc2d868ec9efcfd}\index{calc.c@{calc.c}!CONTEXT\_REAL@{CONTEXT\_REAL}}
+\index{CONTEXT\_REAL@{CONTEXT\_REAL}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{CONTEXT\_REAL}{CONTEXT\_REAL}}
+{\footnotesize\ttfamily \label{calc_8c_abfb843d9e2dd714a7bc2d868ec9efcfd} 
+\#define CONTEXT\+\_\+\+REAL~0}
+
+\Hypertarget{calc_8c_ac8bc6356298684f7370d2f517309d100}\index{calc.c@{calc.c}!CONTEXT\_UNCERT@{CONTEXT\_UNCERT}}
+\index{CONTEXT\_UNCERT@{CONTEXT\_UNCERT}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{CONTEXT\_UNCERT}{CONTEXT\_UNCERT}}
+{\footnotesize\ttfamily \label{calc_8c_ac8bc6356298684f7370d2f517309d100} 
+\#define CONTEXT\+\_\+\+UNCERT~1}
+
+\Hypertarget{calc_8c_a82e8a8b93f947b52497955303eed4805}\index{calc.c@{calc.c}!DRAW\_CURSOR@{DRAW\_CURSOR}}
+\index{DRAW\_CURSOR@{DRAW\_CURSOR}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{DRAW\_CURSOR}{DRAW\_CURSOR}}
+{\footnotesize\ttfamily \label{calc_8c_a82e8a8b93f947b52497955303eed4805} 
+\#define DRAW\+\_\+\+CURSOR~0x0010}
+
+\Hypertarget{calc_8c_a1bbf41b951fbfd25683d95a49f7e9287}\index{calc.c@{calc.c}!DRAW\_ERROR@{DRAW\_ERROR}}
+\index{DRAW\_ERROR@{DRAW\_ERROR}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{DRAW\_ERROR}{DRAW\_ERROR}}
+{\footnotesize\ttfamily \label{calc_8c_a1bbf41b951fbfd25683d95a49f7e9287} 
+\#define DRAW\+\_\+\+ERROR~0x0008}
+
+\Hypertarget{calc_8c_aa6cd4c9289f0a536acaacbdb13af8ae4}\index{calc.c@{calc.c}!DRAW\_INPUT@{DRAW\_INPUT}}
+\index{DRAW\_INPUT@{DRAW\_INPUT}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{DRAW\_INPUT}{DRAW\_INPUT}}
+{\footnotesize\ttfamily \label{calc_8c_aa6cd4c9289f0a536acaacbdb13af8ae4} 
+\#define DRAW\+\_\+\+INPUT~0x0004}
+
+\Hypertarget{calc_8c_a294871c0beb5fd747190cdb8eae3ed9d}\index{calc.c@{calc.c}!DRAW\_STACK@{DRAW\_STACK}}
+\index{DRAW\_STACK@{DRAW\_STACK}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{DRAW\_STACK}{DRAW\_STACK}}
+{\footnotesize\ttfamily \label{calc_8c_a294871c0beb5fd747190cdb8eae3ed9d} 
+\#define DRAW\+\_\+\+STACK~0x0002}
+
+\Hypertarget{calc_8c_a35b90a17b431bbb5bd31cf2d04050bf8}\index{calc.c@{calc.c}!DRAW\_STATUS@{DRAW\_STATUS}}
+\index{DRAW\_STATUS@{DRAW\_STATUS}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{DRAW\_STATUS}{DRAW\_STATUS}}
+{\footnotesize\ttfamily \label{calc_8c_a35b90a17b431bbb5bd31cf2d04050bf8} 
+\#define DRAW\+\_\+\+STATUS~0x0001}
+
+\Hypertarget{calc_8c_a315df5c7a8642f2cd2eb9d964bad3732}\index{calc.c@{calc.c}!DRAWMODE\_CLEAR@{DRAWMODE\_CLEAR}}
+\index{DRAWMODE\_CLEAR@{DRAWMODE\_CLEAR}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{DRAWMODE\_CLEAR}{DRAWMODE\_CLEAR}}
+{\footnotesize\ttfamily \label{calc_8c_a315df5c7a8642f2cd2eb9d964bad3732} 
+\#define DRAWMODE\+\_\+\+CLEAR~1}
+
+\Hypertarget{calc_8c_aab5fade2cb30bcaf67c5ae9740c2e3b8}\index{calc.c@{calc.c}!DRAWMODE\_FLUSH@{DRAWMODE\_FLUSH}}
+\index{DRAWMODE\_FLUSH@{DRAWMODE\_FLUSH}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{DRAWMODE\_FLUSH}{DRAWMODE\_FLUSH}}
+{\footnotesize\ttfamily \label{calc_8c_aab5fade2cb30bcaf67c5ae9740c2e3b8} 
+\#define DRAWMODE\+\_\+\+FLUSH~2}
+
+\Hypertarget{calc_8c_a64836ca42eaa0e249ea8f25f21a43a2b}\index{calc.c@{calc.c}!LINE\_INTERVAL@{LINE\_INTERVAL}}
+\index{LINE\_INTERVAL@{LINE\_INTERVAL}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{LINE\_INTERVAL}{LINE\_INTERVAL}}
+{\footnotesize\ttfamily \label{calc_8c_a64836ca42eaa0e249ea8f25f21a43a2b} 
+\#define LINE\+\_\+\+INTERVAL~54}
+
+\Hypertarget{calc_8c_adea1bd3f15f0c62a2af912434193622e}\index{calc.c@{calc.c}!MAX\_MEMORY\_SIZE@{MAX\_MEMORY\_SIZE}}
+\index{MAX\_MEMORY\_SIZE@{MAX\_MEMORY\_SIZE}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_MEMORY\_SIZE}{MAX\_MEMORY\_SIZE}}
+{\footnotesize\ttfamily \label{calc_8c_adea1bd3f15f0c62a2af912434193622e} 
+\#define MAX\+\_\+\+MEMORY\+\_\+\+SIZE~99}
+
+\Hypertarget{calc_8c_a0c5197950b670978fb265b78cf6d8c5c}\index{calc.c@{calc.c}!MAX\_PROGRAM\_SIZE@{MAX\_PROGRAM\_SIZE}}
+\index{MAX\_PROGRAM\_SIZE@{MAX\_PROGRAM\_SIZE}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_PROGRAM\_SIZE}{MAX\_PROGRAM\_SIZE}}
+{\footnotesize\ttfamily \label{calc_8c_a0c5197950b670978fb265b78cf6d8c5c} 
+\#define MAX\+\_\+\+PROGRAM\+\_\+\+SIZE~99}
+
+\Hypertarget{calc_8c_accbb358028675c83675d8b34c386268d}\index{calc.c@{calc.c}!MAX\_STACK\_SIZE@{MAX\_STACK\_SIZE}}
+\index{MAX\_STACK\_SIZE@{MAX\_STACK\_SIZE}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_STACK\_SIZE}{MAX\_STACK\_SIZE}}
+{\footnotesize\ttfamily \label{calc_8c_accbb358028675c83675d8b34c386268d} 
+\#define MAX\+\_\+\+STACK\+\_\+\+SIZE~99}
+
+\Hypertarget{calc_8c_ae812b1073943cc1642d1f47b4f7a819e}\index{calc.c@{calc.c}!OP\_ACOS@{OP\_ACOS}}
+\index{OP\_ACOS@{OP\_ACOS}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ACOS}{OP\_ACOS}}
+{\footnotesize\ttfamily \label{calc_8c_ae812b1073943cc1642d1f47b4f7a819e} 
+\#define OP\+\_\+\+ACOS~0x1011}
+
+\Hypertarget{calc_8c_a5ff22932a3b213d22b0a7c1fb18ea418}\index{calc.c@{calc.c}!OP\_ASIN@{OP\_ASIN}}
+\index{OP\_ASIN@{OP\_ASIN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ASIN}{OP\_ASIN}}
+{\footnotesize\ttfamily \label{calc_8c_a5ff22932a3b213d22b0a7c1fb18ea418} 
+\#define OP\+\_\+\+ASIN~0x1010}
+
+\Hypertarget{calc_8c_a5fa1f8af68434578bdfb750a49ba58f2}\index{calc.c@{calc.c}!OP\_ATAN@{OP\_ATAN}}
+\index{OP\_ATAN@{OP\_ATAN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ATAN}{OP\_ATAN}}
+{\footnotesize\ttfamily \label{calc_8c_a5fa1f8af68434578bdfb750a49ba58f2} 
+\#define OP\+\_\+\+ATAN~0x1012}
+
+\Hypertarget{calc_8c_a6fa66e58232f1accfd2eae481dc07168}\index{calc.c@{calc.c}!OP\_BETAGAMMA@{OP\_BETAGAMMA}}
+\index{OP\_BETAGAMMA@{OP\_BETAGAMMA}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_BETAGAMMA}{OP\_BETAGAMMA}}
+{\footnotesize\ttfamily \label{calc_8c_a6fa66e58232f1accfd2eae481dc07168} 
+\#define OP\+\_\+\+BETAGAMMA~0x1019}
+
+\Hypertarget{calc_8c_a037edae16bdac7d50aa0055f552e7462}\index{calc.c@{calc.c}!OP\_CHI2\_PROB@{OP\_CHI2\_PROB}}
+\index{OP\_CHI2\_PROB@{OP\_CHI2\_PROB}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CHI2\_PROB}{OP\_CHI2\_PROB}}
+{\footnotesize\ttfamily \label{calc_8c_a037edae16bdac7d50aa0055f552e7462} 
+\#define OP\+\_\+\+CHI2\+\_\+\+PROB~0x2018}
+
+\Hypertarget{calc_8c_a35226d9a2726bb5993406b40bbe086e4}\index{calc.c@{calc.c}!OP\_CLEAR\_MEM@{OP\_CLEAR\_MEM}}
+\index{OP\_CLEAR\_MEM@{OP\_CLEAR\_MEM}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CLEAR\_MEM}{OP\_CLEAR\_MEM}}
+{\footnotesize\ttfamily \label{calc_8c_a35226d9a2726bb5993406b40bbe086e4} 
+\#define OP\+\_\+\+CLEAR\+\_\+\+MEM~0x6009}
+
+\Hypertarget{calc_8c_af47ff037939981fcf957c9bf31e73ef8}\index{calc.c@{calc.c}!OP\_CLEAR\_STACK@{OP\_CLEAR\_STACK}}
+\index{OP\_CLEAR\_STACK@{OP\_CLEAR\_STACK}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CLEAR\_STACK}{OP\_CLEAR\_STACK}}
+{\footnotesize\ttfamily \label{calc_8c_af47ff037939981fcf957c9bf31e73ef8} 
+\#define OP\+\_\+\+CLEAR\+\_\+\+STACK~0x6004}
+
+\Hypertarget{calc_8c_ac3575ca843ae1e17cd92322e368f9972}\index{calc.c@{calc.c}!OP\_CONST\_C@{OP\_CONST\_C}}
+\index{OP\_CONST\_C@{OP\_CONST\_C}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CONST\_C}{OP\_CONST\_C}}
+{\footnotesize\ttfamily \label{calc_8c_ac3575ca843ae1e17cd92322e368f9972} 
+\#define OP\+\_\+\+CONST\+\_\+C~0x4019}
+
+\Hypertarget{calc_8c_acf0d7b99440fd134a3769b9ec83dbcf0}\index{calc.c@{calc.c}!OP\_CONST\_E@{OP\_CONST\_E}}
+\index{OP\_CONST\_E@{OP\_CONST\_E}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CONST\_E}{OP\_CONST\_E}}
+{\footnotesize\ttfamily \label{calc_8c_acf0d7b99440fd134a3769b9ec83dbcf0} 
+\#define OP\+\_\+\+CONST\+\_\+E~0x4014}
+
+\Hypertarget{calc_8c_aef2bfb4dd56dc50bbd9fa9a560b727e1}\index{calc.c@{calc.c}!OP\_CONST\_K@{OP\_CONST\_K}}
+\index{OP\_CONST\_K@{OP\_CONST\_K}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CONST\_K}{OP\_CONST\_K}}
+{\footnotesize\ttfamily \label{calc_8c_aef2bfb4dd56dc50bbd9fa9a560b727e1} 
+\#define OP\+\_\+\+CONST\+\_\+K~0x4018}
+
+\Hypertarget{calc_8c_a4624e87dbc5947af35e558b93e8a9e89}\index{calc.c@{calc.c}!OP\_CONST\_NA@{OP\_CONST\_NA}}
+\index{OP\_CONST\_NA@{OP\_CONST\_NA}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CONST\_NA}{OP\_CONST\_NA}}
+{\footnotesize\ttfamily \label{calc_8c_a4624e87dbc5947af35e558b93e8a9e89} 
+\#define OP\+\_\+\+CONST\+\_\+\+NA~0x4017}
+
+\Hypertarget{calc_8c_a975de5d938db5e60614569cc330d1bb9}\index{calc.c@{calc.c}!OP\_CONST\_PI@{OP\_CONST\_PI}}
+\index{OP\_CONST\_PI@{OP\_CONST\_PI}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CONST\_PI}{OP\_CONST\_PI}}
+{\footnotesize\ttfamily \label{calc_8c_a975de5d938db5e60614569cc330d1bb9} 
+\#define OP\+\_\+\+CONST\+\_\+\+PI~0x4013}
+
+\Hypertarget{calc_8c_a41b57b3bb4872b94d06f3b1f3bd489ab}\index{calc.c@{calc.c}!OP\_CONST\_PLANCK@{OP\_CONST\_PLANCK}}
+\index{OP\_CONST\_PLANCK@{OP\_CONST\_PLANCK}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CONST\_PLANCK}{OP\_CONST\_PLANCK}}
+{\footnotesize\ttfamily \label{calc_8c_a41b57b3bb4872b94d06f3b1f3bd489ab} 
+\#define OP\+\_\+\+CONST\+\_\+\+PLANCK~0x4015}
+
+\Hypertarget{calc_8c_a645ec85458c2b941d26962137f4fad14}\index{calc.c@{calc.c}!OP\_CONST\_PLANCKC@{OP\_CONST\_PLANCKC}}
+\index{OP\_CONST\_PLANCKC@{OP\_CONST\_PLANCKC}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CONST\_PLANCKC}{OP\_CONST\_PLANCKC}}
+{\footnotesize\ttfamily \label{calc_8c_a645ec85458c2b941d26962137f4fad14} 
+\#define OP\+\_\+\+CONST\+\_\+\+PLANCKC~0x4016}
+
+\Hypertarget{calc_8c_a723137b28d131db6de68c6fdf931090a}\index{calc.c@{calc.c}!OP\_COS@{OP\_COS}}
+\index{OP\_COS@{OP\_COS}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_COS}{OP\_COS}}
+{\footnotesize\ttfamily \label{calc_8c_a723137b28d131db6de68c6fdf931090a} 
+\#define OP\+\_\+\+COS~0x100E}
+
+\Hypertarget{calc_8c_a702e51b1d03563d73019f21a873109c9}\index{calc.c@{calc.c}!OP\_CYX@{OP\_CYX}}
+\index{OP\_CYX@{OP\_CYX}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_CYX}{OP\_CYX}}
+{\footnotesize\ttfamily \label{calc_8c_a702e51b1d03563d73019f21a873109c9} 
+\#define OP\+\_\+\+CYX~0x2014}
+
+\Hypertarget{calc_8c_af21140099bbd967f8a19391b39c1e8a0}\index{calc.c@{calc.c}!OP\_DESCARTES@{OP\_DESCARTES}}
+\index{OP\_DESCARTES@{OP\_DESCARTES}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_DESCARTES}{OP\_DESCARTES}}
+{\footnotesize\ttfamily \label{calc_8c_af21140099bbd967f8a19391b39c1e8a0} 
+\#define OP\+\_\+\+DESCARTES~0x3002}
+
+\Hypertarget{calc_8c_addec4be73478fb9243f0ea0087366641}\index{calc.c@{calc.c}!OP\_DIV@{OP\_DIV}}
+\index{OP\_DIV@{OP\_DIV}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_DIV}{OP\_DIV}}
+{\footnotesize\ttfamily \label{calc_8c_addec4be73478fb9243f0ea0087366641} 
+\#define OP\+\_\+\+DIV~0x2004}
+
+\Hypertarget{calc_8c_ad6d5987d239c4af91bb5862d3d31cfa5}\index{calc.c@{calc.c}!OP\_DROP@{OP\_DROP}}
+\index{OP\_DROP@{OP\_DROP}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_DROP}{OP\_DROP}}
+{\footnotesize\ttfamily \label{calc_8c_ad6d5987d239c4af91bb5862d3d31cfa5} 
+\#define OP\+\_\+\+DROP~0x6001}
+
+\Hypertarget{calc_8c_a3456423425d453d2d0de1f316d2f5951}\index{calc.c@{calc.c}!OP\_ENTER@{OP\_ENTER}}
+\index{OP\_ENTER@{OP\_ENTER}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER}{OP\_ENTER}}
+{\footnotesize\ttfamily \label{calc_8c_a3456423425d453d2d0de1f316d2f5951} 
+\#define OP\+\_\+\+ENTER~0x500F}
+
+\Hypertarget{calc_8c_a6c213bfdba5fcc3dff92e9f8e493fde7}\index{calc.c@{calc.c}!OP\_ENTER\_0@{OP\_ENTER\_0}}
+\index{OP\_ENTER\_0@{OP\_ENTER\_0}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_0}{OP\_ENTER\_0}}
+{\footnotesize\ttfamily \label{calc_8c_a6c213bfdba5fcc3dff92e9f8e493fde7} 
+\#define OP\+\_\+\+ENTER\+\_\+0~0x5000}
+
+\Hypertarget{calc_8c_a59ae697ce7934797376ee1134c75e3df}\index{calc.c@{calc.c}!OP\_ENTER\_1@{OP\_ENTER\_1}}
+\index{OP\_ENTER\_1@{OP\_ENTER\_1}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_1}{OP\_ENTER\_1}}
+{\footnotesize\ttfamily \label{calc_8c_a59ae697ce7934797376ee1134c75e3df} 
+\#define OP\+\_\+\+ENTER\+\_\+1~0x5001}
+
+\Hypertarget{calc_8c_ae944b2f3d2bb5f9073d4c90dcf922249}\index{calc.c@{calc.c}!OP\_ENTER\_2@{OP\_ENTER\_2}}
+\index{OP\_ENTER\_2@{OP\_ENTER\_2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_2}{OP\_ENTER\_2}}
+{\footnotesize\ttfamily \label{calc_8c_ae944b2f3d2bb5f9073d4c90dcf922249} 
+\#define OP\+\_\+\+ENTER\+\_\+2~0x5002}
+
+\Hypertarget{calc_8c_a737788397284c7aac719f474dc5abeb9}\index{calc.c@{calc.c}!OP\_ENTER\_3@{OP\_ENTER\_3}}
+\index{OP\_ENTER\_3@{OP\_ENTER\_3}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_3}{OP\_ENTER\_3}}
+{\footnotesize\ttfamily \label{calc_8c_a737788397284c7aac719f474dc5abeb9} 
+\#define OP\+\_\+\+ENTER\+\_\+3~0x5003}
+
+\Hypertarget{calc_8c_a1529d49954e4ea6f13f9e539b5ba5f85}\index{calc.c@{calc.c}!OP\_ENTER\_4@{OP\_ENTER\_4}}
+\index{OP\_ENTER\_4@{OP\_ENTER\_4}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_4}{OP\_ENTER\_4}}
+{\footnotesize\ttfamily \label{calc_8c_a1529d49954e4ea6f13f9e539b5ba5f85} 
+\#define OP\+\_\+\+ENTER\+\_\+4~0x5004}
+
+\Hypertarget{calc_8c_a96f2124565463515a84773beaeda1b84}\index{calc.c@{calc.c}!OP\_ENTER\_5@{OP\_ENTER\_5}}
+\index{OP\_ENTER\_5@{OP\_ENTER\_5}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_5}{OP\_ENTER\_5}}
+{\footnotesize\ttfamily \label{calc_8c_a96f2124565463515a84773beaeda1b84} 
+\#define OP\+\_\+\+ENTER\+\_\+5~0x5005}
+
+\Hypertarget{calc_8c_a17c5b982a98b5760004af9d7997af115}\index{calc.c@{calc.c}!OP\_ENTER\_6@{OP\_ENTER\_6}}
+\index{OP\_ENTER\_6@{OP\_ENTER\_6}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_6}{OP\_ENTER\_6}}
+{\footnotesize\ttfamily \label{calc_8c_a17c5b982a98b5760004af9d7997af115} 
+\#define OP\+\_\+\+ENTER\+\_\+6~0x5006}
+
+\Hypertarget{calc_8c_ae8009e1f0db3ec413f6989bb571c951b}\index{calc.c@{calc.c}!OP\_ENTER\_7@{OP\_ENTER\_7}}
+\index{OP\_ENTER\_7@{OP\_ENTER\_7}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_7}{OP\_ENTER\_7}}
+{\footnotesize\ttfamily \label{calc_8c_ae8009e1f0db3ec413f6989bb571c951b} 
+\#define OP\+\_\+\+ENTER\+\_\+7~0x5007}
+
+\Hypertarget{calc_8c_a342c2ef1ef68973329d272243adb8d45}\index{calc.c@{calc.c}!OP\_ENTER\_8@{OP\_ENTER\_8}}
+\index{OP\_ENTER\_8@{OP\_ENTER\_8}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_8}{OP\_ENTER\_8}}
+{\footnotesize\ttfamily \label{calc_8c_a342c2ef1ef68973329d272243adb8d45} 
+\#define OP\+\_\+\+ENTER\+\_\+8~0x5008}
+
+\Hypertarget{calc_8c_a41a21d121b4451fb0a06b22cf17d64ca}\index{calc.c@{calc.c}!OP\_ENTER\_9@{OP\_ENTER\_9}}
+\index{OP\_ENTER\_9@{OP\_ENTER\_9}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_9}{OP\_ENTER\_9}}
+{\footnotesize\ttfamily \label{calc_8c_a41a21d121b4451fb0a06b22cf17d64ca} 
+\#define OP\+\_\+\+ENTER\+\_\+9~0x5009}
+
+\Hypertarget{calc_8c_aef24c5800e97aa73134ecfb2f1cc870e}\index{calc.c@{calc.c}!OP\_ENTER\_BACKSPACE@{OP\_ENTER\_BACKSPACE}}
+\index{OP\_ENTER\_BACKSPACE@{OP\_ENTER\_BACKSPACE}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_BACKSPACE}{OP\_ENTER\_BACKSPACE}}
+{\footnotesize\ttfamily \label{calc_8c_aef24c5800e97aa73134ecfb2f1cc870e} 
+\#define OP\+\_\+\+ENTER\+\_\+\+BACKSPACE~0x500D}
+
+\Hypertarget{calc_8c_a95658850ad5be543d4b22d7f944b06c3}\index{calc.c@{calc.c}!OP\_ENTER\_DECPOINT@{OP\_ENTER\_DECPOINT}}
+\index{OP\_ENTER\_DECPOINT@{OP\_ENTER\_DECPOINT}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_DECPOINT}{OP\_ENTER\_DECPOINT}}
+{\footnotesize\ttfamily \label{calc_8c_a95658850ad5be543d4b22d7f944b06c3} 
+\#define OP\+\_\+\+ENTER\+\_\+\+DECPOINT~0x500A}
+
+\Hypertarget{calc_8c_a1ee4911e957f9d7eab090ebf9c1156fa}\index{calc.c@{calc.c}!OP\_ENTER\_EXP@{OP\_ENTER\_EXP}}
+\index{OP\_ENTER\_EXP@{OP\_ENTER\_EXP}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_EXP}{OP\_ENTER\_EXP}}
+{\footnotesize\ttfamily \label{calc_8c_a1ee4911e957f9d7eab090ebf9c1156fa} 
+\#define OP\+\_\+\+ENTER\+\_\+\+EXP~0x500C}
+
+\Hypertarget{calc_8c_aa12e1da56b8714e3dcfbd777b9356faf}\index{calc.c@{calc.c}!OP\_ENTER\_SIGN@{OP\_ENTER\_SIGN}}
+\index{OP\_ENTER\_SIGN@{OP\_ENTER\_SIGN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_SIGN}{OP\_ENTER\_SIGN}}
+{\footnotesize\ttfamily \label{calc_8c_aa12e1da56b8714e3dcfbd777b9356faf} 
+\#define OP\+\_\+\+ENTER\+\_\+\+SIGN~0x500B}
+
+\Hypertarget{calc_8c_acf5893f764c148dbd13f5f1420073be5}\index{calc.c@{calc.c}!OP\_ENTER\_UNCERT@{OP\_ENTER\_UNCERT}}
+\index{OP\_ENTER\_UNCERT@{OP\_ENTER\_UNCERT}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ENTER\_UNCERT}{OP\_ENTER\_UNCERT}}
+{\footnotesize\ttfamily \label{calc_8c_acf5893f764c148dbd13f5f1420073be5} 
+\#define OP\+\_\+\+ENTER\+\_\+\+UNCERT~0x500E}
+
+\Hypertarget{calc_8c_a3fe9c452091095cc77e93607421e9258}\index{calc.c@{calc.c}!OP\_ERF@{OP\_ERF}}
+\index{OP\_ERF@{OP\_ERF}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ERF}{OP\_ERF}}
+{\footnotesize\ttfamily \label{calc_8c_a3fe9c452091095cc77e93607421e9258} 
+\#define OP\+\_\+\+ERF~0x1014}
+
+\Hypertarget{calc_8c_a4c733de79f6c2df41b5e3ae4d8f63f8b}\index{calc.c@{calc.c}!OP\_ERFINV@{OP\_ERFINV}}
+\index{OP\_ERFINV@{OP\_ERFINV}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ERFINV}{OP\_ERFINV}}
+{\footnotesize\ttfamily \label{calc_8c_a4c733de79f6c2df41b5e3ae4d8f63f8b} 
+\#define OP\+\_\+\+ERFINV~0x1015}
+
+\Hypertarget{calc_8c_aa4742aa3a9855a08296fb1b9877a5c3b}\index{calc.c@{calc.c}!OP\_ETATHETA@{OP\_ETATHETA}}
+\index{OP\_ETATHETA@{OP\_ETATHETA}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ETATHETA}{OP\_ETATHETA}}
+{\footnotesize\ttfamily \label{calc_8c_aa4742aa3a9855a08296fb1b9877a5c3b} 
+\#define OP\+\_\+\+ETATHETA~0x101A}
+
+\Hypertarget{calc_8c_a0032d60db5f714ec67b9d8a4d62ca511}\index{calc.c@{calc.c}!OP\_EXP@{OP\_EXP}}
+\index{OP\_EXP@{OP\_EXP}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_EXP}{OP\_EXP}}
+{\footnotesize\ttfamily \label{calc_8c_a0032d60db5f714ec67b9d8a4d62ca511} 
+\#define OP\+\_\+\+EXP~0x100B}
+
+\Hypertarget{calc_8c_a6e7ff6bc304713fba07e35cb695e937c}\index{calc.c@{calc.c}!OP\_FACTORIAL@{OP\_FACTORIAL}}
+\index{OP\_FACTORIAL@{OP\_FACTORIAL}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_FACTORIAL}{OP\_FACTORIAL}}
+{\footnotesize\ttfamily \label{calc_8c_a6e7ff6bc304713fba07e35cb695e937c} 
+\#define OP\+\_\+\+FACTORIAL~0x101E}
+
+\Hypertarget{calc_8c_a0b7ae1bb46c60cccf8e77ad34ca2ff53}\index{calc.c@{calc.c}!OP\_GAMMA@{OP\_GAMMA}}
+\index{OP\_GAMMA@{OP\_GAMMA}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_GAMMA}{OP\_GAMMA}}
+{\footnotesize\ttfamily \label{calc_8c_a0b7ae1bb46c60cccf8e77ad34ca2ff53} 
+\#define OP\+\_\+\+GAMMA~0x1016}
+
+\Hypertarget{calc_8c_a3cbeea608a15ee578b5ad9077f678bc8}\index{calc.c@{calc.c}!OP\_GAMMABETA@{OP\_GAMMABETA}}
+\index{OP\_GAMMABETA@{OP\_GAMMABETA}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_GAMMABETA}{OP\_GAMMABETA}}
+{\footnotesize\ttfamily \label{calc_8c_a3cbeea608a15ee578b5ad9077f678bc8} 
+\#define OP\+\_\+\+GAMMABETA~0x1018}
+
+\Hypertarget{calc_8c_a4cd2d8a8ec0bdf298f38b70ee405ea71}\index{calc.c@{calc.c}!OP\_GAUSS\_PVALUE@{OP\_GAUSS\_PVALUE}}
+\index{OP\_GAUSS\_PVALUE@{OP\_GAUSS\_PVALUE}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_GAUSS\_PVALUE}{OP\_GAUSS\_PVALUE}}
+{\footnotesize\ttfamily \label{calc_8c_a4cd2d8a8ec0bdf298f38b70ee405ea71} 
+\#define OP\+\_\+\+GAUSS\+\_\+\+PVALUE~0x101D}
+
+\Hypertarget{calc_8c_acf617802406c5fa69628cf62525cf048}\index{calc.c@{calc.c}!OP\_INV@{OP\_INV}}
+\index{OP\_INV@{OP\_INV}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_INV}{OP\_INV}}
+{\footnotesize\ttfamily \label{calc_8c_acf617802406c5fa69628cf62525cf048} 
+\#define OP\+\_\+\+INV~0x1005}
+
+\Hypertarget{calc_8c_a31974649147717b6dcf1647f46f3e220}\index{calc.c@{calc.c}!OP\_LASTX@{OP\_LASTX}}
+\index{OP\_LASTX@{OP\_LASTX}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_LASTX}{OP\_LASTX}}
+{\footnotesize\ttfamily \label{calc_8c_a31974649147717b6dcf1647f46f3e220} 
+\#define OP\+\_\+\+LASTX~0x6003}
+
+\Hypertarget{calc_8c_aeafb17c42259855ca12f30e6521be285}\index{calc.c@{calc.c}!OP\_LG@{OP\_LG}}
+\index{OP\_LG@{OP\_LG}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_LG}{OP\_LG}}
+{\footnotesize\ttfamily \label{calc_8c_aeafb17c42259855ca12f30e6521be285} 
+\#define OP\+\_\+\+LG~0x100A}
+
+\Hypertarget{calc_8c_a42bd982e2a40d1048d84f08647c68c73}\index{calc.c@{calc.c}!OP\_LN@{OP\_LN}}
+\index{OP\_LN@{OP\_LN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_LN}{OP\_LN}}
+{\footnotesize\ttfamily \label{calc_8c_a42bd982e2a40d1048d84f08647c68c73} 
+\#define OP\+\_\+\+LN~0x1009}
+
+\Hypertarget{calc_8c_a1e524ee476945ec4dd96ebd2e1447016}\index{calc.c@{calc.c}!OP\_LOGGAMMA@{OP\_LOGGAMMA}}
+\index{OP\_LOGGAMMA@{OP\_LOGGAMMA}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_LOGGAMMA}{OP\_LOGGAMMA}}
+{\footnotesize\ttfamily \label{calc_8c_a1e524ee476945ec4dd96ebd2e1447016} 
+\#define OP\+\_\+\+LOGGAMMA~0x1017}
+
+\Hypertarget{calc_8c_ab62390fc8d7f39a0edfd26f5c30df780}\index{calc.c@{calc.c}!OP\_MINUS@{OP\_MINUS}}
+\index{OP\_MINUS@{OP\_MINUS}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_MINUS}{OP\_MINUS}}
+{\footnotesize\ttfamily \label{calc_8c_ab62390fc8d7f39a0edfd26f5c30df780} 
+\#define OP\+\_\+\+MINUS~0x2002}
+
+\Hypertarget{calc_8c_a371f53fb34126aa75001e968442f1a3d}\index{calc.c@{calc.c}!OP\_MULT@{OP\_MULT}}
+\index{OP\_MULT@{OP\_MULT}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_MULT}{OP\_MULT}}
+{\footnotesize\ttfamily \label{calc_8c_a371f53fb34126aa75001e968442f1a3d} 
+\#define OP\+\_\+\+MULT~0x2003}
+
+\Hypertarget{calc_8c_a470b039eb8cfe27a1810bb01c2f4ac30}\index{calc.c@{calc.c}!OP\_NOP@{OP\_NOP}}
+\index{OP\_NOP@{OP\_NOP}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_NOP}{OP\_NOP}}
+{\footnotesize\ttfamily \label{calc_8c_a470b039eb8cfe27a1810bb01c2f4ac30} 
+\#define OP\+\_\+\+NOP~0x0000}
+
+\Hypertarget{calc_8c_a75a9903938da31e530a136d37a839848}\index{calc.c@{calc.c}!OP\_PLUS@{OP\_PLUS}}
+\index{OP\_PLUS@{OP\_PLUS}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_PLUS}{OP\_PLUS}}
+{\footnotesize\ttfamily \label{calc_8c_a75a9903938da31e530a136d37a839848} 
+\#define OP\+\_\+\+PLUS~0x2001}
+
+\Hypertarget{calc_8c_a6fc75f51b29a43d74135d1cde98e0e53}\index{calc.c@{calc.c}!OP\_POISSON@{OP\_POISSON}}
+\index{OP\_POISSON@{OP\_POISSON}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_POISSON}{OP\_POISSON}}
+{\footnotesize\ttfamily \label{calc_8c_a6fc75f51b29a43d74135d1cde98e0e53} 
+\#define OP\+\_\+\+POISSON~0x2017}
+
+\Hypertarget{calc_8c_a188a1f08d33b486be8f3ff6aa6d87905}\index{calc.c@{calc.c}!OP\_POLAR@{OP\_POLAR}}
+\index{OP\_POLAR@{OP\_POLAR}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_POLAR}{OP\_POLAR}}
+{\footnotesize\ttfamily \label{calc_8c_a188a1f08d33b486be8f3ff6aa6d87905} 
+\#define OP\+\_\+\+POLAR~0x3001}
+
+\Hypertarget{calc_8c_a896bbe976fbf33e85f49f650480f4a49}\index{calc.c@{calc.c}!OP\_POW@{OP\_POW}}
+\index{OP\_POW@{OP\_POW}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_POW}{OP\_POW}}
+{\footnotesize\ttfamily \label{calc_8c_a896bbe976fbf33e85f49f650480f4a49} 
+\#define OP\+\_\+\+POW~0x2008}
+
+\Hypertarget{calc_8c_afa885931998fd06bdb6ff94271b1c03a}\index{calc.c@{calc.c}!OP\_POW10@{OP\_POW10}}
+\index{OP\_POW10@{OP\_POW10}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_POW10}{OP\_POW10}}
+{\footnotesize\ttfamily \label{calc_8c_afa885931998fd06bdb6ff94271b1c03a} 
+\#define OP\+\_\+\+POW10~0x100C}
+
+\Hypertarget{calc_8c_aa08240df89a7ae61e836372994492c90}\index{calc.c@{calc.c}!OP\_PROG@{OP\_PROG}}
+\index{OP\_PROG@{OP\_PROG}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_PROG}{OP\_PROG}}
+{\footnotesize\ttfamily \label{calc_8c_aa08240df89a7ae61e836372994492c90} 
+\#define OP\+\_\+\+PROG~0x\+A001}
+
+\Hypertarget{calc_8c_a549e22044cf483925197488c6934c00b}\index{calc.c@{calc.c}!OP\_PYX@{OP\_PYX}}
+\index{OP\_PYX@{OP\_PYX}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_PYX}{OP\_PYX}}
+{\footnotesize\ttfamily \label{calc_8c_a549e22044cf483925197488c6934c00b} 
+\#define OP\+\_\+\+PYX~0x2015}
+
+\Hypertarget{calc_8c_a768dec51697bc08c902e0b5ffee16c8a}\index{calc.c@{calc.c}!OP\_PZXY@{OP\_PZXY}}
+\index{OP\_PZXY@{OP\_PZXY}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_PZXY}{OP\_PZXY}}
+{\footnotesize\ttfamily \label{calc_8c_a768dec51697bc08c902e0b5ffee16c8a} 
+\#define OP\+\_\+\+PZXY~0x8001}
+
+\Hypertarget{calc_8c_a3b51757d5e75b628713a3dea90d88c71}\index{calc.c@{calc.c}!OP\_REWIND@{OP\_REWIND}}
+\index{OP\_REWIND@{OP\_REWIND}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_REWIND}{OP\_REWIND}}
+{\footnotesize\ttfamily \label{calc_8c_a3b51757d5e75b628713a3dea90d88c71} 
+\#define OP\+\_\+\+REWIND~0x\+A004}
+
+\Hypertarget{calc_8c_a24209994b3dc7b09aa9e96b451fddbf5}\index{calc.c@{calc.c}!OP\_ROOTX@{OP\_ROOTX}}
+\index{OP\_ROOTX@{OP\_ROOTX}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ROOTX}{OP\_ROOTX}}
+{\footnotesize\ttfamily \label{calc_8c_a24209994b3dc7b09aa9e96b451fddbf5} 
+\#define OP\+\_\+\+ROOTX~0x2013}
+
+\Hypertarget{calc_8c_a82166b45c919217a9dbaf7477758e40e}\index{calc.c@{calc.c}!OP\_ROTDOWN@{OP\_ROTDOWN}}
+\index{OP\_ROTDOWN@{OP\_ROTDOWN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ROTDOWN}{OP\_ROTDOWN}}
+{\footnotesize\ttfamily \label{calc_8c_a82166b45c919217a9dbaf7477758e40e} 
+\#define OP\+\_\+\+ROTDOWN~0x6008}
+
+\Hypertarget{calc_8c_a8a209d88f2e43ab218c8447aeec711f5}\index{calc.c@{calc.c}!OP\_ROTUP@{OP\_ROTUP}}
+\index{OP\_ROTUP@{OP\_ROTUP}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_ROTUP}{OP\_ROTUP}}
+{\footnotesize\ttfamily \label{calc_8c_a8a209d88f2e43ab218c8447aeec711f5} 
+\#define OP\+\_\+\+ROTUP~0x6007}
+
+\Hypertarget{calc_8c_a1350e5592ab3f400354c24c2f45079d2}\index{calc.c@{calc.c}!OP\_RUN@{OP\_RUN}}
+\index{OP\_RUN@{OP\_RUN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_RUN}{OP\_RUN}}
+{\footnotesize\ttfamily \label{calc_8c_a1350e5592ab3f400354c24c2f45079d2} 
+\#define OP\+\_\+\+RUN~0x\+A002}
+
+\Hypertarget{calc_8c_ab5b64442599dc96db3ddffe43fa26a83}\index{calc.c@{calc.c}!OP\_SIGNIF\_X@{OP\_SIGNIF\_X}}
+\index{OP\_SIGNIF\_X@{OP\_SIGNIF\_X}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_SIGNIF\_X}{OP\_SIGNIF\_X}}
+{\footnotesize\ttfamily \label{calc_8c_ab5b64442599dc96db3ddffe43fa26a83} 
+\#define OP\+\_\+\+SIGNIF\+\_\+X~0x101C}
+
+\Hypertarget{calc_8c_ae2c46ed4abbd4097519f45a6a0c5eba0}\index{calc.c@{calc.c}!OP\_SIGNIF\_XY@{OP\_SIGNIF\_XY}}
+\index{OP\_SIGNIF\_XY@{OP\_SIGNIF\_XY}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_SIGNIF\_XY}{OP\_SIGNIF\_XY}}
+{\footnotesize\ttfamily \label{calc_8c_ae2c46ed4abbd4097519f45a6a0c5eba0} 
+\#define OP\+\_\+\+SIGNIF\+\_\+\+XY~0x2016}
+
+\Hypertarget{calc_8c_ad469192ec7b0d24bdafe9154256bc8da}\index{calc.c@{calc.c}!OP\_SIN@{OP\_SIN}}
+\index{OP\_SIN@{OP\_SIN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_SIN}{OP\_SIN}}
+{\footnotesize\ttfamily \label{calc_8c_ad469192ec7b0d24bdafe9154256bc8da} 
+\#define OP\+\_\+\+SIN~0x100D}
+
+\Hypertarget{calc_8c_aa779eafd1cbcdf0abaa604c9a66a0c90}\index{calc.c@{calc.c}!OP\_SQR@{OP\_SQR}}
+\index{OP\_SQR@{OP\_SQR}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_SQR}{OP\_SQR}}
+{\footnotesize\ttfamily \label{calc_8c_aa779eafd1cbcdf0abaa604c9a66a0c90} 
+\#define OP\+\_\+\+SQR~0x1006}
+
+\Hypertarget{calc_8c_ab69e544184d6633879b05e9408e7c4b4}\index{calc.c@{calc.c}!OP\_SQRT@{OP\_SQRT}}
+\index{OP\_SQRT@{OP\_SQRT}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_SQRT}{OP\_SQRT}}
+{\footnotesize\ttfamily \label{calc_8c_ab69e544184d6633879b05e9408e7c4b4} 
+\#define OP\+\_\+\+SQRT~0x1007}
+
+\Hypertarget{calc_8c_a84420dd4ed2f83601c3b95af06ae61af}\index{calc.c@{calc.c}!OP\_STAT\_CHI2@{OP\_STAT\_CHI2}}
+\index{OP\_STAT\_CHI2@{OP\_STAT\_CHI2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_STAT\_CHI2}{OP\_STAT\_CHI2}}
+{\footnotesize\ttfamily \label{calc_8c_a84420dd4ed2f83601c3b95af06ae61af} 
+\#define OP\+\_\+\+STAT\+\_\+\+CHI2~0x9002}
+
+\Hypertarget{calc_8c_adae896e7a829e1718230bd3f53b93aa5}\index{calc.c@{calc.c}!OP\_STAT\_MEAN@{OP\_STAT\_MEAN}}
+\index{OP\_STAT\_MEAN@{OP\_STAT\_MEAN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_STAT\_MEAN}{OP\_STAT\_MEAN}}
+{\footnotesize\ttfamily \label{calc_8c_adae896e7a829e1718230bd3f53b93aa5} 
+\#define OP\+\_\+\+STAT\+\_\+\+MEAN~0x9001}
+
+\Hypertarget{calc_8c_a1f273ac38885b311a89ca89846728c38}\index{calc.c@{calc.c}!OP\_STEP@{OP\_STEP}}
+\index{OP\_STEP@{OP\_STEP}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_STEP}{OP\_STEP}}
+{\footnotesize\ttfamily \label{calc_8c_a1f273ac38885b311a89ca89846728c38} 
+\#define OP\+\_\+\+STEP~0x\+A003}
+
+\Hypertarget{calc_8c_a2193c19ef839c22a7d0c8fa8bf684aea}\index{calc.c@{calc.c}!OP\_SWAP@{OP\_SWAP}}
+\index{OP\_SWAP@{OP\_SWAP}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_SWAP}{OP\_SWAP}}
+{\footnotesize\ttfamily \label{calc_8c_a2193c19ef839c22a7d0c8fa8bf684aea} 
+\#define OP\+\_\+\+SWAP~0x6002}
+
+\Hypertarget{calc_8c_abde55bbe80cb01b7201f944c2dd749f7}\index{calc.c@{calc.c}!OP\_TAN@{OP\_TAN}}
+\index{OP\_TAN@{OP\_TAN}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TAN}{OP\_TAN}}
+{\footnotesize\ttfamily \label{calc_8c_abde55bbe80cb01b7201f944c2dd749f7} 
+\#define OP\+\_\+\+TAN~0x100F}
+
+\Hypertarget{calc_8c_af45a5499a23c79c9e35f6eec1a677133}\index{calc.c@{calc.c}!OP\_TEST\_1@{OP\_TEST\_1}}
+\index{OP\_TEST\_1@{OP\_TEST\_1}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_1}{OP\_TEST\_1}}
+{\footnotesize\ttfamily \label{calc_8c_af45a5499a23c79c9e35f6eec1a677133} 
+\#define OP\+\_\+\+TEST\+\_\+1~0x\+FF01}
+
+\Hypertarget{calc_8c_adcc803ba5ab99c20810dd1cdcb634051}\index{calc.c@{calc.c}!OP\_TEST\_2@{OP\_TEST\_2}}
+\index{OP\_TEST\_2@{OP\_TEST\_2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_2}{OP\_TEST\_2}}
+{\footnotesize\ttfamily \label{calc_8c_adcc803ba5ab99c20810dd1cdcb634051} 
+\#define OP\+\_\+\+TEST\+\_\+2~0x\+FF02}
+
+\Hypertarget{calc_8c_ad3f22fd5e815196a04bdacb42ffac3d9}\index{calc.c@{calc.c}!OP\_TEST\_3@{OP\_TEST\_3}}
+\index{OP\_TEST\_3@{OP\_TEST\_3}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_3}{OP\_TEST\_3}}
+{\footnotesize\ttfamily \label{calc_8c_ad3f22fd5e815196a04bdacb42ffac3d9} 
+\#define OP\+\_\+\+TEST\+\_\+3~0x\+FF03}
+
+\Hypertarget{calc_8c_a701c45a4f900568bccd5d88bfe7f3af7}\index{calc.c@{calc.c}!OP\_TEST\_4@{OP\_TEST\_4}}
+\index{OP\_TEST\_4@{OP\_TEST\_4}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_4}{OP\_TEST\_4}}
+{\footnotesize\ttfamily \label{calc_8c_a701c45a4f900568bccd5d88bfe7f3af7} 
+\#define OP\+\_\+\+TEST\+\_\+4~0x\+FF04}
+
+\Hypertarget{calc_8c_ab7425dcab245bbd5a2abd3a2721880a3}\index{calc.c@{calc.c}!OP\_TEST\_5@{OP\_TEST\_5}}
+\index{OP\_TEST\_5@{OP\_TEST\_5}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_5}{OP\_TEST\_5}}
+{\footnotesize\ttfamily \label{calc_8c_ab7425dcab245bbd5a2abd3a2721880a3} 
+\#define OP\+\_\+\+TEST\+\_\+5~0x\+FF05}
+
+\Hypertarget{calc_8c_a07350978b88b4b858932b4fb06ffcc0c}\index{calc.c@{calc.c}!OP\_TEST\_6@{OP\_TEST\_6}}
+\index{OP\_TEST\_6@{OP\_TEST\_6}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_6}{OP\_TEST\_6}}
+{\footnotesize\ttfamily \label{calc_8c_a07350978b88b4b858932b4fb06ffcc0c} 
+\#define OP\+\_\+\+TEST\+\_\+6~0x\+FF06}
+
+\Hypertarget{calc_8c_af84ef351bd7b46a3c263a4bb73f974dd}\index{calc.c@{calc.c}!OP\_TEST\_7@{OP\_TEST\_7}}
+\index{OP\_TEST\_7@{OP\_TEST\_7}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_7}{OP\_TEST\_7}}
+{\footnotesize\ttfamily \label{calc_8c_af84ef351bd7b46a3c263a4bb73f974dd} 
+\#define OP\+\_\+\+TEST\+\_\+7~0x\+FF07}
+
+\Hypertarget{calc_8c_a00a5ce84ae25617a23bdc12f2fb7d34d}\index{calc.c@{calc.c}!OP\_TEST\_8@{OP\_TEST\_8}}
+\index{OP\_TEST\_8@{OP\_TEST\_8}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_8}{OP\_TEST\_8}}
+{\footnotesize\ttfamily \label{calc_8c_a00a5ce84ae25617a23bdc12f2fb7d34d} 
+\#define OP\+\_\+\+TEST\+\_\+8~0x\+FF08}
+
+\Hypertarget{calc_8c_a0df51348a28745719c4a39f3d7702b50}\index{calc.c@{calc.c}!OP\_TEST\_9@{OP\_TEST\_9}}
+\index{OP\_TEST\_9@{OP\_TEST\_9}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_TEST\_9}{OP\_TEST\_9}}
+{\footnotesize\ttfamily \label{calc_8c_a0df51348a28745719c4a39f3d7702b50} 
+\#define OP\+\_\+\+TEST\+\_\+9~0x\+FF09}
+
+\Hypertarget{calc_8c_ab4b0e4c684fa11f77bfe704f0125c8e6}\index{calc.c@{calc.c}!OP\_THETAETA@{OP\_THETAETA}}
+\index{OP\_THETAETA@{OP\_THETAETA}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OP\_THETAETA}{OP\_THETAETA}}
+{\footnotesize\ttfamily \label{calc_8c_ab4b0e4c684fa11f77bfe704f0125c8e6} 
+\#define OP\+\_\+\+THETAETA~0x101B}
+
+\Hypertarget{calc_8c_ae487cae9a61bd851234ba945074973e2}\index{calc.c@{calc.c}!OPMODE\_1TO1@{OPMODE\_1TO1}}
+\index{OPMODE\_1TO1@{OPMODE\_1TO1}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_1TO1}{OPMODE\_1TO1}}
+{\footnotesize\ttfamily \label{calc_8c_ae487cae9a61bd851234ba945074973e2} 
+\#define OPMODE\+\_\+1\+TO1~0x1000}
+
+\Hypertarget{calc_8c_a6831371c4b5f6f3720f49f95e1371b73}\index{calc.c@{calc.c}!OPMODE\_2TO1@{OPMODE\_2TO1}}
+\index{OPMODE\_2TO1@{OPMODE\_2TO1}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_2TO1}{OPMODE\_2TO1}}
+{\footnotesize\ttfamily \label{calc_8c_a6831371c4b5f6f3720f49f95e1371b73} 
+\#define OPMODE\+\_\+2\+TO1~0x2000}
+
+\Hypertarget{calc_8c_a8e42c90e66659e624c59f6195d5977e7}\index{calc.c@{calc.c}!OPMODE\_2TO2@{OPMODE\_2TO2}}
+\index{OPMODE\_2TO2@{OPMODE\_2TO2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_2TO2}{OPMODE\_2TO2}}
+{\footnotesize\ttfamily \label{calc_8c_a8e42c90e66659e624c59f6195d5977e7} 
+\#define OPMODE\+\_\+2\+TO2~0x3000}
+
+\Hypertarget{calc_8c_a5a5bd0e4b18f2a2947dbee1100a43cae}\index{calc.c@{calc.c}!OPMODE\_3TO1@{OPMODE\_3TO1}}
+\index{OPMODE\_3TO1@{OPMODE\_3TO1}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_3TO1}{OPMODE\_3TO1}}
+{\footnotesize\ttfamily \label{calc_8c_a5a5bd0e4b18f2a2947dbee1100a43cae} 
+\#define OPMODE\+\_\+3\+TO1~0x8000}
+
+\Hypertarget{calc_8c_a37662b889d9a0f53b6111a05275cbbe5}\index{calc.c@{calc.c}!OPMODE\_CONST@{OPMODE\_CONST}}
+\index{OPMODE\_CONST@{OPMODE\_CONST}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_CONST}{OPMODE\_CONST}}
+{\footnotesize\ttfamily \label{calc_8c_a37662b889d9a0f53b6111a05275cbbe5} 
+\#define OPMODE\+\_\+\+CONST~0x4000}
+
+\Hypertarget{calc_8c_a64468a443ea13d6f49e6f79b121933f4}\index{calc.c@{calc.c}!OPMODE\_ENTER@{OPMODE\_ENTER}}
+\index{OPMODE\_ENTER@{OPMODE\_ENTER}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_ENTER}{OPMODE\_ENTER}}
+{\footnotesize\ttfamily \label{calc_8c_a64468a443ea13d6f49e6f79b121933f4} 
+\#define OPMODE\+\_\+\+ENTER~0x5000}
+
+\Hypertarget{calc_8c_a34b7e2e7e069134d55bf2725f073cd7c}\index{calc.c@{calc.c}!OPMODE\_MASK@{OPMODE\_MASK}}
+\index{OPMODE\_MASK@{OPMODE\_MASK}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_MASK}{OPMODE\_MASK}}
+{\footnotesize\ttfamily \label{calc_8c_a34b7e2e7e069134d55bf2725f073cd7c} 
+\#define OPMODE\+\_\+\+MASK~0x\+FF00}
+
+\Hypertarget{calc_8c_a3af3fe2f39f45092b20b3684f148c7ab}\index{calc.c@{calc.c}!OPMODE\_MMINUS@{OPMODE\_MMINUS}}
+\index{OPMODE\_MMINUS@{OPMODE\_MMINUS}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_MMINUS}{OPMODE\_MMINUS}}
+{\footnotesize\ttfamily \label{calc_8c_a3af3fe2f39f45092b20b3684f148c7ab} 
+\#define OPMODE\+\_\+\+MMINUS~0x7300}
+
+\Hypertarget{calc_8c_a3d15f0acc8f30e184b1cbc50e393709f}\index{calc.c@{calc.c}!OPMODE\_MPLUS@{OPMODE\_MPLUS}}
+\index{OPMODE\_MPLUS@{OPMODE\_MPLUS}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_MPLUS}{OPMODE\_MPLUS}}
+{\footnotesize\ttfamily \label{calc_8c_a3d15f0acc8f30e184b1cbc50e393709f} 
+\#define OPMODE\+\_\+\+MPLUS~0x7200}
+
+\Hypertarget{calc_8c_a60ca9efffc3b5a2233efae0d3ed94019}\index{calc.c@{calc.c}!OPMODE\_PROG@{OPMODE\_PROG}}
+\index{OPMODE\_PROG@{OPMODE\_PROG}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_PROG}{OPMODE\_PROG}}
+{\footnotesize\ttfamily \label{calc_8c_a60ca9efffc3b5a2233efae0d3ed94019} 
+\#define OPMODE\+\_\+\+PROG~0x\+A000}
+
+\Hypertarget{calc_8c_ac52ef496dcf396d29c956b4b5055d45f}\index{calc.c@{calc.c}!OPMODE\_RCL@{OPMODE\_RCL}}
+\index{OPMODE\_RCL@{OPMODE\_RCL}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_RCL}{OPMODE\_RCL}}
+{\footnotesize\ttfamily \label{calc_8c_ac52ef496dcf396d29c956b4b5055d45f} 
+\#define OPMODE\+\_\+\+RCL~0x7000}
+
+\Hypertarget{calc_8c_a54ff84d9dc3969e2243e81393ba78a0d}\index{calc.c@{calc.c}!OPMODE\_RCLX@{OPMODE\_RCLX}}
+\index{OPMODE\_RCLX@{OPMODE\_RCLX}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_RCLX}{OPMODE\_RCLX}}
+{\footnotesize\ttfamily \label{calc_8c_a54ff84d9dc3969e2243e81393ba78a0d} 
+\#define OPMODE\+\_\+\+RCLX~0x7400}
+
+\Hypertarget{calc_8c_a590b2a65347eff329532c9eb1b20b5d9}\index{calc.c@{calc.c}!OPMODE\_STACK@{OPMODE\_STACK}}
+\index{OPMODE\_STACK@{OPMODE\_STACK}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_STACK}{OPMODE\_STACK}}
+{\footnotesize\ttfamily \label{calc_8c_a590b2a65347eff329532c9eb1b20b5d9} 
+\#define OPMODE\+\_\+\+STACK~0x6000}
+
+\Hypertarget{calc_8c_a251477ca6a302d17db4bb65aa90000ad}\index{calc.c@{calc.c}!OPMODE\_STAT@{OPMODE\_STAT}}
+\index{OPMODE\_STAT@{OPMODE\_STAT}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_STAT}{OPMODE\_STAT}}
+{\footnotesize\ttfamily \label{calc_8c_a251477ca6a302d17db4bb65aa90000ad} 
+\#define OPMODE\+\_\+\+STAT~0x9000}
+
+\Hypertarget{calc_8c_aa4c565d2b8b9c457269573f41e4d2e81}\index{calc.c@{calc.c}!OPMODE\_STO@{OPMODE\_STO}}
+\index{OPMODE\_STO@{OPMODE\_STO}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_STO}{OPMODE\_STO}}
+{\footnotesize\ttfamily \label{calc_8c_aa4c565d2b8b9c457269573f41e4d2e81} 
+\#define OPMODE\+\_\+\+STO~0x7100}
+
+\Hypertarget{calc_8c_af77b4e2c46bfb8245f20f7e3e3124508}\index{calc.c@{calc.c}!OPMODE\_STOX@{OPMODE\_STOX}}
+\index{OPMODE\_STOX@{OPMODE\_STOX}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_STOX}{OPMODE\_STOX}}
+{\footnotesize\ttfamily \label{calc_8c_af77b4e2c46bfb8245f20f7e3e3124508} 
+\#define OPMODE\+\_\+\+STOX~0x7500}
+
+\Hypertarget{calc_8c_af97b4d9a9b4b50c407a0e09be17302fc}\index{calc.c@{calc.c}!OPMODE\_TEST@{OPMODE\_TEST}}
+\index{OPMODE\_TEST@{OPMODE\_TEST}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{OPMODE\_TEST}{OPMODE\_TEST}}
+{\footnotesize\ttfamily \label{calc_8c_af97b4d9a9b4b50c407a0e09be17302fc} 
+\#define OPMODE\+\_\+\+TEST~0x\+FF00}
+
+
+
+\label{doc-func-members}
+\Hypertarget{calc_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{calc_8c_adbbd91fd144160e03cc29845207f806f}\index{calc.c@{calc.c}!apply\_const@{apply\_const}}
+\index{apply\_const@{apply\_const}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_const()}{apply\_const()}}
+{\footnotesize\ttfamily \label{calc_8c_adbbd91fd144160e03cc29845207f806f} 
+void apply\+\_\+const (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a8485fbb880c136ae15ee55b961352bb5}\index{calc.c@{calc.c}!apply\_enter@{apply\_enter}}
+\index{apply\_enter@{apply\_enter}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_enter()}{apply\_enter()}}
+{\footnotesize\ttfamily \label{calc_8c_a8485fbb880c136ae15ee55b961352bb5} 
+void apply\+\_\+enter (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a75bb46fca331fcdcf6218aacc8689619}\index{calc.c@{calc.c}!apply\_func\_1to1@{apply\_func\_1to1}}
+\index{apply\_func\_1to1@{apply\_func\_1to1}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_func\_1to1()}{apply\_func\_1to1()}}
+{\footnotesize\ttfamily \label{calc_8c_a75bb46fca331fcdcf6218aacc8689619} 
+void apply\+\_\+func\+\_\+1to1 (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_aa79f31b4cc96969b5a09b2ecd77e2cd8}\index{calc.c@{calc.c}!apply\_func\_2to1@{apply\_func\_2to1}}
+\index{apply\_func\_2to1@{apply\_func\_2to1}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_func\_2to1()}{apply\_func\_2to1()}}
+{\footnotesize\ttfamily \label{calc_8c_aa79f31b4cc96969b5a09b2ecd77e2cd8} 
+void apply\+\_\+func\+\_\+2to1 (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ad2c93a6a9896b201fc046546c8a992fa}\index{calc.c@{calc.c}!apply\_func\_2to2@{apply\_func\_2to2}}
+\index{apply\_func\_2to2@{apply\_func\_2to2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_func\_2to2()}{apply\_func\_2to2()}}
+{\footnotesize\ttfamily \label{calc_8c_ad2c93a6a9896b201fc046546c8a992fa} 
+void apply\+\_\+func\+\_\+2to2 (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ae789f2145e2af47130abd02c2714d519}\index{calc.c@{calc.c}!apply\_func\_3to1@{apply\_func\_3to1}}
+\index{apply\_func\_3to1@{apply\_func\_3to1}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_func\_3to1()}{apply\_func\_3to1()}}
+{\footnotesize\ttfamily \label{calc_8c_ae789f2145e2af47130abd02c2714d519} 
+void apply\+\_\+func\+\_\+3to1 (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a560572d422d93271f2a6167fbe6c22e6}\index{calc.c@{calc.c}!apply\_func\_stat@{apply\_func\_stat}}
+\index{apply\_func\_stat@{apply\_func\_stat}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_func\_stat()}{apply\_func\_stat()}}
+{\footnotesize\ttfamily \label{calc_8c_a560572d422d93271f2a6167fbe6c22e6} 
+void apply\+\_\+func\+\_\+stat (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ae914cca5bd413ed7c4fc8634f0b56107}\index{calc.c@{calc.c}!apply\_memory\_minus@{apply\_memory\_minus}}
+\index{apply\_memory\_minus@{apply\_memory\_minus}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_memory\_minus()}{apply\_memory\_minus()}}
+{\footnotesize\ttfamily \label{calc_8c_ae914cca5bd413ed7c4fc8634f0b56107} 
+void apply\+\_\+memory\+\_\+minus (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ac065bd7461a4fca71fd9e3c708ee11b7}\index{calc.c@{calc.c}!apply\_memory\_plus@{apply\_memory\_plus}}
+\index{apply\_memory\_plus@{apply\_memory\_plus}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_memory\_plus()}{apply\_memory\_plus()}}
+{\footnotesize\ttfamily \label{calc_8c_ac065bd7461a4fca71fd9e3c708ee11b7} 
+void apply\+\_\+memory\+\_\+plus (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a8894ecfbf758b939e5122c9f279be6e8}\index{calc.c@{calc.c}!apply\_memory\_rcl@{apply\_memory\_rcl}}
+\index{apply\_memory\_rcl@{apply\_memory\_rcl}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_memory\_rcl()}{apply\_memory\_rcl()}}
+{\footnotesize\ttfamily \label{calc_8c_a8894ecfbf758b939e5122c9f279be6e8} 
+void apply\+\_\+memory\+\_\+rcl (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a4d9c47116dcb6d4938c09ce75f0147da}\index{calc.c@{calc.c}!apply\_memory\_rcl\_x@{apply\_memory\_rcl\_x}}
+\index{apply\_memory\_rcl\_x@{apply\_memory\_rcl\_x}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_memory\_rcl\_x()}{apply\_memory\_rcl\_x()}}
+{\footnotesize\ttfamily \label{calc_8c_a4d9c47116dcb6d4938c09ce75f0147da} 
+void apply\+\_\+memory\+\_\+rcl\+\_\+x (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ac70dc33f62b272f5da3589669b86e2ce}\index{calc.c@{calc.c}!apply\_memory\_sto@{apply\_memory\_sto}}
+\index{apply\_memory\_sto@{apply\_memory\_sto}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_memory\_sto()}{apply\_memory\_sto()}}
+{\footnotesize\ttfamily \label{calc_8c_ac70dc33f62b272f5da3589669b86e2ce} 
+void apply\+\_\+memory\+\_\+sto (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_aeaa44989644967f123c2880a0354331d}\index{calc.c@{calc.c}!apply\_memory\_sto\_x@{apply\_memory\_sto\_x}}
+\index{apply\_memory\_sto\_x@{apply\_memory\_sto\_x}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_memory\_sto\_x()}{apply\_memory\_sto\_x()}}
+{\footnotesize\ttfamily \label{calc_8c_aeaa44989644967f123c2880a0354331d} 
+void apply\+\_\+memory\+\_\+sto\+\_\+x (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a1bab80d411d0774ae39cb13f68244e29}\index{calc.c@{calc.c}!apply\_op@{apply\_op}}
+\index{apply\_op@{apply\_op}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_op()}{apply\_op()}}
+{\footnotesize\ttfamily \label{calc_8c_a1bab80d411d0774ae39cb13f68244e29} 
+void apply\+\_\+op (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a25683da676a6e47e69b1967be8073e5e}\index{calc.c@{calc.c}!apply\_prog@{apply\_prog}}
+\index{apply\_prog@{apply\_prog}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_prog()}{apply\_prog()}}
+{\footnotesize\ttfamily \label{calc_8c_a25683da676a6e47e69b1967be8073e5e} 
+void apply\+\_\+prog (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a2162cb7b664b638012f6b7d1ef8af648}\index{calc.c@{calc.c}!apply\_stack@{apply\_stack}}
+\index{apply\_stack@{apply\_stack}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_stack()}{apply\_stack()}}
+{\footnotesize\ttfamily \label{calc_8c_a2162cb7b664b638012f6b7d1ef8af648} 
+void apply\+\_\+stack (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ab90752fd17645ed795932ab32e3092e3}\index{calc.c@{calc.c}!apply\_test@{apply\_test}}
+\index{apply\_test@{apply\_test}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{apply\_test()}{apply\_test()}}
+{\footnotesize\ttfamily \label{calc_8c_ab90752fd17645ed795932ab32e3092e3} 
+void apply\+\_\+test (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a7bde9ca97dfc4379a95339f01f11d982}\index{calc.c@{calc.c}!calc\_init@{calc\_init}}
+\index{calc\_init@{calc\_init}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{calc\_init()}{calc\_init()}}
+{\footnotesize\ttfamily \label{calc_8c_a7bde9ca97dfc4379a95339f01f11d982} 
+void calc\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a75038911fbd95aa11f1c8241641918f9}\index{calc.c@{calc.c}!calc\_on\_key@{calc\_on\_key}}
+\index{calc\_on\_key@{calc\_on\_key}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{calc\_on\_key()}{calc\_on\_key()}}
+{\footnotesize\ttfamily \label{calc_8c_a75038911fbd95aa11f1c8241641918f9} 
+int calc\+\_\+on\+\_\+key (\begin{DoxyParamCaption}\item[{int}]{c}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a4eeaec6aad1ea7c0a3d3e0c26d28908b}\index{calc.c@{calc.c}!calc\_refresh@{calc\_refresh}}
+\index{calc\_refresh@{calc\_refresh}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{calc\_refresh()}{calc\_refresh()}}
+{\footnotesize\ttfamily \label{calc_8c_a4eeaec6aad1ea7c0a3d3e0c26d28908b} 
+void calc\+\_\+refresh (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_aa4b1d16b5248a2b3624e49b61ce395e8}\index{calc.c@{calc.c}!change\_context@{change\_context}}
+\index{change\_context@{change\_context}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{change\_context()}{change\_context()}}
+{\footnotesize\ttfamily \label{calc_8c_aa4b1d16b5248a2b3624e49b61ce395e8} 
+void change\+\_\+context (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_af1d928e8c1ea116b991a18bab002db31}\index{calc.c@{calc.c}!change\_dispmode@{change\_dispmode}}
+\index{change\_dispmode@{change\_dispmode}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{change\_dispmode()}{change\_dispmode()}}
+{\footnotesize\ttfamily \label{calc_8c_af1d928e8c1ea116b991a18bab002db31} 
+void change\+\_\+dispmode (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a740919d24748619466f129db8a53cef0}\index{calc.c@{calc.c}!change\_precision@{change\_precision}}
+\index{change\_precision@{change\_precision}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{change\_precision()}{change\_precision()}}
+{\footnotesize\ttfamily \label{calc_8c_a740919d24748619466f129db8a53cef0} 
+void change\+\_\+precision (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ad6ab2c5ef37b9fb86015e0052ec47e23}\index{calc.c@{calc.c}!change\_trigmode@{change\_trigmode}}
+\index{change\_trigmode@{change\_trigmode}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{change\_trigmode()}{change\_trigmode()}}
+{\footnotesize\ttfamily \label{calc_8c_ad6ab2c5ef37b9fb86015e0052ec47e23} 
+void change\+\_\+trigmode (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_aa330390c9651004cab49b4784103b728}\index{calc.c@{calc.c}!clear\_cursor@{clear\_cursor}}
+\index{clear\_cursor@{clear\_cursor}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{clear\_cursor()}{clear\_cursor()}}
+{\footnotesize\ttfamily \label{calc_8c_aa330390c9651004cab49b4784103b728} 
+void clear\+\_\+cursor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a5fed5e5d05ab07ac96ba3d483807da48}\index{calc.c@{calc.c}!clear\_input@{clear\_input}}
+\index{clear\_input@{clear\_input}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{clear\_input()}{clear\_input()}}
+{\footnotesize\ttfamily \label{calc_8c_a5fed5e5d05ab07ac96ba3d483807da48} 
+void clear\+\_\+input (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a768be9baa0e268907096abf0492c45a3}\index{calc.c@{calc.c}!clear\_shift@{clear\_shift}}
+\index{clear\_shift@{clear\_shift}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{clear\_shift()}{clear\_shift()}}
+{\footnotesize\ttfamily \label{calc_8c_a768be9baa0e268907096abf0492c45a3} 
+void clear\+\_\+shift (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ad8e0eeb404b2b6efb899a530982b7070}\index{calc.c@{calc.c}!clear\_stack@{clear\_stack}}
+\index{clear\_stack@{clear\_stack}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{clear\_stack()}{clear\_stack()}}
+{\footnotesize\ttfamily \label{calc_8c_ad8e0eeb404b2b6efb899a530982b7070} 
+void clear\+\_\+stack (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a97c353c23050b2faebd883435f73aa6e}\index{calc.c@{calc.c}!clear\_variables@{clear\_variables}}
+\index{clear\_variables@{clear\_variables}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{clear\_variables()}{clear\_variables()}}
+{\footnotesize\ttfamily \label{calc_8c_a97c353c23050b2faebd883435f73aa6e} 
+void clear\+\_\+variables (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a61783353b1c244432f87c87de3204847}\index{calc.c@{calc.c}!convert\_input@{convert\_input}}
+\index{convert\_input@{convert\_input}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{convert\_input()}{convert\_input()}}
+{\footnotesize\ttfamily \label{calc_8c_a61783353b1c244432f87c87de3204847} 
+double convert\+\_\+input (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a82a1642045301ced730fb062b15a7358}\index{calc.c@{calc.c}!draw\_char@{draw\_char}}
+\index{draw\_char@{draw\_char}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_char()}{draw\_char()}}
+{\footnotesize\ttfamily \label{calc_8c_a82a1642045301ced730fb062b15a7358} 
+void draw\+\_\+char (\begin{DoxyParamCaption}\item[{int}]{x}{, }\item[{int}]{pos}{, }\item[{char}]{ch}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a608343c0c4fb70cff0ccd951d5d98b2a}\index{calc.c@{calc.c}!draw\_cursor@{draw\_cursor}}
+\index{draw\_cursor@{draw\_cursor}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_cursor()}{draw\_cursor()}}
+{\footnotesize\ttfamily \label{calc_8c_a608343c0c4fb70cff0ccd951d5d98b2a} 
+void draw\+\_\+cursor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ad9134dcc4e73c3bb4d4e7e8a243ea666}\index{calc.c@{calc.c}!draw\_decpoint@{draw\_decpoint}}
+\index{draw\_decpoint@{draw\_decpoint}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_decpoint()}{draw\_decpoint()}}
+{\footnotesize\ttfamily \label{calc_8c_ad9134dcc4e73c3bb4d4e7e8a243ea666} 
+void draw\+\_\+decpoint (\begin{DoxyParamCaption}\item[{int}]{x}{, }\item[{int}]{pos}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a0b352461f81aeb6e734626d735fbeba1}\index{calc.c@{calc.c}!draw\_error@{draw\_error}}
+\index{draw\_error@{draw\_error}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_error()}{draw\_error()}}
+{\footnotesize\ttfamily \label{calc_8c_a0b352461f81aeb6e734626d735fbeba1} 
+void draw\+\_\+error (\begin{DoxyParamCaption}\item[{int}]{pos}{, }\item[{int}]{code}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a908fac0738994a25f09a605b01fba5c1}\index{calc.c@{calc.c}!draw\_input@{draw\_input}}
+\index{draw\_input@{draw\_input}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_input()}{draw\_input()}}
+{\footnotesize\ttfamily \label{calc_8c_a908fac0738994a25f09a605b01fba5c1} 
+void draw\+\_\+input (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a9b70b751176a324226c99d4464e10d33}\index{calc.c@{calc.c}!draw\_number@{draw\_number}}
+\index{draw\_number@{draw\_number}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_number()}{draw\_number()}}
+{\footnotesize\ttfamily \label{calc_8c_a9b70b751176a324226c99d4464e10d33} 
+void draw\+\_\+number (\begin{DoxyParamCaption}\item[{int}]{pos}{, }\item[{double}]{num}{, }\item[{int}]{mode}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_abfa3ade2514e01f4c3735e019f0ffbf3}\index{calc.c@{calc.c}!draw\_number\_eng@{draw\_number\_eng}}
+\index{draw\_number\_eng@{draw\_number\_eng}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_number\_eng()}{draw\_number\_eng()}}
+{\footnotesize\ttfamily \label{calc_8c_abfa3ade2514e01f4c3735e019f0ffbf3} 
+void draw\+\_\+number\+\_\+eng (\begin{DoxyParamCaption}\item[{int}]{pos}{, }\item[{double}]{num}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_aa38f445162d7c771cb57758e9b7b105a}\index{calc.c@{calc.c}!draw\_number\_normal@{draw\_number\_normal}}
+\index{draw\_number\_normal@{draw\_number\_normal}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_number\_normal()}{draw\_number\_normal()}}
+{\footnotesize\ttfamily \label{calc_8c_aa38f445162d7c771cb57758e9b7b105a} 
+void draw\+\_\+number\+\_\+normal (\begin{DoxyParamCaption}\item[{int}]{pos}{, }\item[{double}]{num}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_af9ce627cafc83650ac4f639f6939942c}\index{calc.c@{calc.c}!draw\_number\_sci@{draw\_number\_sci}}
+\index{draw\_number\_sci@{draw\_number\_sci}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_number\_sci()}{draw\_number\_sci()}}
+{\footnotesize\ttfamily \label{calc_8c_af9ce627cafc83650ac4f639f6939942c} 
+void draw\+\_\+number\+\_\+sci (\begin{DoxyParamCaption}\item[{int}]{pos}{, }\item[{double}]{num}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a2643010ca32f5e826333c5c722ab72e2}\index{calc.c@{calc.c}!draw\_number\_split@{draw\_number\_split}}
+\index{draw\_number\_split@{draw\_number\_split}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_number\_split()}{draw\_number\_split()}}
+{\footnotesize\ttfamily \label{calc_8c_a2643010ca32f5e826333c5c722ab72e2} 
+void draw\+\_\+number\+\_\+split (\begin{DoxyParamCaption}\item[{int}]{pos}{, }\item[{int64\+\_\+t}]{\+\_\+mantissa}{, }\item[{int}]{\+\_\+exponent}{, }\item[{int}]{pointpos}{, }\item[{int}]{hideexp}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a1414fdd2051ee3f78c933ab5a93a70b5}\index{calc.c@{calc.c}!draw\_stack@{draw\_stack}}
+\index{draw\_stack@{draw\_stack}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_stack()}{draw\_stack()}}
+{\footnotesize\ttfamily \label{calc_8c_a1414fdd2051ee3f78c933ab5a93a70b5} 
+void draw\+\_\+stack (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a2f806b0694a5724fbace18f87c69e7d5}\index{calc.c@{calc.c}!draw\_stack\_register\_name@{draw\_stack\_register\_name}}
+\index{draw\_stack\_register\_name@{draw\_stack\_register\_name}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_stack\_register\_name()}{draw\_stack\_register\_name()}}
+{\footnotesize\ttfamily \label{calc_8c_a2f806b0694a5724fbace18f87c69e7d5} 
+void draw\+\_\+stack\+\_\+register\+\_\+name (\begin{DoxyParamCaption}\item[{int}]{pos}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a559338c59ca66c234f172046f8c16965}\index{calc.c@{calc.c}!draw\_status@{draw\_status}}
+\index{draw\_status@{draw\_status}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_status()}{draw\_status()}}
+{\footnotesize\ttfamily \label{calc_8c_a559338c59ca66c234f172046f8c16965} 
+void draw\+\_\+status (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a9708c9eee225b3fbd555981ad6516ee4}\index{calc.c@{calc.c}!enter\_backspace@{enter\_backspace}}
+\index{enter\_backspace@{enter\_backspace}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_backspace()}{enter\_backspace()}}
+{\footnotesize\ttfamily \label{calc_8c_a9708c9eee225b3fbd555981ad6516ee4} 
+void enter\+\_\+backspace (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a025ebf3ce567c52b35aa4ba32a230315}\index{calc.c@{calc.c}!enter\_clear@{enter\_clear}}
+\index{enter\_clear@{enter\_clear}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_clear()}{enter\_clear()}}
+{\footnotesize\ttfamily \label{calc_8c_a025ebf3ce567c52b35aa4ba32a230315} 
+void enter\+\_\+clear (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a85ca3e8dbf4d61b7f33cc626bca315cf}\index{calc.c@{calc.c}!enter\_clear\_mem@{enter\_clear\_mem}}
+\index{enter\_clear\_mem@{enter\_clear\_mem}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_clear\_mem()}{enter\_clear\_mem()}}
+{\footnotesize\ttfamily \label{calc_8c_a85ca3e8dbf4d61b7f33cc626bca315cf} 
+void enter\+\_\+clear\+\_\+mem (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a19afaa6c14e73d5b339d20ea0d0a1444}\index{calc.c@{calc.c}!enter\_decpoint@{enter\_decpoint}}
+\index{enter\_decpoint@{enter\_decpoint}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_decpoint()}{enter\_decpoint()}}
+{\footnotesize\ttfamily \label{calc_8c_a19afaa6c14e73d5b339d20ea0d0a1444} 
+void enter\+\_\+decpoint (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a638ef06b625031dd50b5216f680d35c7}\index{calc.c@{calc.c}!enter\_drop@{enter\_drop}}
+\index{enter\_drop@{enter\_drop}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_drop()}{enter\_drop()}}
+{\footnotesize\ttfamily \label{calc_8c_a638ef06b625031dd50b5216f680d35c7} 
+void enter\+\_\+drop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ab4b51c8bd65657708c4d5385beba146f}\index{calc.c@{calc.c}!enter\_enter@{enter\_enter}}
+\index{enter\_enter@{enter\_enter}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_enter()}{enter\_enter()}}
+{\footnotesize\ttfamily \label{calc_8c_ab4b51c8bd65657708c4d5385beba146f} 
+void enter\+\_\+enter (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_abef67ccdef8a4d74b40c80f99ccb2b39}\index{calc.c@{calc.c}!enter\_exp@{enter\_exp}}
+\index{enter\_exp@{enter\_exp}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_exp()}{enter\_exp()}}
+{\footnotesize\ttfamily \label{calc_8c_abef67ccdef8a4d74b40c80f99ccb2b39} 
+void enter\+\_\+exp (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a88e3826469ecb6b4a328d75c7baf3010}\index{calc.c@{calc.c}!enter\_key@{enter\_key}}
+\index{enter\_key@{enter\_key}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_key()}{enter\_key()}}
+{\footnotesize\ttfamily \label{calc_8c_a88e3826469ecb6b4a328d75c7baf3010} 
+void enter\+\_\+key (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{code}{, }\item[{uint16\+\_\+t}]{code1}{, }\item[{uint16\+\_\+t}]{code2}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_af5fe5e6432d8ef703a7e75908885dfa8}\index{calc.c@{calc.c}!enter\_lastx@{enter\_lastx}}
+\index{enter\_lastx@{enter\_lastx}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_lastx()}{enter\_lastx()}}
+{\footnotesize\ttfamily \label{calc_8c_af5fe5e6432d8ef703a7e75908885dfa8} 
+void enter\+\_\+lastx (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a4b9785a798b91002ec9f79306dafb895}\index{calc.c@{calc.c}!enter\_number@{enter\_number}}
+\index{enter\_number@{enter\_number}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_number()}{enter\_number()}}
+{\footnotesize\ttfamily \label{calc_8c_a4b9785a798b91002ec9f79306dafb895} 
+void enter\+\_\+number (\begin{DoxyParamCaption}\item[{char}]{c}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a58afed509bbc3ee9a9a51919ddb15dd4}\index{calc.c@{calc.c}!enter\_rotate\_down@{enter\_rotate\_down}}
+\index{enter\_rotate\_down@{enter\_rotate\_down}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_rotate\_down()}{enter\_rotate\_down()}}
+{\footnotesize\ttfamily \label{calc_8c_a58afed509bbc3ee9a9a51919ddb15dd4} 
+void enter\+\_\+rotate\+\_\+down (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a3505fb8de09380bdc432144347660889}\index{calc.c@{calc.c}!enter\_rotate\_up@{enter\_rotate\_up}}
+\index{enter\_rotate\_up@{enter\_rotate\_up}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_rotate\_up()}{enter\_rotate\_up()}}
+{\footnotesize\ttfamily \label{calc_8c_a3505fb8de09380bdc432144347660889} 
+void enter\+\_\+rotate\+\_\+up (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a2799054fee014d5b2c80958c43fc82c5}\index{calc.c@{calc.c}!enter\_shift@{enter\_shift}}
+\index{enter\_shift@{enter\_shift}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_shift()}{enter\_shift()}}
+{\footnotesize\ttfamily \label{calc_8c_a2799054fee014d5b2c80958c43fc82c5} 
+void enter\+\_\+shift (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a4df8cda97a2bf1004612f114162a6998}\index{calc.c@{calc.c}!enter\_shift2@{enter\_shift2}}
+\index{enter\_shift2@{enter\_shift2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_shift2()}{enter\_shift2()}}
+{\footnotesize\ttfamily \label{calc_8c_a4df8cda97a2bf1004612f114162a6998} 
+void enter\+\_\+shift2 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a46337facc96467e28cb0e87187eca062}\index{calc.c@{calc.c}!enter\_sign@{enter\_sign}}
+\index{enter\_sign@{enter\_sign}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_sign()}{enter\_sign()}}
+{\footnotesize\ttfamily \label{calc_8c_a46337facc96467e28cb0e87187eca062} 
+void enter\+\_\+sign (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a5544a6c43fd40c43c8c92d5c65889c74}\index{calc.c@{calc.c}!enter\_swap\_xy@{enter\_swap\_xy}}
+\index{enter\_swap\_xy@{enter\_swap\_xy}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_swap\_xy()}{enter\_swap\_xy()}}
+{\footnotesize\ttfamily \label{calc_8c_a5544a6c43fd40c43c8c92d5c65889c74} 
+void enter\+\_\+swap\+\_\+xy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a7ef52cc403855a5ccdf8a1df44559006}\index{calc.c@{calc.c}!enter\_uncert@{enter\_uncert}}
+\index{enter\_uncert@{enter\_uncert}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{enter\_uncert()}{enter\_uncert()}}
+{\footnotesize\ttfamily \label{calc_8c_a7ef52cc403855a5ccdf8a1df44559006} 
+void enter\+\_\+uncert (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a87d2989ae7a4dfaba02641e0d255ee25}\index{calc.c@{calc.c}!get\_register\_number@{get\_register\_number}}
+\index{get\_register\_number@{get\_register\_number}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{get\_register\_number()}{get\_register\_number()}}
+{\footnotesize\ttfamily \label{calc_8c_a87d2989ae7a4dfaba02641e0d255ee25} 
+int get\+\_\+register\+\_\+number (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_aee07a15cc1f42b7463e3c4b33f5834df}\index{calc.c@{calc.c}!maybe\_convert\_input@{maybe\_convert\_input}}
+\index{maybe\_convert\_input@{maybe\_convert\_input}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{maybe\_convert\_input()}{maybe\_convert\_input()}}
+{\footnotesize\ttfamily \label{calc_8c_aee07a15cc1f42b7463e3c4b33f5834df} 
+void maybe\+\_\+convert\+\_\+input (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a2f37c9b67bdf2459424652f57e6d294a}\index{calc.c@{calc.c}!set\_trigconv@{set\_trigconv}}
+\index{set\_trigconv@{set\_trigconv}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{set\_trigconv()}{set\_trigconv()}}
+{\footnotesize\ttfamily \label{calc_8c_a2f37c9b67bdf2459424652f57e6d294a} 
+void set\+\_\+trigconv (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_ac94f8529470d75354ec866de60c44950}\index{calc.c@{calc.c}!stack\_drop@{stack\_drop}}
+\index{stack\_drop@{stack\_drop}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{stack\_drop()}{stack\_drop()}}
+{\footnotesize\ttfamily \label{calc_8c_ac94f8529470d75354ec866de60c44950} 
+void stack\+\_\+drop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_acae0cd21985a8b9d95cae8017a0c949f}\index{calc.c@{calc.c}!stack\_push@{stack\_push}}
+\index{stack\_push@{stack\_push}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{stack\_push()}{stack\_push()}}
+{\footnotesize\ttfamily \label{calc_8c_acae0cd21985a8b9d95cae8017a0c949f} 
+void stack\+\_\+push (\begin{DoxyParamCaption}\item[{double}]{num}{, }\item[{double}]{err}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a6a36cb5e47ae942918c885272af6b685}\index{calc.c@{calc.c}!stack\_rotate\_down@{stack\_rotate\_down}}
+\index{stack\_rotate\_down@{stack\_rotate\_down}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{stack\_rotate\_down()}{stack\_rotate\_down()}}
+{\footnotesize\ttfamily \label{calc_8c_a6a36cb5e47ae942918c885272af6b685} 
+void stack\+\_\+rotate\+\_\+down (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{calc_8c_a7646e969c9bca9d1687b6409b072f899}\index{calc.c@{calc.c}!stack\_rotate\_up@{stack\_rotate\_up}}
+\index{stack\_rotate\_up@{stack\_rotate\_up}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{stack\_rotate\_up()}{stack\_rotate\_up()}}
+{\footnotesize\ttfamily \label{calc_8c_a7646e969c9bca9d1687b6409b072f899} 
+void stack\+\_\+rotate\+\_\+up (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\label{doc-var-members}
+\Hypertarget{calc_8c_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{calc_8c_a0cd0101a1be8237c7b4483660ba4bfae}\index{calc.c@{calc.c}!context@{context}}
+\index{context@{context}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{context}{context}}
+{\footnotesize\ttfamily \label{calc_8c_a0cd0101a1be8237c7b4483660ba4bfae} 
+int context}
+
+\Hypertarget{calc_8c_af556508e6838659023baa5501c6d77e3}\index{calc.c@{calc.c}!dispmode@{dispmode}}
+\index{dispmode@{dispmode}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{dispmode}{dispmode}}
+{\footnotesize\ttfamily \label{calc_8c_af556508e6838659023baa5501c6d77e3} 
+int dispmode}
+
+\Hypertarget{calc_8c_ae371ed515d6476430521763a0c155e9e}\index{calc.c@{calc.c}!draw\_flags@{draw\_flags}}
+\index{draw\_flags@{draw\_flags}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{draw\_flags}{draw\_flags}}
+{\footnotesize\ttfamily \label{calc_8c_ae371ed515d6476430521763a0c155e9e} 
+uint16\+\_\+t draw\+\_\+flags}
+
+\Hypertarget{calc_8c_abc22a72d751fd7b9edfd17ce47da5651}\index{calc.c@{calc.c}!error\_flag@{error\_flag}}
+\index{error\_flag@{error\_flag}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{error\_flag}{error\_flag}}
+{\footnotesize\ttfamily \label{calc_8c_abc22a72d751fd7b9edfd17ce47da5651} 
+int error\+\_\+flag}
+
+\Hypertarget{calc_8c_a79ef9860d57798efe65aeb1e7ff8ea01}\index{calc.c@{calc.c}!input@{input}}
+\index{input@{input}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{input}{input}}
+{\footnotesize\ttfamily \label{calc_8c_a79ef9860d57798efe65aeb1e7ff8ea01} 
+\mbox{\hyperlink{structt__input}{t\+\_\+input}} input}
+
+\Hypertarget{calc_8c_a83c5412355881b5b1444421cb973a9dd}\index{calc.c@{calc.c}!input\_uncert@{input\_uncert}}
+\index{input\_uncert@{input\_uncert}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{input\_uncert}{input\_uncert}}
+{\footnotesize\ttfamily \label{calc_8c_a83c5412355881b5b1444421cb973a9dd} 
+int input\+\_\+uncert}
+
+\Hypertarget{calc_8c_a8d1cffc725548ba8b07443ca10756557}\index{calc.c@{calc.c}!lastx@{lastx}}
+\index{lastx@{lastx}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{lastx}{lastx}}
+{\footnotesize\ttfamily \label{calc_8c_a8d1cffc725548ba8b07443ca10756557} 
+double lastx}
+
+\Hypertarget{calc_8c_a4507fee6acd1c054022b79e4bdcf6682}\index{calc.c@{calc.c}!lastx2@{lastx2}}
+\index{lastx2@{lastx2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{lastx2}{lastx2}}
+{\footnotesize\ttfamily \label{calc_8c_a4507fee6acd1c054022b79e4bdcf6682} 
+double lastx2}
+
+\Hypertarget{calc_8c_a8f3b8f8e9927454ee93008a2780eef59}\index{calc.c@{calc.c}!max\_mantissa@{max\_mantissa}}
+\index{max\_mantissa@{max\_mantissa}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{max\_mantissa}{max\_mantissa}}
+{\footnotesize\ttfamily \label{calc_8c_a8f3b8f8e9927454ee93008a2780eef59} 
+uint64\+\_\+t max\+\_\+mantissa\mbox{[}10\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ 9LL,}
+\DoxyCodeLine{\ \ \ \ 99LL,}
+\DoxyCodeLine{\ \ \ \ 999LL,}
+\DoxyCodeLine{\ \ \ \ 9999LL,}
+\DoxyCodeLine{\ \ \ \ 99999LL,}
+\DoxyCodeLine{\ \ \ \ 999999LL,}
+\DoxyCodeLine{\ \ \ \ 9999999LL,}
+\DoxyCodeLine{\ \ \ \ 99999999LL,}
+\DoxyCodeLine{\ \ \ \ 999999999LL,}
+\DoxyCodeLine{\ \ \ \ 9999999999LL\}}
+
+\end{DoxyCode}
+\Hypertarget{calc_8c_aa95455ed52a8459fad69509a4a0411b5}\index{calc.c@{calc.c}!precision@{precision}}
+\index{precision@{precision}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{precision}{precision}}
+{\footnotesize\ttfamily \label{calc_8c_aa95455ed52a8459fad69509a4a0411b5} 
+int precision}
+
+\Hypertarget{calc_8c_a618f9490a8aef36da1453d7f04e38048}\index{calc.c@{calc.c}!precision\_uncert@{precision\_uncert}}
+\index{precision\_uncert@{precision\_uncert}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{precision\_uncert}{precision\_uncert}}
+{\footnotesize\ttfamily \label{calc_8c_a618f9490a8aef36da1453d7f04e38048} 
+int precision\+\_\+uncert}
+
+\Hypertarget{calc_8c_a1cdde34c7dec3175b4f302bf5598a15c}\index{calc.c@{calc.c}!program@{program}}
+\index{program@{program}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{program}{program}}
+{\footnotesize\ttfamily \label{calc_8c_a1cdde34c7dec3175b4f302bf5598a15c} 
+uint16\+\_\+t program\mbox{[}\mbox{\hyperlink{calc_8c_a0c5197950b670978fb265b78cf6d8c5c}{MAX\+\_\+\+PROGRAM\+\_\+\+SIZE}}\mbox{]}}
+
+\Hypertarget{calc_8c_ac38654c92339d9d2695bf9f5476af65f}\index{calc.c@{calc.c}!program\_entry@{program\_entry}}
+\index{program\_entry@{program\_entry}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{program\_entry}{program\_entry}}
+{\footnotesize\ttfamily \label{calc_8c_ac38654c92339d9d2695bf9f5476af65f} 
+int program\+\_\+entry}
+
+\Hypertarget{calc_8c_a660b7c5cdc346fd972cc60db0de71f85}\index{calc.c@{calc.c}!program\_size@{program\_size}}
+\index{program\_size@{program\_size}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{program\_size}{program\_size}}
+{\footnotesize\ttfamily \label{calc_8c_a660b7c5cdc346fd972cc60db0de71f85} 
+int program\+\_\+size}
+
+\Hypertarget{calc_8c_a56f76ee691bd7fd8492fb86312428c51}\index{calc.c@{calc.c}!program\_step@{program\_step}}
+\index{program\_step@{program\_step}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{program\_step}{program\_step}}
+{\footnotesize\ttfamily \label{calc_8c_a56f76ee691bd7fd8492fb86312428c51} 
+int program\+\_\+step}
+
+\Hypertarget{calc_8c_afd8d704fff636cf0234e92c1eade927c}\index{calc.c@{calc.c}!shift@{shift}}
+\index{shift@{shift}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{shift}{shift}}
+{\footnotesize\ttfamily \label{calc_8c_afd8d704fff636cf0234e92c1eade927c} 
+int shift}
+
+\Hypertarget{calc_8c_a2d64e405609b636747c45ca84a16be1b}\index{calc.c@{calc.c}!stack@{stack}}
+\index{stack@{stack}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{stack}{stack}}
+{\footnotesize\ttfamily \label{calc_8c_a2d64e405609b636747c45ca84a16be1b} 
+double stack\mbox{[}\mbox{\hyperlink{calc_8c_accbb358028675c83675d8b34c386268d}{MAX\+\_\+\+STACK\+\_\+\+SIZE}}\mbox{]}}
+
+\Hypertarget{calc_8c_a91ad8adb5f142149e19ac380526460a1}\index{calc.c@{calc.c}!stack2@{stack2}}
+\index{stack2@{stack2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{stack2}{stack2}}
+{\footnotesize\ttfamily \label{calc_8c_a91ad8adb5f142149e19ac380526460a1} 
+double stack2\mbox{[}\mbox{\hyperlink{calc_8c_accbb358028675c83675d8b34c386268d}{MAX\+\_\+\+STACK\+\_\+\+SIZE}}\mbox{]}}
+
+\Hypertarget{calc_8c_ac80d2e8d634bda960452fbb6e9f5f7d9}\index{calc.c@{calc.c}!stack\_size@{stack\_size}}
+\index{stack\_size@{stack\_size}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{stack\_size}{stack\_size}}
+{\footnotesize\ttfamily \label{calc_8c_ac80d2e8d634bda960452fbb6e9f5f7d9} 
+int stack\+\_\+size}
+
+\Hypertarget{calc_8c_aea9efd150d84b390800238a854c88282}\index{calc.c@{calc.c}!trigconv@{trigconv}}
+\index{trigconv@{trigconv}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{trigconv}{trigconv}}
+{\footnotesize\ttfamily \label{calc_8c_aea9efd150d84b390800238a854c88282} 
+double trigconv}
+
+\Hypertarget{calc_8c_a2d551cf4ec7298af2fe4ae7c5e470a22}\index{calc.c@{calc.c}!trigmode@{trigmode}}
+\index{trigmode@{trigmode}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{trigmode}{trigmode}}
+{\footnotesize\ttfamily \label{calc_8c_a2d551cf4ec7298af2fe4ae7c5e470a22} 
+int trigmode}
+
+\Hypertarget{calc_8c_a5441d6e9af244d7a66a51c3dbe9b316a}\index{calc.c@{calc.c}!variables@{variables}}
+\index{variables@{variables}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{variables}{variables}}
+{\footnotesize\ttfamily \label{calc_8c_a5441d6e9af244d7a66a51c3dbe9b316a} 
+double variables\mbox{[}\mbox{\hyperlink{calc_8c_adea1bd3f15f0c62a2af912434193622e}{MAX\+\_\+\+MEMORY\+\_\+\+SIZE}}\mbox{]}}
+
+\Hypertarget{calc_8c_a5d42aac99da5cd6f91bb5087b70b8f05}\index{calc.c@{calc.c}!variables2@{variables2}}
+\index{variables2@{variables2}!calc.c@{calc.c}}
+\doxysubsubsection{\texorpdfstring{variables2}{variables2}}
+{\footnotesize\ttfamily \label{calc_8c_a5d42aac99da5cd6f91bb5087b70b8f05} 
+double variables2\mbox{[}\mbox{\hyperlink{calc_8c_adea1bd3f15f0c62a2af912434193622e}{MAX\+\_\+\+MEMORY\+\_\+\+SIZE}}\mbox{]}}
+

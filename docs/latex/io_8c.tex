@@ -1,0 +1,37 @@
+\doxysection{liborcos/\+Src/io.c File Reference}
+\hypertarget{io_8c}{}\label{io_8c}\index{liborcos/Src/io.c@{liborcos/Src/io.c}}
+{\ttfamily \#include "{}stm32u3xx\+\_\+hal.\+h"{}}\newline
+{\ttfamily \#include "{}io.\+h"{}}\newline
+{\ttfamily \#include $<$stm32u3xx\+\_\+ll\+\_\+adc.\+h$>$}\newline
+{\ttfamily \#include "{}orcos.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{io_8c_ac8126e6fef3e967923c177958ff28924}{Update\+Sys\+Tick}} (uint32\+\_\+t new\+\_\+\+HCLK\+\_\+freq)
+\item 
+int \mbox{\hyperlink{io_8c_abd63e11c318837c3f2db8008f4f3caa1}{get\+\_\+vbat}} ()
+\begin{DoxyCompactList}\small\item\em Get battery voltage in millivolts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{io_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{io_8c_abd63e11c318837c3f2db8008f4f3caa1}\index{io.c@{io.c}!get\_vbat@{get\_vbat}}
+\index{get\_vbat@{get\_vbat}!io.c@{io.c}}
+\doxysubsubsection{\texorpdfstring{get\_vbat()}{get\_vbat()}}
+{\footnotesize\ttfamily \label{io_8c_abd63e11c318837c3f2db8008f4f3caa1} 
+int get\+\_\+vbat (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Get battery voltage in millivolts. 
+
+\begin{DoxyReturn}{Returns}
+Battery voltage in mV 
+\end{DoxyReturn}
+\Hypertarget{io_8c_ac8126e6fef3e967923c177958ff28924}\index{io.c@{io.c}!UpdateSysTick@{UpdateSysTick}}
+\index{UpdateSysTick@{UpdateSysTick}!io.c@{io.c}}
+\doxysubsubsection{\texorpdfstring{UpdateSysTick()}{UpdateSysTick()}}
+{\footnotesize\ttfamily \label{io_8c_ac8126e6fef3e967923c177958ff28924} 
+void Update\+Sys\+Tick (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{new\+\_\+\+HCLK\+\_\+freq}{}\end{DoxyParamCaption})}
+

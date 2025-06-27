@@ -1,0 +1,181 @@
+\doxysection{liborcos/\+Src/keyboard.c File Reference}
+\hypertarget{keyboard_8c}{}\label{keyboard_8c}\index{liborcos/Src/keyboard.c@{liborcos/Src/keyboard.c}}
+{\ttfamily \#include "{}keyboard.\+h"{}}\newline
+{\ttfamily \#include "{}main.\+h"{}}\newline
+{\ttfamily \#include "{}orcos.\+h"{}}\newline
+{\ttfamily \#include "{}sharp.\+h"{}}\newline
+{\ttfamily \#include "{}sharp\+\_\+lowlevel.\+h"{}}\newline
+{\ttfamily \#include "{}SEGGER\+\_\+\+RTT.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{keyboard_8c_a0a27c6c21376d77d548e9229d67a51de}{KEY\+\_\+\+QUEUE\+\_\+\+SIZE}}~16
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09}{Key\+State}} \{ \mbox{\hyperlink{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c}{WAIT\+\_\+\+PRESS}}
+, \mbox{\hyperlink{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09a164aec81e3119c7cd598426b1998bfba}{WAIT\+\_\+\+RELEASE\+\_\+\+AFTER\+\_\+\+PRESS}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{keyboard_8c_a9517c0e0622b0109ec92b0465b667570}{key\+\_\+push}} (uint16\+\_\+t keycode)
+\begin{DoxyCompactList}\small\item\em Push keycode to input queue. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{keyboard_8c_ac7dc1595df4c87b0d629406c3862b50f}{key\+\_\+pop}} (void)
+\begin{DoxyCompactList}\small\item\em Pop keycode from input queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{keyboard_8c_a95753604948d9a314fab9322d9da30a2}{wait\+\_\+for\+\_\+key\+\_\+press}} ()
+\begin{DoxyCompactList}\small\item\em Wait until a key is pressed Puts system to sleep until key press detected Use \doxylink{orcos_8h_ac7dc1595df4c87b0d629406c3862b50f}{key\+\_\+pop()} to retrieve the keycode. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{keyboard_8c_acd7b45442ea54bd555176e5cfc891413}{scan\+\_\+keyboard}} (void)
+\begin{DoxyCompactList}\small\item\em Scan keyboard matrix. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{keyboard_8c_a537318eafe9182b60dc22ef54966c6a1}{HAL\+\_\+\+GPIO\+\_\+\+EXTI\+\_\+\+Rising\+\_\+\+Callback}} (uint16\+\_\+t GPIO\+\_\+\+Pin)
+\item 
+void \mbox{\hyperlink{keyboard_8c_a0b334860563f4a109443e0a604af2300}{HAL\+\_\+\+GPIO\+\_\+\+EXTI\+\_\+\+Falling\+\_\+\+Callback}} (uint16\+\_\+t GPIO\+\_\+\+Pin)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const uint16\+\_\+t \mbox{\hyperlink{keyboard_8c_a8f8a0e0cfc2049ea6e0ce7bee58f8a6b}{row\+\_\+pin\+\_\+array}} \mbox{[}NUM\+\_\+\+ROW\+\_\+\+PINS\mbox{]}
+\item 
+const uint16\+\_\+t \mbox{\hyperlink{keyboard_8c_a9438408f0582dc69b79f466d9073fdf4}{column\+\_\+pin\+\_\+array}} \mbox{[}NUM\+\_\+\+COLUMN\+\_\+\+PINS\mbox{]}
+\item 
+enum \mbox{\hyperlink{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09}{Key\+State}} \mbox{\hyperlink{keyboard_8c_a8622a526ec42bd71350dc9dc31fc7d4f}{key\+\_\+state}} = \mbox{\hyperlink{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c}{WAIT\+\_\+\+PRESS}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-define-members}
+\Hypertarget{keyboard_8c_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{keyboard_8c_a0a27c6c21376d77d548e9229d67a51de}\index{keyboard.c@{keyboard.c}!KEY\_QUEUE\_SIZE@{KEY\_QUEUE\_SIZE}}
+\index{KEY\_QUEUE\_SIZE@{KEY\_QUEUE\_SIZE}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{KEY\_QUEUE\_SIZE}{KEY\_QUEUE\_SIZE}}
+{\footnotesize\ttfamily \label{keyboard_8c_a0a27c6c21376d77d548e9229d67a51de} 
+\#define KEY\+\_\+\+QUEUE\+\_\+\+SIZE~16}
+
+
+
+\label{doc-enum-members}
+\Hypertarget{keyboard_8c_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09}\index{keyboard.c@{keyboard.c}!KeyState@{KeyState}}
+\index{KeyState@{KeyState}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{KeyState}{KeyState}}
+{\footnotesize\ttfamily \label{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09} 
+enum \mbox{\hyperlink{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09}{Key\+State}}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WAIT\_PRESS@{WAIT\_PRESS}!keyboard.c@{keyboard.c}}\index{keyboard.c@{keyboard.c}!WAIT\_PRESS@{WAIT\_PRESS}}}\Hypertarget{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c}\label{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c} 
+WAIT\+\_\+\+PRESS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WAIT\_RELEASE\_AFTER\_PRESS@{WAIT\_RELEASE\_AFTER\_PRESS}!keyboard.c@{keyboard.c}}\index{keyboard.c@{keyboard.c}!WAIT\_RELEASE\_AFTER\_PRESS@{WAIT\_RELEASE\_AFTER\_PRESS}}}\Hypertarget{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09a164aec81e3119c7cd598426b1998bfba}\label{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09a164aec81e3119c7cd598426b1998bfba} 
+WAIT\+\_\+\+RELEASE\+\_\+\+AFTER\+\_\+\+PRESS&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\label{doc-func-members}
+\Hypertarget{keyboard_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{keyboard_8c_a0b334860563f4a109443e0a604af2300}\index{keyboard.c@{keyboard.c}!HAL\_GPIO\_EXTI\_Falling\_Callback@{HAL\_GPIO\_EXTI\_Falling\_Callback}}
+\index{HAL\_GPIO\_EXTI\_Falling\_Callback@{HAL\_GPIO\_EXTI\_Falling\_Callback}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{HAL\_GPIO\_EXTI\_Falling\_Callback()}{HAL\_GPIO\_EXTI\_Falling\_Callback()}}
+{\footnotesize\ttfamily \label{keyboard_8c_a0b334860563f4a109443e0a604af2300} 
+void HAL\+\_\+\+GPIO\+\_\+\+EXTI\+\_\+\+Falling\+\_\+\+Callback (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{GPIO\+\_\+\+Pin}{}\end{DoxyParamCaption})}
+
+\Hypertarget{keyboard_8c_a537318eafe9182b60dc22ef54966c6a1}\index{keyboard.c@{keyboard.c}!HAL\_GPIO\_EXTI\_Rising\_Callback@{HAL\_GPIO\_EXTI\_Rising\_Callback}}
+\index{HAL\_GPIO\_EXTI\_Rising\_Callback@{HAL\_GPIO\_EXTI\_Rising\_Callback}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{HAL\_GPIO\_EXTI\_Rising\_Callback()}{HAL\_GPIO\_EXTI\_Rising\_Callback()}}
+{\footnotesize\ttfamily \label{keyboard_8c_a537318eafe9182b60dc22ef54966c6a1} 
+void HAL\+\_\+\+GPIO\+\_\+\+EXTI\+\_\+\+Rising\+\_\+\+Callback (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{GPIO\+\_\+\+Pin}{}\end{DoxyParamCaption})}
+
+\Hypertarget{keyboard_8c_ac7dc1595df4c87b0d629406c3862b50f}\index{keyboard.c@{keyboard.c}!key\_pop@{key\_pop}}
+\index{key\_pop@{key\_pop}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{key\_pop()}{key\_pop()}}
+{\footnotesize\ttfamily \label{keyboard_8c_ac7dc1595df4c87b0d629406c3862b50f} 
+uint16\+\_\+t key\+\_\+pop (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Pop keycode from input queue. 
+
+\begin{DoxyReturn}{Returns}
+Next keycode in queue, 0 if empty 
+\end{DoxyReturn}
+\Hypertarget{keyboard_8c_a9517c0e0622b0109ec92b0465b667570}\index{keyboard.c@{keyboard.c}!key\_push@{key\_push}}
+\index{key\_push@{key\_push}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{key\_push()}{key\_push()}}
+{\footnotesize\ttfamily \label{keyboard_8c_a9517c0e0622b0109ec92b0465b667570} 
+void key\+\_\+push (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{keycode}{}\end{DoxyParamCaption})}
+
+
+
+Push keycode to input queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em keycode} & Keycode to enqueue \\
+\hline
+\end{DoxyParams}
+\Hypertarget{keyboard_8c_acd7b45442ea54bd555176e5cfc891413}\index{keyboard.c@{keyboard.c}!scan\_keyboard@{scan\_keyboard}}
+\index{scan\_keyboard@{scan\_keyboard}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{scan\_keyboard()}{scan\_keyboard()}}
+{\footnotesize\ttfamily \label{keyboard_8c_acd7b45442ea54bd555176e5cfc891413} 
+uint16\+\_\+t scan\+\_\+keyboard (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Scan keyboard matrix. 
+
+\begin{DoxyReturn}{Returns}
+Keycode of pressed key, 0 if none, 0x\+FFFF if multiple keys 
+\end{DoxyReturn}
+\Hypertarget{keyboard_8c_a95753604948d9a314fab9322d9da30a2}\index{keyboard.c@{keyboard.c}!wait\_for\_key\_press@{wait\_for\_key\_press}}
+\index{wait\_for\_key\_press@{wait\_for\_key\_press}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{wait\_for\_key\_press()}{wait\_for\_key\_press()}}
+{\footnotesize\ttfamily \label{keyboard_8c_a95753604948d9a314fab9322d9da30a2} 
+void wait\+\_\+for\+\_\+key\+\_\+press (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Wait until a key is pressed Puts system to sleep until key press detected Use \doxylink{orcos_8h_ac7dc1595df4c87b0d629406c3862b50f}{key\+\_\+pop()} to retrieve the keycode. 
+
+
+
+\label{doc-var-members}
+\Hypertarget{keyboard_8c_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{keyboard_8c_a9438408f0582dc69b79f466d9073fdf4}\index{keyboard.c@{keyboard.c}!column\_pin\_array@{column\_pin\_array}}
+\index{column\_pin\_array@{column\_pin\_array}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{column\_pin\_array}{column\_pin\_array}}
+{\footnotesize\ttfamily \label{keyboard_8c_a9438408f0582dc69b79f466d9073fdf4} 
+const uint16\+\_\+t column\+\_\+pin\+\_\+array\mbox{[}NUM\+\_\+\+COLUMN\+\_\+\+PINS\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ GPIO\_PIN\_0,\ GPIO\_PIN\_2,\ GPIO\_PIN\_3,}
+\DoxyCodeLine{\ \ \ \ GPIO\_PIN\_4,\ GPIO\_PIN\_5,\ GPIO\_PIN\_8\}}
+
+\end{DoxyCode}
+\Hypertarget{keyboard_8c_a8622a526ec42bd71350dc9dc31fc7d4f}\index{keyboard.c@{keyboard.c}!key\_state@{key\_state}}
+\index{key\_state@{key\_state}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{key\_state}{key\_state}}
+{\footnotesize\ttfamily \label{keyboard_8c_a8622a526ec42bd71350dc9dc31fc7d4f} 
+enum \mbox{\hyperlink{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09}{Key\+State}} key\+\_\+state = \mbox{\hyperlink{keyboard_8c_a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c}{WAIT\+\_\+\+PRESS}}}
+
+\Hypertarget{keyboard_8c_a8f8a0e0cfc2049ea6e0ce7bee58f8a6b}\index{keyboard.c@{keyboard.c}!row\_pin\_array@{row\_pin\_array}}
+\index{row\_pin\_array@{row\_pin\_array}!keyboard.c@{keyboard.c}}
+\doxysubsubsection{\texorpdfstring{row\_pin\_array}{row\_pin\_array}}
+{\footnotesize\ttfamily \label{keyboard_8c_a8f8a0e0cfc2049ea6e0ce7bee58f8a6b} 
+const uint16\+\_\+t row\+\_\+pin\+\_\+array\mbox{[}NUM\+\_\+\+ROW\+\_\+\+PINS\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ GPIO\_PIN\_0,\ GPIO\_PIN\_1,\ GPIO\_PIN\_2,\ GPIO\_PIN\_3,}
+\DoxyCodeLine{\ \ \ \ GPIO\_PIN\_4,\ GPIO\_PIN\_5,\ GPIO\_PIN\_13,\ GPIO\_PIN\_14,\ GPIO\_PIN\_15\}}
+
+\end{DoxyCode}

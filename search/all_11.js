@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['scan_5fkeyboard_0',['scan_keyboard',['../keyboard_8c.html#acd7b45442ea54bd555176e5cfc891413',1,'scan_keyboard(void):&#160;keyboard.c'],['../orcos_8h.html#acd7b45442ea54bd555176e5cfc891413',1,'scan_keyboard(void):&#160;keyboard.c']]],
+  ['screens_1',['SCREENS',['../group___s_c_r_e_e_n_s.html',1,'']]],
+  ['sec_2',['sec',['../structtm__t.html#aab94d0df559cf3b9fe24fdf148b409aa',1,'tm_t']]],
+  ['second_5fkeycode_3',['SECOND_KEYCODE',['../orcos_8h.html#a4d5dabfae41d6f5321cb07698e127b71',1,'orcos.h']]],
+  ['set_5ftrigconv_4',['set_trigconv',['../calc_8c.html#a2f37c9b67bdf2459424652f57e6d294a',1,'calc.c']]],
+  ['sharp_2ec_5',['sharp.c',['../sharp_8c.html',1,'']]],
+  ['sharp_5fgraphics_2ec_6',['sharp_graphics.c',['../sharp__graphics_8c.html',1,'']]],
+  ['sharp_5flowlevel_2ec_7',['sharp_lowlevel.c',['../sharp__lowlevel_8c.html',1,'']]],
+  ['shift_8',['shift',['../calc_8c.html#afd8d704fff636cf0234e92c1eade927c',1,'calc.c']]],
+  ['sign_9',['sign',['../structt__input.html#a3e6e38af0389778a43532e1b3f2d5a44',1,'t_input']]],
+  ['spi2_5finit_10',['SPI2_Init',['../sharp__lowlevel_8c.html#a5b870155c01678a2480ede985cc4383f',1,'sharp_lowlevel.c']]],
+  ['stack_11',['stack',['../calc_8c.html#a2d64e405609b636747c45ca84a16be1b',1,'calc.c']]],
+  ['stack2_12',['stack2',['../calc_8c.html#a91ad8adb5f142149e19ac380526460a1',1,'calc.c']]],
+  ['stack_5fdrop_13',['stack_drop',['../calc_8c.html#ac94f8529470d75354ec866de60c44950',1,'calc.c']]],
+  ['stack_5fpush_14',['stack_push',['../calc_8c.html#acae0cd21985a8b9d95cae8017a0c949f',1,'calc.c']]],
+  ['stack_5frotate_5fdown_15',['stack_rotate_down',['../calc_8c.html#a6a36cb5e47ae942918c885272af6b685',1,'calc.c']]],
+  ['stack_5frotate_5fup_16',['stack_rotate_up',['../calc_8c.html#a7646e969c9bca9d1687b6409b072f899',1,'calc.c']]],
+  ['stack_5fsize_17',['stack_size',['../calc_8c.html#ac80d2e8d634bda960452fbb6e9f5f7d9',1,'calc.c']]],
+  ['started_18',['started',['../structt__input.html#aa4bfa67bcb0509d4824c9d95840708c2',1,'t_input']]],
+  ['stat_5fchi2_19',['stat_chi2',['../func_8c.html#aca78c03aa726fc9898e76e4b8bdee75f',1,'func.c']]],
+  ['stat_5fmean_20',['stat_mean',['../func_8c.html#a083c75da95a93fa47e9bba306cb50d58',1,'func.c']]],
+  ['sys_5freset_21',['sys_reset',['../power_8c.html#a2b1ed233a180d3991b4832e9de38e176',1,'sys_reset(void):&#160;power.c'],['../orcos_8h.html#a2b1ed233a180d3991b4832e9de38e176',1,'sys_reset(void):&#160;power.c']]],
+  ['sys_5fsleep_22',['sys_sleep',['../power_8c.html#abfb3a43ffa132292fca23ef2cd6535ab',1,'sys_sleep(int off):&#160;power.c'],['../orcos_8h.html#abfb3a43ffa132292fca23ef2cd6535ab',1,'sys_sleep(int off):&#160;power.c']]],
+  ['systemclock_5fconfig_23',['SystemClock_Config',['../orcos_8c.html#a70af21c671abfcc773614a9a4f63d920',1,'orcos.c']]]
+];
