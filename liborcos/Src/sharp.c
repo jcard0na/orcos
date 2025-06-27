@@ -209,7 +209,9 @@ void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
     HAL_RTC_GetTime(hrtc, &Time, RTC_FORMAT_BIN);
     // Do not skip reading the date: This triggers an update to the shadow registers!
     HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);
+#if DEBUG
     SEGGER_RTT_printf(0, "wake up timer event %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
+#endif
 
     // If we are showng the RTC test screen, update the time
     if (current_test_screen == 5)
@@ -420,6 +422,64 @@ static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, u
     }
 }
 
+/**
+ * @brief Blits dx bits from val at position x, y
+ * @param x Position x (0-399)
+ * @param dx Width in bits (1-24)
+ * @param y Position y (0-239)
+ * @param val Value to blit (right-aligned)
+ * @param blt_op BLT_OR, BLT_ANDN or BLT_XOR
+ * @param fill BLT_SET or BLT_NONE
+ */
+void bitblt24(uint32_t x, uint32_t dx, uint32_t y, uint32_t val, int blt_op, int fill)
+{
+    if (x >= LCD_WIDTH || y >= LCD_HEIGHT || dx == 0 || dx > 24)
+        return;
+
+    // Clamp dx to remaining width
+    if (x + dx > LCD_WIDTH)
+        dx = LCD_WIDTH - x;
+
+    // Apply fill mode to source value
+    if (fill == BLT_SET) {
+        if (blt_op == BLT_OR) {
+            val = 0;
+        } else if (blt_op == BLT_ANDN) {
+            val = ~0;
+        }
+    }
+
+    // Process each bit
+    for (uint32_t i = 0; i < dx; i++) {
+        uint32_t bit_pos = x + i;
+        uint8_t bit_val = (val >> (dx - 1 - i)) & 1;
+        uint8_t *byte_ptr = &g_framebuffer[y][bit_pos / 8];
+        uint8_t bit_mask = 1 << bit_pos % 8;
+
+        switch (blt_op) {
+            case BLT_OR:
+                if (bit_val) {
+                    *byte_ptr |= bit_mask;  // Set bit (black pixel)
+                } else if (fill == BLT_SET) {
+                    *byte_ptr &= ~bit_mask; // Clear bit (white pixel)
+                }
+                break;
+            case BLT_ANDN:
+                if (!bit_val) {
+                    *byte_ptr &= ~bit_mask;
+                } else if (fill == BLT_SET) {
+                    *byte_ptr |= bit_mask;
+                }
+                break;
+            case BLT_XOR:
+                if (bit_val) {
+                    *byte_ptr ^= bit_mask;
+                }
+                break;
+        }
+    }
+}
+
 /* Bit reversal helper */
 uint8_t reverse_bits(uint8_t b)
 {
@@ -625,8 +685,30 @@ void LCD_test_screen(uint16_t count)
     }
     if (count == 7)
     {
-        lcd_draw_img(pixel_data_bin, 400, 240, 0, 0, LCD_BLACK);
-        lcd_invert_framebuffer();
+        lcd_clear_buffer();
+        // First line - normal black text
+        lcd_putsAt("Reverse", FONT_24x40, 120, 80, LCD_BLACK);
+        
+        // Second line - highlighted text with background
+        FontDef_t *font = font_lookup(FONT_24x40);
+        uint16_t text_width = strlen("Polish") * font->FontWidth;
+        uint16_t text_height = font->FontHeight;
+        uint16_t padding = 10;
+        
+        // Draw text first
+        lcd_putsAt("Polish", FONT_24x40, 120, 120, LCD_BLACK);
+        
+        // XOR the entire text area (background and text)
+        for (uint16_t y = 120 - padding/2; y < 120 + text_height + padding/2; y++) {
+            uint16_t remaining_width = text_width + padding;
+            uint16_t x_pos = 120 - padding / 2;
+            while (remaining_width > 0) {
+                uint16_t chunk_width = (remaining_width > 24) ? 24 : remaining_width;
+                bitblt24(x_pos, chunk_width, y, 0xFFFFFFFF, BLT_XOR, BLT_NONE);
+                x_pos += chunk_width;
+                remaining_width -= chunk_width;
+            }
+        }
     }
     if (count == 8)
     {

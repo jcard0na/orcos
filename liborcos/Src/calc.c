@@ -1380,7 +1380,7 @@ void apply_memory_minus()
 
 void apply_test(uint16_t code)
 {
-	static uint16_t counter = 0;
+	static uint16_t counter = 6;
 	switch (code)
 	{
 	case OP_TEST_1:

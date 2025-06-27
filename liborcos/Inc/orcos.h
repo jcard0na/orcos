@@ -33,8 +33,18 @@ void LCD_power_on(void);
 void LCD_power_off(int clear);
 bool LCD_is_on(void);
 
+// Blit operations
+#define BLT_OR    0
+#define BLT_ANDN  1
+#define BLT_XOR   2
+
+// Fill modes
+#define BLT_NONE  0
+#define BLT_SET   1
+
 // LCD and draw functions
 // Sends one line data to LCD
+void bitblt24(uint32_t x, uint32_t dx, uint32_t y, uint32_t val, int blt_op, int fill);
 void LCD_write_line(uint8_t *buf);
 void lcd_draw_img(const uint8_t *img, uint32_t w, uint32_t h, uint32_t x, uint32_t y, uint8_t color);
 void lcd_refresh(void);
