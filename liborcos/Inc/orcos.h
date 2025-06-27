@@ -96,6 +96,21 @@ void orcos_init();
 
 uint16_t scan_keyboard(void);
 
+// Keyboard queue functions
+uint16_t key_pop(void);
+void key_push(uint16_t keycode);
+// Sleep until a key is pressed.  Retrieve key with key_pop()
+void wait_for_key_press();
+
+#define KEY_0 1
+#define KEY_SIGN 2
+#define KEY_ENTER 29
+#define MULTIPLE_KEYS_PRESSED(x)  ((x) > 0xff)
+#define FIRST_KEYCODE(x)  ((x) & 0xff)
+#define SECOND_KEYCODE(x)  ((x) >> 8)
+#define TOO_MANY_KEYS_PRESSED(x)  ((x) == 0xffff)
+
+
 // Date/Time functions 
 typedef struct
 {

@@ -214,7 +214,7 @@ static void MX_GPIO_Init(void)
 
     /*Configure GPIO pin : PB15 */
     GPIO_InitStruct.Pin = GPIO_PIN_15;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -254,7 +254,7 @@ static void MX_GPIO_Init(void)
 
     /*Configure GPIO pin : PB8 */
     GPIO_InitStruct.Pin = GPIO_PIN_8;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -363,10 +363,14 @@ void orcos_init()
 {
     DEBUG_PRINT("Started...\n");
 
-    /* MCU Configuration--------------------------------------------------------*/
-
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
+
+#if DEBUG
+    // This is required to keep RTT debug messages flowing when in STOP mode :shrug:
+    // https://community.st.com/t5/stm32-mcus-products/how-to-get-segger-rtt-to-work-with-sleep-modes-on-stm32l0/m-p/121639
+    __HAL_RCC_GPDMA1_CLK_ENABLE();
+#endif
 
     /* Configure the system clock */
     DEBUG_PRINT("Config clocks...\n");
