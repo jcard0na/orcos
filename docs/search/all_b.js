@@ -24,5 +24,6 @@ var searchData=
   ['lcd_5ftest_5fscreen_21',['LCD_test_screen',['../sharp_8c.html#ae05f0ca3bff52d8189c94274e2488cba',1,'sharp.c']]],
   ['lcd_5fwidth_22',['LCD_WIDTH',['../orcos_8h.html#a19693eac3018d3e7800fde141921b812',1,'orcos.h']]],
   ['lcd_5fwrite_5fline_23',['LCD_write_line',['../sharp__lowlevel_8c.html#ab7fa6fde4b3851f3588e9f0283bcaf1d',1,'LCD_write_line(uint8_t *buf):&#160;sharp_lowlevel.c'],['../orcos_8h.html#ab7fa6fde4b3851f3588e9f0283bcaf1d',1,'LCD_write_line(uint8_t *buf):&#160;sharp_lowlevel.c']]],
-  ['line_5finterval_24',['LINE_INTERVAL',['../calc_8c.html#a64836ca42eaa0e249ea8f25f21a43a2b',1,'calc.c']]]
+  ['line_5finterval_24',['LINE_INTERVAL',['../calc_8c.html#a64836ca42eaa0e249ea8f25f21a43a2b',1,'calc.c']]],
+  ['list_25',['Deprecated List',['../deprecated.html',1,'']]]
 ];

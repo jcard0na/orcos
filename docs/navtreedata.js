@@ -25,6 +25,7 @@
 var NAVTREE =
 [
   [ "OpenRPNCalc OS (ORCOS)", "index.html", [
+    [ "Deprecated List", "deprecated.html", null ],
     [ "Topics", "topics.html", "topics" ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
@@ -50,7 +51,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"globals_k.html"
+"globals_func.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';
