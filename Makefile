@@ -248,6 +248,21 @@ docs:
 clean-docs:
 	rm -rf docs/
 
+publish-docs: docs
+# Note: git worktree requires git >= 2.5
+	git worktree add /tmp/gh-pages gh-pages  # Create gh-pages worktree
+	rm -rf /tmp/gh-pages/docs/*              # Clear old files
+	cp -r docs/html/* /tmp/gh-pages/docs     # Copy new docs
+	cd /tmp/gh-pages && \
+	git add docs/* && \
+	if ! git diff-index --quiet HEAD --; then \
+	  git commit -m "Deploy Doxygen docs" && \
+	  git push origin gh-pages; \
+	else \
+	  echo "No documentation changes to commit"; \
+	fi
+	git worktree remove /tmp/gh-pages       # Cleanup
+
 probe-rs:
 	(cd probe-rs && cargo build --release)
 
