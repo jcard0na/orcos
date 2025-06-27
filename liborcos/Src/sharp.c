@@ -159,7 +159,7 @@ static FontDef_t *font_lookup(uint8_t font_id)
  * @param font: Pointer to font definition
  * @param dx: X position (0-399)
  * @param dy: Y position (0-239)
- * @param color: LCD_BLACK (1=set) or LCD_WHITE (1=clear)
+ * @param color: LCD_SET_VALUE (1=set) or LCD_EMPTY_VALUE (1=clear)
  *
  * Note: dx will be rounded to the closest byte-aligned address
  */
@@ -358,7 +358,7 @@ static void lcd_draw_img_aligned(const uint8_t *img, uint32_t w, uint32_t h, uin
                 uint32_t dx = dest_x + sx;
                 if (dx < (LCD_WIDTH / 8))
                 {
-                    if (color == LCD_BLACK)
+                    if (color == LCD_SET_VALUE)
                     {
                         g_framebuffer[dest_y][dx] &= ~src_byte; // Clear bits for white
                     }
@@ -396,7 +396,7 @@ static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, u
             if (dest_byte < (LCD_WIDTH / 8))
             {
                 uint8_t mask = img_byte << shift;
-                if (color == LCD_BLACK)
+                if (color == LCD_SET_VALUE)
                 {
                     g_framebuffer[dest_y][dest_byte] &= ~mask; // Clear bits
                 }
@@ -409,7 +409,7 @@ static void lcd_draw_img_unaligned(const uint8_t *img, uint32_t w, uint32_t h, u
             if (shift != 0 && dest_byte + 1 < (LCD_WIDTH / 8))
             {
                 uint8_t mask = img_byte >> (8 - shift);
-                if (color == LCD_BLACK)
+                if (color == LCD_SET_VALUE)
                 {
                     g_framebuffer[dest_y][dest_byte + 1] &= ~mask;
                 }
@@ -535,7 +535,7 @@ void lcd_draw_test_pattern(uint8_t square_size)
 
 void lcd_fill(uint8_t color)
 {
-    if (color == LCD_BLACK)
+    if (color == LCD_SET_VALUE)
     {
         memset(g_framebuffer, 0x00, sizeof(g_framebuffer));
     }
@@ -547,7 +547,7 @@ void lcd_fill(uint8_t color)
 
 void lcd_clear_buffer(void)
 {
-    lcd_fill(LCD_WHITE);
+    lcd_fill(LCD_EMPTY_VALUE);
 }
 
 // Sends line data to LCD.
@@ -583,7 +583,7 @@ void __lcd_init()
     TIM1_Init();
     HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 4095, RTC_WAKEUPCLOCK_RTCCLK_DIV8, 0);
 
-    lcd_fill(LCD_WHITE);
+    lcd_fill(LCD_EMPTY_VALUE);
 }
 
 int lcd_for_calc(int what_screen)
@@ -601,18 +601,18 @@ int lcd_for_calc(int what_screen)
         char time_str[20];
         snprintf(time_str, sizeof(time_str), "%02d:%02d:%02d",
                  time.hour, time.min, time.sec);
-        lcd_putsAt(time_str, FONT_16x26, 120, 100, LCD_BLACK);
+        lcd_putsAt(time_str, FONT_16x26, 120, 100, LCD_SET_VALUE);
 
         char date_str[20];
         snprintf(date_str, sizeof(date_str), "%02d/%02d/20%02d",
                  date.day, date.month, date.year);
-        lcd_putsAt(date_str, FONT_16x26, 120, 130, LCD_BLACK);
+        lcd_putsAt(date_str, FONT_16x26, 120, 130, LCD_SET_VALUE);
 
         char voltage_str[20];
         uint16_t vbat = (uint16_t) get_vbat();
         snprintf(voltage_str, sizeof(voltage_str), "bat: %01d.%03dV",
                  vbat / 1000, vbat % 1000);
-        lcd_putsAt(voltage_str, FONT_16x26, 0, 0, LCD_BLACK);
+        lcd_putsAt(voltage_str, FONT_16x26, 0, 0, LCD_SET_VALUE);
 
         break;
     default:
@@ -646,25 +646,25 @@ void LCD_test_screen(uint16_t count)
         {
             for (int j = 0; j < 6; j++)
             {
-                lcd_draw_img(rook_img, 32, 32, i * 64, j * 64, LCD_WHITE);
-                lcd_draw_img(rook_img, 32, 32, i * 64, j * 64 + 32, LCD_BLACK);
-                lcd_draw_img(rook_img, 32, 32, i * 64 + 32, j * 64 + 32, LCD_WHITE);
-                lcd_draw_img(rook_img, 32, 32, i * 64 + 32, j * 64, LCD_BLACK);
+                lcd_draw_img(rook_img, 32, 32, i * 64, j * 64, LCD_EMPTY_VALUE);
+                lcd_draw_img(rook_img, 32, 32, i * 64, j * 64 + 32, LCD_SET_VALUE);
+                lcd_draw_img(rook_img, 32, 32, i * 64 + 32, j * 64 + 32, LCD_EMPTY_VALUE);
+                lcd_draw_img(rook_img, 32, 32, i * 64 + 32, j * 64, LCD_SET_VALUE);
             }
         }
     }
     if (count == 4)
     {
         lcd_clear_buffer();
-        lcd_draw_img(pixel_data_bin, 400, 240, 0, 0, LCD_BLACK);
-        lcd_draw_img(test_img, 32, 32, 0, 0, LCD_BLACK);
-        lcd_draw_img(test_img, 32, 32, 50, 50, LCD_BLACK);
-        lcd_draw_img(test_img, 32, 32, 90, 90, LCD_WHITE);
+        lcd_draw_img(pixel_data_bin, 400, 240, 0, 0, LCD_SET_VALUE);
+        lcd_draw_img(test_img, 32, 32, 0, 0, LCD_SET_VALUE);
+        lcd_draw_img(test_img, 32, 32, 50, 50, LCD_SET_VALUE);
+        lcd_draw_img(test_img, 32, 32, 90, 90, LCD_EMPTY_VALUE);
 
-        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 100, 100, LCD_BLACK);
-        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 106, 100, LCD_BLACK);
-        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 100, 106, LCD_BLACK);
-        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 106, 106, LCD_BLACK);
+        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 100, 100, LCD_SET_VALUE);
+        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 106, 100, LCD_SET_VALUE);
+        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 100, 106, LCD_SET_VALUE);
+        lcd_draw_img((uint8_t[]){0xff, 0xff}, 2, 2, 106, 106, LCD_SET_VALUE);
     }
     if (count == 5)
     {
@@ -674,20 +674,20 @@ void LCD_test_screen(uint16_t count)
     {
         lcd_clear_buffer();
 
-        lcd_putsAt("OpenRPNCalc", FONT_24x40, 72, 40, LCD_BLACK);
-        lcd_putsAt("Open Hardware", FONT_16x26, 96, 80, LCD_BLACK);
-        lcd_putsAt("Hello World!", FONT_12x20, 110, 120, LCD_BLACK);
-        lcd_putsAt("Small and Bold!", FONT_7x12b, 130, 140, LCD_BLACK);
-        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 160, LCD_BLACK);
-        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 170, LCD_BLACK);
-        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 180, LCD_BLACK);
-        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 190, LCD_BLACK);
+        lcd_putsAt("OpenRPNCalc", FONT_24x40, 72, 40, LCD_SET_VALUE);
+        lcd_putsAt("Open Hardware", FONT_16x26, 96, 80, LCD_SET_VALUE);
+        lcd_putsAt("Hello World!", FONT_12x20, 110, 120, LCD_SET_VALUE);
+        lcd_putsAt("Small and Bold!", FONT_7x12b, 130, 140, LCD_SET_VALUE);
+        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 160, LCD_SET_VALUE);
+        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 170, LCD_SET_VALUE);
+        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 180, LCD_SET_VALUE);
+        lcd_putsAt("tiny, tiny, behold!", FONT_6x8, 125, 190, LCD_SET_VALUE);
     }
     if (count == 7)
     {
         lcd_clear_buffer();
         // First line - normal black text
-        lcd_putsAt("Reverse", FONT_24x40, 120, 80, LCD_BLACK);
+        lcd_putsAt("Reverse", FONT_24x40, 120, 80, LCD_SET_VALUE);
         
         // Second line - highlighted text with background
         FontDef_t *font = font_lookup(FONT_24x40);
@@ -696,7 +696,7 @@ void LCD_test_screen(uint16_t count)
         uint16_t padding = 10;
         
         // Draw text first
-        lcd_putsAt("Polish", FONT_24x40, 120, 120, LCD_BLACK);
+        lcd_putsAt("Polish", FONT_24x40, 120, 120, LCD_SET_VALUE);
         
         // XOR the entire text area (background and text)
         for (uint16_t y = 120 - padding/2; y < 120 + text_height + padding/2; y++) {
