@@ -53,6 +53,7 @@ void lcd_fill(uint8_t fill_pattern);
 void lcd_clear_buffer(void);
 void lcd_invert_framebuffer(void);
 void lcd_putsAt(const char *str, uint8_t font_id, uint16_t dx, uint16_t dy, uint8_t color);
+void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t dy, int val);
 int lcd_for_calc(int what_screen);
 
 // Screens
