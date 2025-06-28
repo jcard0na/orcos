@@ -1,20 +1,4 @@
 var searchData=
 [
-  ['apply_5fconst_0',['apply_const',['../calc_8c.html#adbbd91fd144160e03cc29845207f806f',1,'calc.c']]],
-  ['apply_5fenter_1',['apply_enter',['../calc_8c.html#a8485fbb880c136ae15ee55b961352bb5',1,'calc.c']]],
-  ['apply_5ffunc_5f1to1_2',['apply_func_1to1',['../calc_8c.html#a75bb46fca331fcdcf6218aacc8689619',1,'calc.c']]],
-  ['apply_5ffunc_5f2to1_3',['apply_func_2to1',['../calc_8c.html#aa79f31b4cc96969b5a09b2ecd77e2cd8',1,'calc.c']]],
-  ['apply_5ffunc_5f2to2_4',['apply_func_2to2',['../calc_8c.html#ad2c93a6a9896b201fc046546c8a992fa',1,'calc.c']]],
-  ['apply_5ffunc_5f3to1_5',['apply_func_3to1',['../calc_8c.html#ae789f2145e2af47130abd02c2714d519',1,'calc.c']]],
-  ['apply_5ffunc_5fstat_6',['apply_func_stat',['../calc_8c.html#a560572d422d93271f2a6167fbe6c22e6',1,'calc.c']]],
-  ['apply_5fmemory_5fminus_7',['apply_memory_minus',['../calc_8c.html#ae914cca5bd413ed7c4fc8634f0b56107',1,'calc.c']]],
-  ['apply_5fmemory_5fplus_8',['apply_memory_plus',['../calc_8c.html#ac065bd7461a4fca71fd9e3c708ee11b7',1,'calc.c']]],
-  ['apply_5fmemory_5frcl_9',['apply_memory_rcl',['../calc_8c.html#a8894ecfbf758b939e5122c9f279be6e8',1,'calc.c']]],
-  ['apply_5fmemory_5frcl_5fx_10',['apply_memory_rcl_x',['../calc_8c.html#a4d9c47116dcb6d4938c09ce75f0147da',1,'calc.c']]],
-  ['apply_5fmemory_5fsto_11',['apply_memory_sto',['../calc_8c.html#ac70dc33f62b272f5da3589669b86e2ce',1,'calc.c']]],
-  ['apply_5fmemory_5fsto_5fx_12',['apply_memory_sto_x',['../calc_8c.html#aeaa44989644967f123c2880a0354331d',1,'calc.c']]],
-  ['apply_5fop_13',['apply_op',['../calc_8c.html#a1bab80d411d0774ae39cb13f68244e29',1,'calc.c']]],
-  ['apply_5fprog_14',['apply_prog',['../calc_8c.html#a25683da676a6e47e69b1967be8073e5e',1,'calc.c']]],
-  ['apply_5fstack_15',['apply_stack',['../calc_8c.html#a2162cb7b664b638012f6b7d1ef8af648',1,'calc.c']]],
-  ['apply_5ftest_16',['apply_test',['../calc_8c.html#ab90752fd17645ed795932ab32e3092e3',1,'calc.c']]]
+  ['bitblt24_0',['bitblt24',['../sharp__graphics_8c.html#aefbfdc2f65e2457837906fee3a220795',1,'bitblt24(uint32_t x, uint32_t dx, uint32_t y, uint32_t val, int blt_op, int fill):&#160;sharp_graphics.c'],['../orcos_8h.html#aefbfdc2f65e2457837906fee3a220795',1,'bitblt24(uint32_t x, uint32_t dx, uint32_t y, uint32_t val, int blt_op, int fill):&#160;sharp_graphics.c']]]
 ];

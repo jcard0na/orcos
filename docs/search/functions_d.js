@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['orcos_5finit_0',['orcos_init',['../orcos_8c.html#a9b34c73adeff06a8b4a11fbc0cfdc659',1,'orcos_init():&#160;orcos.c'],['../orcos_8h.html#a9b34c73adeff06a8b4a11fbc0cfdc659',1,'orcos_init():&#160;orcos.c']]]
+  ['reverse_5fbits_0',['reverse_bits',['../sharp__graphics_8c.html#af2de9d55e2e628cd9ddf92ab740934ee',1,'sharp_graphics.c']]],
+  ['rtc_5fread_1',['rtc_read',['../rtc_8c.html#ae1400f2618332aec937a37843c434709',1,'rtc_read(tm_t *tm, dt_t *dt):&#160;rtc.c'],['../orcos_8h.html#ae1400f2618332aec937a37843c434709',1,'rtc_read(tm_t *tm, dt_t *dt):&#160;rtc.c']]]
 ];

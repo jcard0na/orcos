@@ -96,58 +96,72 @@ $(function(){initNavTree('main_8c_source.html','',''); });
 <a href="main_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;main.h&quot;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;<a class="code" href="orcos_8h.html">orcos.h</a>&quot;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span></div>
-<div class="foldopen" id="foldopen00009" data-start="{" data-end="}">
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="main_8c.html#a840291bc02cba5474a4cb46a9b9566fe">    9</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="main_8c.html#a840291bc02cba5474a4cb46a9b9566fe">main</a>(<span class="keywordtype">void</span>)</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>  <a class="code hl_function" href="orcos_8c.html#a9b34c73adeff06a8b4a11fbc0cfdc659">orcos_init</a>();</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  <a class="code hl_function" href="calc_8c.html#a7bde9ca97dfc4379a95339f01f11d982">calc_init</a>();</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>  <span class="keywordflow">while</span> (1)</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    uint16_t keycode = 0;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    uint16_t last_keycode = 0;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <a class="code hl_function" href="keyboard_8c.html#a95753604948d9a314fab9322d9da30a2">wait_for_key_press</a>();</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    keycode = <a class="code hl_function" href="keyboard_8c.html#ac7dc1595df4c87b0d629406c3862b50f">key_pop</a>();</div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span></div>
+<div class="foldopen" id="foldopen00010" data-start="{" data-end="}">
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="main_8c.html#a840291bc02cba5474a4cb46a9b9566fe">   10</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="main_8c.html#a840291bc02cba5474a4cb46a9b9566fe">main</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>{</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  <span class="keywordtype">bool</span> shift = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>  <span class="keyword">static</span> <span class="keywordtype">int</span> counter = 0;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>  <a class="code hl_function" href="orcos_8c.html#a9b34c73adeff06a8b4a11fbc0cfdc659">orcos_init</a>();</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  <a class="code hl_function" href="sharp_8c.html#a62f147db55f878fadcba3ffdb7acf29b">LCD_power_off</a>(1);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  <span class="keywordflow">while</span> (1)</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    uint16_t keycode = 0;</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordflow">if</span> (keycode == 54 &amp;&amp; !<a class="code hl_function" href="sharp_8c.html#a7db02e55c427894ec13cbd0de3cccaee">LCD_is_on</a>() &amp;&amp; last_keycode == 0)</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    { <span class="comment">// Calculator was OFF and the ON button was pressed</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>      <a class="code hl_function" href="sharp_8c.html#a974793f3b67a06e42f2d2220085d6450">LCD_power_on</a>();</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>      keycode = 0;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    }</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordtype">int</span> ret = 1;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="sharp_8c.html#a7db02e55c427894ec13cbd0de3cccaee">LCD_is_on</a>())</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>      <span class="keywordflow">if</span> (keycode)</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>      {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        ret = <a class="code hl_function" href="calc_8c.html#a75038911fbd95aa11f1c8241641918f9">calc_on_key</a>(keycode);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>      }</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>      <span class="keywordflow">if</span> (!ret)</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>      { <span class="comment">// OFF command received</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <a class="code hl_function" href="sharp_8c.html#a62f147db55f878fadcba3ffdb7acf29b">LCD_power_off</a>(1);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <a class="code hl_function" href="power_8c.html#abfb3a43ffa132292fca23ef2cd6535ab">sys_sleep</a>(1);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>      }</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    }</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    last_keycode = keycode;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  }</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>}</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="comment">// blocking call -&gt; wait for any key</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_function" href="keyboard_8c.html#a95753604948d9a314fab9322d9da30a2">wait_for_key_press</a>();</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    keycode = <a class="code hl_function" href="keyboard_8c.html#ac7dc1595df4c87b0d629406c3862b50f">key_pop</a>();</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordflow">switch</span> (keycode)</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordflow">case</span> <a class="code hl_define" href="group___k_e_y_c_o_d_e_s.html#gacc696937f28ef5bdd90eeb8addd0ef82">KEY_F</a>:</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>      shift = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordflow">case</span> <a class="code hl_define" href="group___k_e_y_c_o_d_e_s.html#ga493549a47eea62a36d0a11cc214e8b30">KEY_SIGN</a>:</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>      <span class="keywordflow">if</span> (shift)</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <a class="code hl_function" href="sharp_8c.html#ae05f0ca3bff52d8189c94274e2488cba">LCD_test_screen</a>(++counter);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordflow">case</span> <a class="code hl_define" href="group___k_e_y_c_o_d_e_s.html#ga51ca76d1508339b071a974798b90474b">KEY_0</a>:</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>      <span class="keywordflow">if</span> (shift)</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <a class="code hl_function" href="sharp_8c.html#ae05f0ca3bff52d8189c94274e2488cba">LCD_test_screen</a>(--counter);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordflow">case</span> <a class="code hl_define" href="group___k_e_y_c_o_d_e_s.html#gac2491095a425d82ae937bb194de40961">KEY_ON</a>:</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>      <span class="keywordflow">if</span> (shift)</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>      {</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <a class="code hl_function" href="sharp_8c.html#a62f147db55f878fadcba3ffdb7acf29b">LCD_power_off</a>(1);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="comment">// also blocking call -&gt; wait for ON</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <a class="code hl_function" href="power_8c.html#abfb3a43ffa132292fca23ef2cd6535ab">sys_sleep</a>(1);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>      }</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>      <span class="keywordflow">if</span> (!<a class="code hl_function" href="sharp_8c.html#a7db02e55c427894ec13cbd0de3cccaee">LCD_is_on</a>())</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>      {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <a class="code hl_function" href="sharp_8c.html#a974793f3b67a06e42f2d2220085d6450">LCD_power_on</a>();</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>      }</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="comment">// Any key other keycode clear &#39;shift&#39;</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordflow">if</span> (keycode != <a class="code hl_define" href="group___k_e_y_c_o_d_e_s.html#ga02531bf28bf1c98caf3da055f22a08bd">KEY_NONE</a> &amp;&amp; keycode != <a class="code hl_define" href="group___k_e_y_c_o_d_e_s.html#gacc696937f28ef5bdd90eeb8addd0ef82">KEY_F</a>)</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>      shift = 0;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  }</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}</div>
 </div>
-<div class="ttc" id="acalc_8c_html_a75038911fbd95aa11f1c8241641918f9"><div class="ttname"><a href="calc_8c.html#a75038911fbd95aa11f1c8241641918f9">calc_on_key</a></div><div class="ttdeci">int calc_on_key(int c)</div><div class="ttdoc">calc_on_key</div><div class="ttdef"><b>Definition</b> <a href="calc_8c_source.html#l01623">calc.c:1623</a></div></div>
-<div class="ttc" id="acalc_8c_html_a7bde9ca97dfc4379a95339f01f11d982"><div class="ttname"><a href="calc_8c.html#a7bde9ca97dfc4379a95339f01f11d982">calc_init</a></div><div class="ttdeci">void calc_init()</div><div class="ttdoc">calc_init</div><div class="ttdef"><b>Definition</b> <a href="calc_8c_source.html#l00797">calc.c:797</a></div></div>
+<div class="ttc" id="agroup___k_e_y_c_o_d_e_s_html_ga02531bf28bf1c98caf3da055f22a08bd"><div class="ttname"><a href="group___k_e_y_c_o_d_e_s.html#ga02531bf28bf1c98caf3da055f22a08bd">KEY_NONE</a></div><div class="ttdeci">#define KEY_NONE</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00183">orcos.h:183</a></div></div>
+<div class="ttc" id="agroup___k_e_y_c_o_d_e_s_html_ga493549a47eea62a36d0a11cc214e8b30"><div class="ttname"><a href="group___k_e_y_c_o_d_e_s.html#ga493549a47eea62a36d0a11cc214e8b30">KEY_SIGN</a></div><div class="ttdeci">#define KEY_SIGN</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00185">orcos.h:185</a></div></div>
+<div class="ttc" id="agroup___k_e_y_c_o_d_e_s_html_ga51ca76d1508339b071a974798b90474b"><div class="ttname"><a href="group___k_e_y_c_o_d_e_s.html#ga51ca76d1508339b071a974798b90474b">KEY_0</a></div><div class="ttdeci">#define KEY_0</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00184">orcos.h:184</a></div></div>
+<div class="ttc" id="agroup___k_e_y_c_o_d_e_s_html_gac2491095a425d82ae937bb194de40961"><div class="ttname"><a href="group___k_e_y_c_o_d_e_s.html#gac2491095a425d82ae937bb194de40961">KEY_ON</a></div><div class="ttdeci">#define KEY_ON</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00188">orcos.h:188</a></div></div>
+<div class="ttc" id="agroup___k_e_y_c_o_d_e_s_html_gacc696937f28ef5bdd90eeb8addd0ef82"><div class="ttname"><a href="group___k_e_y_c_o_d_e_s.html#gacc696937f28ef5bdd90eeb8addd0ef82">KEY_F</a></div><div class="ttdeci">#define KEY_F</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00187">orcos.h:187</a></div></div>
 <div class="ttc" id="akeyboard_8c_html_a95753604948d9a314fab9322d9da30a2"><div class="ttname"><a href="keyboard_8c.html#a95753604948d9a314fab9322d9da30a2">wait_for_key_press</a></div><div class="ttdeci">void wait_for_key_press()</div><div class="ttdoc">Wait until a key is pressed Puts system to sleep until key press detected Use key_pop() to retrieve t...</div><div class="ttdef"><b>Definition</b> <a href="keyboard_8c_source.html#l00050">keyboard.c:50</a></div></div>
 <div class="ttc" id="akeyboard_8c_html_ac7dc1595df4c87b0d629406c3862b50f"><div class="ttname"><a href="keyboard_8c.html#ac7dc1595df4c87b0d629406c3862b50f">key_pop</a></div><div class="ttdeci">uint16_t key_pop(void)</div><div class="ttdoc">Pop keycode from input queue.</div><div class="ttdef"><b>Definition</b> <a href="keyboard_8c_source.html#l00039">keyboard.c:39</a></div></div>
-<div class="ttc" id="amain_8c_html_a840291bc02cba5474a4cb46a9b9566fe"><div class="ttname"><a href="main_8c.html#a840291bc02cba5474a4cb46a9b9566fe">main</a></div><div class="ttdeci">int main(void)</div><div class="ttdoc">The application entry point.</div><div class="ttdef"><b>Definition</b> <a href="#l00009">main.c:9</a></div></div>
+<div class="ttc" id="amain_8c_html_a840291bc02cba5474a4cb46a9b9566fe"><div class="ttname"><a href="main_8c.html#a840291bc02cba5474a4cb46a9b9566fe">main</a></div><div class="ttdeci">int main(void)</div><div class="ttdoc">The application entry point.</div><div class="ttdef"><b>Definition</b> <a href="#l00010">main.c:10</a></div></div>
 <div class="ttc" id="aorcos_8c_html_a9b34c73adeff06a8b4a11fbc0cfdc659"><div class="ttname"><a href="orcos_8c.html#a9b34c73adeff06a8b4a11fbc0cfdc659">orcos_init</a></div><div class="ttdeci">void orcos_init()</div><div class="ttdoc">Initialize ORCOS library Sets up hardware peripherals, clocks, and display.</div><div class="ttdef"><b>Definition</b> <a href="orcos_8c_source.html#l00362">orcos.c:362</a></div></div>
 <div class="ttc" id="aorcos_8h_html"><div class="ttname"><a href="orcos_8h.html">orcos.h</a></div><div class="ttdoc">OpenRPNCalc Operating System (ORCOS) library header.</div></div>
 <div class="ttc" id="apower_8c_html_abfb3a43ffa132292fca23ef2cd6535ab"><div class="ttname"><a href="power_8c.html#abfb3a43ffa132292fca23ef2cd6535ab">sys_sleep</a></div><div class="ttdeci">void sys_sleep(int off)</div><div class="ttdoc">Put calculator into low-power sleep mode.</div><div class="ttdef"><b>Definition</b> <a href="power_8c_source.html#l00015">power.c:15</a></div></div>
-<div class="ttc" id="asharp_8c_html_a62f147db55f878fadcba3ffdb7acf29b"><div class="ttname"><a href="sharp_8c.html#a62f147db55f878fadcba3ffdb7acf29b">LCD_power_off</a></div><div class="ttdeci">void LCD_power_off(int clear)</div><div class="ttdoc">Power off the LCD display.</div><div class="ttdef"><b>Definition</b> <a href="sharp_8c_source.html#l00107">sharp.c:107</a></div></div>
-<div class="ttc" id="asharp_8c_html_a7db02e55c427894ec13cbd0de3cccaee"><div class="ttname"><a href="sharp_8c.html#a7db02e55c427894ec13cbd0de3cccaee">LCD_is_on</a></div><div class="ttdeci">bool LCD_is_on()</div><div class="ttdoc">Check if LCD is powered on.</div><div class="ttdef"><b>Definition</b> <a href="sharp_8c_source.html#l00122">sharp.c:122</a></div></div>
+<div class="ttc" id="asharp_8c_html_a62f147db55f878fadcba3ffdb7acf29b"><div class="ttname"><a href="sharp_8c.html#a62f147db55f878fadcba3ffdb7acf29b">LCD_power_off</a></div><div class="ttdeci">void LCD_power_off(int clear)</div><div class="ttdoc">Power off the LCD display.</div><div class="ttdef"><b>Definition</b> <a href="sharp_8c_source.html#l00106">sharp.c:106</a></div></div>
+<div class="ttc" id="asharp_8c_html_a7db02e55c427894ec13cbd0de3cccaee"><div class="ttname"><a href="sharp_8c.html#a7db02e55c427894ec13cbd0de3cccaee">LCD_is_on</a></div><div class="ttdeci">bool LCD_is_on()</div><div class="ttdoc">Check if LCD is powered on.</div><div class="ttdef"><b>Definition</b> <a href="sharp_8c_source.html#l00121">sharp.c:121</a></div></div>
 <div class="ttc" id="asharp_8c_html_a974793f3b67a06e42f2d2220085d6450"><div class="ttname"><a href="sharp_8c.html#a974793f3b67a06e42f2d2220085d6450">LCD_power_on</a></div><div class="ttdeci">void LCD_power_on()</div><div class="ttdoc">Power on the LCD display Enables power supply and initializes display controller.</div><div class="ttdef"><b>Definition</b> <a href="sharp_8c_source.html#l00088">sharp.c:88</a></div></div>
+<div class="ttc" id="asharp_8c_html_ae05f0ca3bff52d8189c94274e2488cba"><div class="ttname"><a href="sharp_8c.html#ae05f0ca3bff52d8189c94274e2488cba">LCD_test_screen</a></div><div class="ttdeci">void LCD_test_screen(uint16_t count)</div><div class="ttdoc">Show a test screen on the display.</div><div class="ttdef"><b>Definition</b> <a href="sharp_8c_source.html#l00185">sharp.c:185</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

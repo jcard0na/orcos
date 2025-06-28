@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['font_5flookup_0',['font_lookup',['../sharp__graphics_8c.html#ad07a8e124cb0b8646f7a99437bfa41ab',1,'sharp_graphics.c']]]
+  ['get_5fvbat_0',['get_vbat',['../io_8c.html#abd63e11c318837c3f2db8008f4f3caa1',1,'get_vbat():&#160;io.c'],['../orcos_8h.html#ae2b9f81fcd7ab4bd30b2d9f6eecc9f52',1,'get_vbat(void):&#160;io.c']]]
 ];

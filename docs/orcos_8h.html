@@ -155,6 +155,7 @@ Macros</h2></td></tr>
 <tr class="memitem:gaa583a3359bf095db14efcef2b1ecfb6a" id="r_gaa583a3359bf095db14efcef2b1ecfb6a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___s_c_r_e_e_n_s.html#gaa583a3359bf095db14efcef2b1ecfb6a">DISP_POWER_CHECK</a>&#160;&#160;&#160;24</td></tr>
 <tr class="memitem:gae63a3e60794f152af70ffe586ffc3d11" id="r_gae63a3e60794f152af70ffe586ffc3d11"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___s_c_r_e_e_n_s.html#gae63a3e60794f152af70ffe586ffc3d11">DISP_FLASH_CONNECT_USB</a>&#160;&#160;&#160;26</td></tr>
 <tr class="memitem:a88edd2aa4feabff4af21a997d5d8aa23" id="r_a88edd2aa4feabff4af21a997d5d8aa23"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a88edd2aa4feabff4af21a997d5d8aa23">DEBUG_PRINT</a>(...)</td></tr>
+<tr class="memitem:ga02531bf28bf1c98caf3da055f22a08bd" id="r_ga02531bf28bf1c98caf3da055f22a08bd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___k_e_y_c_o_d_e_s.html#ga02531bf28bf1c98caf3da055f22a08bd">KEY_NONE</a>&#160;&#160;&#160;0</td></tr>
 <tr class="memitem:ga51ca76d1508339b071a974798b90474b" id="r_ga51ca76d1508339b071a974798b90474b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___k_e_y_c_o_d_e_s.html#ga51ca76d1508339b071a974798b90474b">KEY_0</a>&#160;&#160;&#160;1</td></tr>
 <tr class="memitem:ga493549a47eea62a36d0a11cc214e8b30" id="r_ga493549a47eea62a36d0a11cc214e8b30"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___k_e_y_c_o_d_e_s.html#ga493549a47eea62a36d0a11cc214e8b30">KEY_SIGN</a>&#160;&#160;&#160;2</td></tr>
 <tr class="memitem:gabaee5edb96e542206ae6c8102ac228af" id="r_gabaee5edb96e542206ae6c8102ac228af"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___k_e_y_c_o_d_e_s.html#gabaee5edb96e542206ae6c8102ac228af">KEY_ENTER</a>&#160;&#160;&#160;29</td></tr>
@@ -175,6 +176,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:a62f147db55f878fadcba3ffdb7acf29b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Power off the LCD display.  <br /></td></tr>
 <tr class="memitem:acf548d651a5da654437aea5b7390ce27" id="r_acf548d651a5da654437aea5b7390ce27"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf548d651a5da654437aea5b7390ce27">LCD_is_on</a> (void)</td></tr>
 <tr class="memdesc:acf548d651a5da654437aea5b7390ce27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if LCD is powered on.  <br /></td></tr>
+<tr class="memitem:ae05f0ca3bff52d8189c94274e2488cba" id="r_ae05f0ca3bff52d8189c94274e2488cba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae05f0ca3bff52d8189c94274e2488cba">LCD_test_screen</a> (uint16_t count)</td></tr>
+<tr class="memdesc:ae05f0ca3bff52d8189c94274e2488cba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show a test screen on the display.  <br /></td></tr>
 <tr class="memitem:aefbfdc2f65e2457837906fee3a220795" id="r_aefbfdc2f65e2457837906fee3a220795"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefbfdc2f65e2457837906fee3a220795">bitblt24</a> (uint32_t x, uint32_t dx, uint32_t y, uint32_t val, int blt_op, int fill)</td></tr>
 <tr class="memdesc:aefbfdc2f65e2457837906fee3a220795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a 24-bit wide bitblt operation.  <br /></td></tr>
 <tr class="memitem:ab7fa6fde4b3851f3588e9f0283bcaf1d" id="r_ab7fa6fde4b3851f3588e9f0283bcaf1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7fa6fde4b3851f3588e9f0283bcaf1d">LCD_write_line</a> (uint8_t *buf)</td></tr>
@@ -212,10 +215,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a95753604948d9a314fab9322d9da30a2" id="r_a95753604948d9a314fab9322d9da30a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95753604948d9a314fab9322d9da30a2">wait_for_key_press</a> ()</td></tr>
 <tr class="memdesc:a95753604948d9a314fab9322d9da30a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until a key is pressed Puts system to sleep until key press detected Use <a class="el" href="#ac7dc1595df4c87b0d629406c3862b50f" title="Pop keycode from input queue.">key_pop()</a> to retrieve the keycode.  <br /></td></tr>
 <tr class="memitem:ae1400f2618332aec937a37843c434709" id="r_ae1400f2618332aec937a37843c434709"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1400f2618332aec937a37843c434709">rtc_read</a> (<a class="el" href="structtm__t.html">tm_t</a> *tm, <a class="el" href="structdt__t.html">dt_t</a> *dt)</td></tr>
-<tr class="memitem:ad214981cfe5b8b5b33ba640d76263ae5" id="r_ad214981cfe5b8b5b33ba640d76263ae5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad214981cfe5b8b5b33ba640d76263ae5">calc_init</a> (void)</td></tr>
-<tr class="memdesc:ad214981cfe5b8b5b33ba640d76263ae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">calc_init  <br /></td></tr>
-<tr class="memitem:a71f7623ee5758a1fc69beb4959aa1d43" id="r_a71f7623ee5758a1fc69beb4959aa1d43"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71f7623ee5758a1fc69beb4959aa1d43">calc_on_key</a> (int)</td></tr>
-<tr class="memdesc:a71f7623ee5758a1fc69beb4959aa1d43"><td class="mdescLeft">&#160;</td><td class="mdescRight">calc_on_key  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>OpenRPNCalc Operating System (ORCOS) library header. </p>
@@ -237,7 +236,7 @@ Functions</h2></td></tr>
 
 <p>AND-NOT operation (clear pixels) </p>
 
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00059">59</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00062">62</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -256,7 +255,7 @@ Functions</h2></td></tr>
 <p>Fill modes for blit operations. </p>
 <p>No fill - use source value </p>
 
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00063">63</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00066">66</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -275,7 +274,7 @@ Functions</h2></td></tr>
 <p>Blit operation types. </p>
 <p>OR operation (set pixels) </p>
 
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00058">58</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00061">61</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -293,7 +292,7 @@ Functions</h2></td></tr>
 
 <p>Fill with constant value. </p>
 
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00064">64</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00067">67</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -311,7 +310,7 @@ Functions</h2></td></tr>
 
 <p>XOR operation (toggle pixels) </p>
 
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00060">60</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00063">63</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -330,7 +329,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00149">149</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00152">152</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -350,7 +349,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">((x) &amp; 0xff)</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00188">188</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00192">192</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -554,7 +553,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">((x) &gt; 0xff)</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00187">187</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00191">191</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -574,7 +573,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">((x) &gt;&gt; 8)</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00189">189</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00193">193</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -594,7 +593,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">((x) == 0xffff)</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00190">190</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orcos_8h_source.html#l00194">194</a> of file <a class="el" href="orcos_8h_source.html">orcos.h</a>.</p>
 
 </div>
 </div>
@@ -641,50 +640,6 @@ Functions</h2></td></tr>
 <p>Draw a 24-bit wide bitblt operation. </p>
 
 <p class="definition">Definition at line <a class="el" href="sharp__graphics_8c_source.html#l00171">171</a> of file <a class="el" href="sharp__graphics_8c_source.html">sharp_graphics.c</a>.</p>
-
-</div>
-</div>
-<a id="ad214981cfe5b8b5b33ba640d76263ae5" name="ad214981cfe5b8b5b33ba640d76263ae5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad214981cfe5b8b5b33ba640d76263ae5">&#9670;&#160;</a></span>calc_init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void calc_init </td>
-          <td>(</td>
-          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>calc_init </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated</a></b></dt><dd>Not to be used. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="calc_8c_source.html#l00797">797</a> of file <a class="el" href="calc_8c_source.html">calc.c</a>.</p>
-
-</div>
-</div>
-<a id="a71f7623ee5758a1fc69beb4959aa1d43" name="a71f7623ee5758a1fc69beb4959aa1d43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71f7623ee5758a1fc69beb4959aa1d43">&#9670;&#160;</a></span>calc_on_key()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int calc_on_key </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>c</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>calc_on_key </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated</a></b></dt><dd>Not to be used. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="calc_8c_source.html#l01623">1623</a> of file <a class="el" href="calc_8c_source.html">calc.c</a>.</p>
 
 </div>
 </div>
@@ -925,7 +880,7 @@ Functions</h2></td></tr>
 <p>Draw calculator screen based on mode. </p>
 <p>Inverts all pixels in the global framebuffer (black becomes white and vice versa) </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00151">151</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00150">150</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -968,7 +923,7 @@ Functions</h2></td></tr>
 <p>Check if LCD is powered on. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if LCD is powered on, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00122">122</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00121">121</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -995,7 +950,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00107">107</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00106">106</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -1077,7 +1032,28 @@ Functions</h2></td></tr>
 
 <p>Refresh the LCD with current framebuffer contents. </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp__lowlevel_8c_source.html#l00109">109</a> of file <a class="el" href="sharp__lowlevel_8c_source.html">sharp_lowlevel.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp__lowlevel_8c_source.html#l00110">110</a> of file <a class="el" href="sharp__lowlevel_8c_source.html">sharp_lowlevel.c</a>.</p>
+
+</div>
+</div>
+<a id="ae05f0ca3bff52d8189c94274e2488cba" name="ae05f0ca3bff52d8189c94274e2488cba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae05f0ca3bff52d8189c94274e2488cba">&#9670;&#160;</a></span>LCD_test_screen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LCD_test_screen </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t</td>          <td class="paramname"><span class="paramname"><em>count</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show a test screen on the display. </p>
+
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00185">185</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -1098,7 +1074,7 @@ Functions</h2></td></tr>
 
 <p>Write a line buffer to LCD. </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp__lowlevel_8c_source.html#l00097">97</a> of file <a class="el" href="sharp__lowlevel_8c_source.html">sharp_lowlevel.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp__lowlevel_8c_source.html#l00098">98</a> of file <a class="el" href="sharp__lowlevel_8c_source.html">sharp_lowlevel.c</a>.</p>
 
 </div>
 </div>

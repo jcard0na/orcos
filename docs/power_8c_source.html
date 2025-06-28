@@ -114,7 +114,7 @@ $(function(){initNavTree('power_8c_source.html','',''); });
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordflow">if</span> (off) {</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="comment">// Only set the row pin corresponding to ON/OFF key to ext. interrupt mode</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        GPIO_InitStruct.Pin = GPIO_PIN_15;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        GPIO_InitStruct.Pull = GPIO_PULLUP; <span class="comment">// Use external 1M pull-up to minimise current draw</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        GPIO_InitStruct.Pull = GPIO_NOPULL; <span class="comment">// Use external 1M pull-up to minimise current draw</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        HAL_GPIO_Init(GPIOB, &amp;GPIO_InitStruct);</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
@@ -173,7 +173,7 @@ $(function(){initNavTree('power_8c_source.html','',''); });
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>}</div>
 </div>
 <div class="ttc" id="aorcos_8h_html"><div class="ttname"><a href="orcos_8h.html">orcos.h</a></div><div class="ttdoc">OpenRPNCalc Operating System (ORCOS) library header.</div></div>
-<div class="ttc" id="aorcos_8h_html_a88edd2aa4feabff4af21a997d5d8aa23"><div class="ttname"><a href="orcos_8h.html#a88edd2aa4feabff4af21a997d5d8aa23">DEBUG_PRINT</a></div><div class="ttdeci">#define DEBUG_PRINT(...)</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00149">orcos.h:149</a></div></div>
+<div class="ttc" id="aorcos_8h_html_a88edd2aa4feabff4af21a997d5d8aa23"><div class="ttname"><a href="orcos_8h.html#a88edd2aa4feabff4af21a997d5d8aa23">DEBUG_PRINT</a></div><div class="ttdeci">#define DEBUG_PRINT(...)</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00152">orcos.h:152</a></div></div>
 <div class="ttc" id="apower_8c_html_a2b1ed233a180d3991b4832e9de38e176"><div class="ttname"><a href="power_8c.html#a2b1ed233a180d3991b4832e9de38e176">sys_reset</a></div><div class="ttdeci">void sys_reset(void)</div><div class="ttdoc">Performs a system reset by triggering the CPU&#39;s reset.</div><div class="ttdef"><b>Definition</b> <a href="#l00074">power.c:74</a></div></div>
 <div class="ttc" id="apower_8c_html_abfb3a43ffa132292fca23ef2cd6535ab"><div class="ttname"><a href="power_8c.html#abfb3a43ffa132292fca23ef2cd6535ab">sys_sleep</a></div><div class="ttdeci">void sys_sleep(int off)</div><div class="ttdoc">Put calculator into low-power sleep mode.</div><div class="ttdef"><b>Definition</b> <a href="#l00015">power.c:15</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

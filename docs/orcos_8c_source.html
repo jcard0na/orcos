@@ -275,7 +275,7 @@ $(function(){initNavTree('orcos_8c_source.html','',''); });
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="comment">                             PB14 PB3 PB4 PB5 */</span></div>
 <div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5;</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    GPIO_InitStruct.Pull = GPIO_PULLUP;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    GPIO_InitStruct.Pull = GPIO_NOPULL;</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    HAL_GPIO_Init(GPIOB, &amp;GPIO_InitStruct);</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="comment">/*Configure GPIO pin : PB15 */</span></div>
@@ -436,9 +436,7 @@ $(function(){initNavTree('orcos_8c_source.html','',''); });
 <div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    MX_ADC1_Init();</div>
 <div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span> </div>
 <div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>    <a class="code hl_function" href="sharp__lowlevel_8c.html#a770bf8b1ee77e02b3bc79fcfa81e8938">__lcd_init</a>();</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span> </div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>    <a class="code hl_function" href="sharp_8c.html#a974793f3b67a06e42f2d2220085d6450">LCD_power_on</a>();</div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>}</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>}</div>
 </div>
 <div class="ttc" id="aorcos_8c_html_a1730ffe1e560465665eb47d9264826f9"><div class="ttname"><a href="orcos_8c.html#a1730ffe1e560465665eb47d9264826f9">Error_Handler</a></div><div class="ttdeci">void Error_Handler(void)</div><div class="ttdoc">This function is executed in case of error occurrence.</div><div class="ttdef"><b>Definition</b> <a href="#l00336">orcos.c:336</a></div></div>
 <div class="ttc" id="aorcos_8c_html_a22b804736f5648d52f639b2647d4ed13"><div class="ttname"><a href="orcos_8c.html#a22b804736f5648d52f639b2647d4ed13">hadc1</a></div><div class="ttdeci">ADC_HandleTypeDef hadc1</div><div class="ttdef"><b>Definition</b> <a href="#l00006">orcos.c:6</a></div></div>
@@ -446,8 +444,7 @@ $(function(){initNavTree('orcos_8c_source.html','',''); });
 <div class="ttc" id="aorcos_8c_html_a9b34c73adeff06a8b4a11fbc0cfdc659"><div class="ttname"><a href="orcos_8c.html#a9b34c73adeff06a8b4a11fbc0cfdc659">orcos_init</a></div><div class="ttdeci">void orcos_init()</div><div class="ttdoc">Initialize ORCOS library Sets up hardware peripherals, clocks, and display.</div><div class="ttdef"><b>Definition</b> <a href="#l00362">orcos.c:362</a></div></div>
 <div class="ttc" id="aorcos_8c_html_aa0c7fca836406ade332e1e3f1039d8ab"><div class="ttname"><a href="orcos_8c.html#aa0c7fca836406ade332e1e3f1039d8ab">hrtc</a></div><div class="ttdeci">RTC_HandleTypeDef hrtc</div><div class="ttdef"><b>Definition</b> <a href="#l00007">orcos.c:7</a></div></div>
 <div class="ttc" id="aorcos_8h_html"><div class="ttname"><a href="orcos_8h.html">orcos.h</a></div><div class="ttdoc">OpenRPNCalc Operating System (ORCOS) library header.</div></div>
-<div class="ttc" id="aorcos_8h_html_a88edd2aa4feabff4af21a997d5d8aa23"><div class="ttname"><a href="orcos_8h.html#a88edd2aa4feabff4af21a997d5d8aa23">DEBUG_PRINT</a></div><div class="ttdeci">#define DEBUG_PRINT(...)</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00149">orcos.h:149</a></div></div>
-<div class="ttc" id="asharp_8c_html_a974793f3b67a06e42f2d2220085d6450"><div class="ttname"><a href="sharp_8c.html#a974793f3b67a06e42f2d2220085d6450">LCD_power_on</a></div><div class="ttdeci">void LCD_power_on()</div><div class="ttdoc">Power on the LCD display Enables power supply and initializes display controller.</div><div class="ttdef"><b>Definition</b> <a href="sharp_8c_source.html#l00088">sharp.c:88</a></div></div>
+<div class="ttc" id="aorcos_8h_html_a88edd2aa4feabff4af21a997d5d8aa23"><div class="ttname"><a href="orcos_8h.html#a88edd2aa4feabff4af21a997d5d8aa23">DEBUG_PRINT</a></div><div class="ttdeci">#define DEBUG_PRINT(...)</div><div class="ttdef"><b>Definition</b> <a href="orcos_8h_source.html#l00152">orcos.h:152</a></div></div>
 <div class="ttc" id="asharp__lowlevel_8c_html_a770bf8b1ee77e02b3bc79fcfa81e8938"><div class="ttname"><a href="sharp__lowlevel_8c.html#a770bf8b1ee77e02b3bc79fcfa81e8938">__lcd_init</a></div><div class="ttdeci">void __lcd_init()</div><div class="ttdef"><b>Definition</b> <a href="sharp__lowlevel_8c_source.html#l00090">sharp_lowlevel.c:90</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

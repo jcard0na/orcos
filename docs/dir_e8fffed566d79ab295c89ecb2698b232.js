@@ -1,6 +1,5 @@
 var dir_e8fffed566d79ab295c89ecb2698b232 =
 [
-    [ "calc.c", "calc_8c.html", "calc_8c" ],
     [ "fonts.c", "fonts_8c.html", "fonts_8c" ],
     [ "func.c", "func_8c.html", "func_8c" ],
     [ "io.c", "io_8c.html", "io_8c" ],

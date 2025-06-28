@@ -1,8 +1,16 @@
 var searchData=
 [
-  ['replace_5fx_0',['replace_x',['../structt__input.html#ab97ef958b4a3fb2fca6bb9801c0f1bca',1,'t_input']]],
-  ['reverse_5fbits_1',['reverse_bits',['../sharp__graphics_8c.html#af2de9d55e2e628cd9ddf92ab740934ee',1,'sharp_graphics.c']]],
-  ['row_5fpin_5farray_2',['row_pin_array',['../keyboard_8c.html#a8f8a0e0cfc2049ea6e0ce7bee58f8a6b',1,'keyboard.c']]],
-  ['rtc_2ec_3',['rtc.c',['../rtc_8c.html',1,'']]],
-  ['rtc_5fread_4',['rtc_read',['../rtc_8c.html#ae1400f2618332aec937a37843c434709',1,'rtc_read(tm_t *tm, dt_t *dt):&#160;rtc.c'],['../orcos_8h.html#ae1400f2618332aec937a37843c434709',1,'rtc_read(tm_t *tm, dt_t *dt):&#160;rtc.c']]]
+  ['scan_5fkeyboard_0',['scan_keyboard',['../keyboard_8c.html#acd7b45442ea54bd555176e5cfc891413',1,'scan_keyboard(void):&#160;keyboard.c'],['../orcos_8h.html#acd7b45442ea54bd555176e5cfc891413',1,'scan_keyboard(void):&#160;keyboard.c']]],
+  ['screens_1',['SCREENS',['../group___s_c_r_e_e_n_s.html',1,'']]],
+  ['sec_2',['sec',['../structtm__t.html#aab94d0df559cf3b9fe24fdf148b409aa',1,'tm_t']]],
+  ['second_5fkeycode_3',['SECOND_KEYCODE',['../orcos_8h.html#a4d5dabfae41d6f5321cb07698e127b71',1,'orcos.h']]],
+  ['sharp_2ec_4',['sharp.c',['../sharp_8c.html',1,'']]],
+  ['sharp_5fgraphics_2ec_5',['sharp_graphics.c',['../sharp__graphics_8c.html',1,'']]],
+  ['sharp_5flowlevel_2ec_6',['sharp_lowlevel.c',['../sharp__lowlevel_8c.html',1,'']]],
+  ['spi2_5finit_7',['SPI2_Init',['../sharp__lowlevel_8c.html#a5b870155c01678a2480ede985cc4383f',1,'sharp_lowlevel.c']]],
+  ['stat_5fchi2_8',['stat_chi2',['../func_8c.html#aca78c03aa726fc9898e76e4b8bdee75f',1,'func.c']]],
+  ['stat_5fmean_9',['stat_mean',['../func_8c.html#a083c75da95a93fa47e9bba306cb50d58',1,'func.c']]],
+  ['sys_5freset_10',['sys_reset',['../power_8c.html#a2b1ed233a180d3991b4832e9de38e176',1,'sys_reset(void):&#160;power.c'],['../orcos_8h.html#a2b1ed233a180d3991b4832e9de38e176',1,'sys_reset(void):&#160;power.c']]],
+  ['sys_5fsleep_11',['sys_sleep',['../power_8c.html#abfb3a43ffa132292fca23ef2cd6535ab',1,'sys_sleep(int off):&#160;power.c'],['../orcos_8h.html#abfb3a43ffa132292fca23ef2cd6535ab',1,'sys_sleep(int off):&#160;power.c']]],
+  ['systemclock_5fconfig_12',['SystemClock_Config',['../orcos_8c.html#a70af21c671abfcc773614a9a4f63d920',1,'orcos.c']]]
 ];
