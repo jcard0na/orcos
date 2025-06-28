@@ -54,6 +54,9 @@ void LCD_power_off(int clear);
  */
 bool LCD_is_on(void);
 
+/// Show a test screen on the display
+void LCD_test_screen(uint16_t count);
+
 /// Blit operation types
 #define BLT_OR    0  ///< OR operation (set pixels)
 #define BLT_ANDN  1  ///< AND-NOT operation (clear pixels)
@@ -177,6 +180,7 @@ void wait_for_key_press();
 /** \addtogroup KEYCODES 
  * @{
  */
+#define KEY_NONE 0
 #define KEY_0 1
 #define KEY_SIGN 2
 #define KEY_ENTER 29
@@ -208,15 +212,5 @@ typedef struct
 } tm_t;
 
 void rtc_read(tm_t *tm, dt_t *dt);
-
-/** @brief calc_init
- * @deprecated Not to be used.
- */
-void calc_init(void);
-
-/** @brief calc_on_key
- * @deprecated Not to be used.
- */
-int calc_on_key(int);
 
 #endif /* __ORCOS_H */

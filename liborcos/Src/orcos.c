@@ -209,7 +209,7 @@ static void MX_GPIO_Init(void)
                              PB14 PB3 PB4 PB5 */
     GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /*Configure GPIO pin : PB15 */
@@ -385,6 +385,4 @@ void orcos_init()
     MX_ADC1_Init();
 
     __lcd_init();
-
-    LCD_power_on();
 }

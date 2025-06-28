@@ -91,7 +91,6 @@ void LCD_power_on()
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
     HAL_Delay(1);
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // DISP signal to "ON"
-    HAL_TIM_Base_Start_IT(&htim1);
     /* Configure wakeup interrupt */
     /* RTC Wakeup Interrupt Generation:
       (2047 + 1) × (16 / 32768) = 1.000 seconds

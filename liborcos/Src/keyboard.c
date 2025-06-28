@@ -55,7 +55,7 @@ void wait_for_key_press()
     sys_sleep(0);
     uint16_t keycode = scan_keyboard();
 
-    DEBUG_PRINT("key_state: %d keycode: %d\n", key_state, keycode);
+    // DEBUG_PRINT("key_state: %d keycode: %d\n", key_state, keycode);
     switch (key_state)
     {
     case WAIT_PRESS:

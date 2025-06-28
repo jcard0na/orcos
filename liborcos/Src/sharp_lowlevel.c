@@ -92,6 +92,7 @@ void __lcd_init()
     SPI2_Init();
     TIM1_Init();
     HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 4095, RTC_WAKEUPCLOCK_RTCCLK_DIV8, 0);
+    HAL_TIM_Base_Start_IT(&htim1);
 }
 
 void LCD_write_line(uint8_t *buf)

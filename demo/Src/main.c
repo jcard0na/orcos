@@ -1,6 +1,7 @@
 #include "main.h"
 #include "orcos.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 /**
  * @brief  The application entry point.
@@ -8,39 +9,48 @@
  */
 int main(void)
 {
+  bool shift = false;
+  static int counter = 0;
   orcos_init();
-  calc_init();
+
+  LCD_power_off(1);
 
   while (1)
   {
     uint16_t keycode = 0;
-    uint16_t last_keycode = 0;
 
+    // blocking call -> wait for any key
     wait_for_key_press();
     keycode = key_pop();
 
-    if (keycode == 54 && !LCD_is_on() && last_keycode == 0)
-    { // Calculator was OFF and the ON button was pressed
-      LCD_power_on();
-      keycode = 0;
-    }
-    int ret = 1;
-
-    if (LCD_is_on())
+    switch (keycode)
     {
-
-      if (keycode)
+    case KEY_F:
+      shift = true;
+      break;
+    case KEY_SIGN:
+      if (shift)
+        LCD_test_screen(++counter);
+      break;
+    case KEY_0:
+      if (shift)
+        LCD_test_screen(--counter);
+      break;
+    case KEY_ON:
+      if (shift)
       {
-        ret = calc_on_key(keycode);
-      }
-
-      if (!ret)
-      { // OFF command received
         LCD_power_off(1);
+        // also blocking call -> wait for ON
         sys_sleep(1);
       }
+      if (!LCD_is_on())
+      {
+        LCD_power_on();
+      }
+      break;
     }
-
-    last_keycode = keycode;
+    // Any key other keycode clear 'shift'
+    if (keycode != KEY_NONE && keycode != KEY_F)
+      shift = 0;
   }
 }

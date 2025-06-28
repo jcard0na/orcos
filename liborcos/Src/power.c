@@ -18,7 +18,7 @@ void sys_sleep(int off) {
 	if (off) {
 		// Only set the row pin corresponding to ON/OFF key to ext. interrupt mode
 		GPIO_InitStruct.Pin = GPIO_PIN_15;
-		GPIO_InitStruct.Pull = GPIO_PULLUP; // Use external 1M pull-up to minimise current draw
+		GPIO_InitStruct.Pull = GPIO_NOPULL; // Use external 1M pull-up to minimise current draw
 		GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
 		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
