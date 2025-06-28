@@ -1,6 +1,7 @@
 #include "keyboard.h"
 #include "main.h"
 #include "orcos.h"
+#include "pin_definitions.h"
 #include "sharp.h" // For LCD functions
 #include "sharp_lowlevel.h" // For delay_us()
 #include "SEGGER_RTT.h"
@@ -9,14 +10,6 @@
 static uint16_t key_queue[KEY_QUEUE_SIZE];
 static uint8_t key_queue_head = 0;
 static uint8_t key_queue_tail = 0;
-
-const uint16_t row_pin_array[NUM_ROW_PINS] = {
-    GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3,
-    GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15};
-
-const uint16_t column_pin_array[NUM_COLUMN_PINS] = {
-    GPIO_PIN_0, GPIO_PIN_2, GPIO_PIN_3,
-    GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8};
 
 enum KeyState
 {
@@ -44,6 +37,7 @@ uint16_t key_pop(void)
   }
   uint16_t key = key_queue[key_queue_tail];
   key_queue_tail = (key_queue_tail + 1) % KEY_QUEUE_SIZE;
+  DEBUG_PRINT("K-POP: %d:%d\n", key >> 8, key & 0xff);
   return key;
 }
 
@@ -85,17 +79,17 @@ uint16_t scan_keyboard(void)
 
   // Set all output column pins to high
   for (uint16_t column = 0; column < NUM_COLUMN_PINS; column++) {
-    HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_SET);
+    GPIO_WRITE(column_pin_array[column], GPIO_PIN_SET);
   }
 
   // Scan columns
   for (int16_t column = 0; column < NUM_COLUMN_PINS; column++) {
-    HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_RESET); // Set column pin to low
+    GPIO_WRITE(column_pin_array[column], GPIO_PIN_RESET); // Set column pin to low
     delay_us(20); // Small delay for transitions
 
     // Read row pins
     for (int16_t row = 0; row < NUM_ROW_PINS; row++) {
-      if (HAL_GPIO_ReadPin(GPIOB, row_pin_array[row]) == GPIO_PIN_RESET) {
+      if ((GPIO_READ(row_pin_array[row])) == GPIO_PIN_RESET) {
         uint16_t keycode = (column + row * NUM_COLUMN_PINS + 1);
         if (key_count == 0) {
           key1 = keycode;
@@ -111,13 +105,13 @@ uint16_t scan_keyboard(void)
       }
     }
 
-    HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_SET); // Reset column
+    GPIO_WRITE(column_pin_array[column], GPIO_PIN_SET); // Reset column
     if (key_count > 2) break; // Early exit if too many keys
   }
 
   // Reset all output column pins to low
   for (uint16_t column = 0; column < NUM_COLUMN_PINS; column++) {
-    HAL_GPIO_WritePin(GPIOA, column_pin_array[column], GPIO_PIN_RESET);
+    GPIO_WRITE(column_pin_array[column], GPIO_PIN_RESET);
   }
 
   if (key_count > 0) {

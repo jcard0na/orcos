@@ -1,6 +1,7 @@
 #include "sharp.h"
 #include "orcos.h"
 #include "orcos_private.h"
+#include "pin_definitions.h"
 #include "SEGGER_RTT.h"
 
 ADC_HandleTypeDef hadc1;
@@ -192,11 +193,7 @@ static void MX_GPIO_Init(void)
 
     /*Configure GPIO pins : PA0 PA2 PA3 PA4
                              PA5 PA8 */
-    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_INIT_ARRAY(column_pin_array, GPIO_MODE_OUTPUT_OD, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW);
 
     /*Configure GPIO pins : PA1 PA6 PA7 PA11
                              PA12 */
@@ -207,10 +204,7 @@ static void MX_GPIO_Init(void)
 
     /*Configure GPIO pins : PB0 PB1 PB2 PB13
                              PB14 PB3 PB4 PB5 */
-    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    GPIO_INIT_ARRAY(row_pin_array, GPIO_MODE_INPUT, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW);
 
     /*Configure GPIO pin : PB15 */
     GPIO_InitStruct.Pin = GPIO_PIN_15;
@@ -259,30 +253,31 @@ static void MX_GPIO_Init(void)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* EXTI interrupt init*/
-    HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+    // HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 
-    HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+    // HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(EXTI1_IRQn);
 
-    HAL_NVIC_SetPriority(EXTI2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+    // HAL_NVIC_SetPriority(EXTI2_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(EXTI2_IRQn);
 
-    HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+    // HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
-    HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(EXTI4_IRQn);
+    // HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 
-    HAL_NVIC_SetPriority(EXTI5_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(EXTI5_IRQn);
+    // HAL_NVIC_SetPriority(EXTI5_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(EXTI5_IRQn);
 
-    HAL_NVIC_SetPriority(EXTI13_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(EXTI13_IRQn);
+    // HAL_NVIC_SetPriority(EXTI13_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(EXTI13_IRQn);
 
-    HAL_NVIC_SetPriority(EXTI14_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(EXTI14_IRQn);
+    // HAL_NVIC_SetPriority(EXTI14_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(EXTI14_IRQn);
 
+    // Initially, only enable the ON button row
     HAL_NVIC_SetPriority(EXTI15_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(EXTI15_IRQn);
 

@@ -69,10 +69,10 @@ liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim.c \
 liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim_ex.c \
 liborcos/Src/calc.c \
 liborcos/Src/fonts.c \
-liborcos/Src/func.c \
 liborcos/Src/io.c \
 liborcos/Src/keyboard.c \
 liborcos/Src/orcos.c \
+liborcos/Src/pin_definitions.c \
 liborcos/Src/power.c \
 liborcos/Src/rtc.c \
 liborcos/Src/sharp.c \
@@ -167,6 +167,7 @@ endif
 
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
+CFLAGS += -std=c11
 
 
 #######################################
