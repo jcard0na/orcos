@@ -1,10 +1,4 @@
 var searchData=
 [
-  ['scan_5fkeyboard_0',['scan_keyboard',['../keyboard_8c.html#acd7b45442ea54bd555176e5cfc891413',1,'scan_keyboard(void):&#160;keyboard.c'],['../orcos_8h.html#acd7b45442ea54bd555176e5cfc891413',1,'scan_keyboard(void):&#160;keyboard.c']]],
-  ['spi2_5finit_1',['SPI2_Init',['../sharp__lowlevel_8c.html#a5b870155c01678a2480ede985cc4383f',1,'sharp_lowlevel.c']]],
-  ['stat_5fchi2_2',['stat_chi2',['../func_8c.html#aca78c03aa726fc9898e76e4b8bdee75f',1,'func.c']]],
-  ['stat_5fmean_3',['stat_mean',['../func_8c.html#a083c75da95a93fa47e9bba306cb50d58',1,'func.c']]],
-  ['sys_5freset_4',['sys_reset',['../power_8c.html#a2b1ed233a180d3991b4832e9de38e176',1,'sys_reset(void):&#160;power.c'],['../orcos_8h.html#a2b1ed233a180d3991b4832e9de38e176',1,'sys_reset(void):&#160;power.c']]],
-  ['sys_5fsleep_5',['sys_sleep',['../power_8c.html#abfb3a43ffa132292fca23ef2cd6535ab',1,'sys_sleep(int off):&#160;power.c'],['../orcos_8h.html#abfb3a43ffa132292fca23ef2cd6535ab',1,'sys_sleep(int off):&#160;power.c']]],
-  ['systemclock_5fconfig_6',['SystemClock_Config',['../orcos_8c.html#a70af21c671abfcc773614a9a4f63d920',1,'orcos.c']]]
+  ['updatesystick_0',['UpdateSysTick',['../io_8c.html#ac8126e6fef3e967923c177958ff28924',1,'io.c']]]
 ];

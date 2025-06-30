@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['chisquared_5fcdf_5fc_0',['chisquared_cdf_c',['../func_8c.html#a2477a0932c331896d34e5fada439a458',1,'func.c']]]
+  ['delay_5fus_0',['delay_us',['../sharp__lowlevel_8c.html#a58f9378c36dbb864c00f8c964c652173',1,'sharp_lowlevel.c']]]
 ];

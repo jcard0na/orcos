@@ -17,6 +17,5 @@ var searchData=
   ['font_5f7x12b_14',['font_7x12b',['../fonts_8c.html#a22e93f936526a6e03337989add5396d5',1,'fonts.c']]],
   ['font_5f7x12b_5fdata_15',['font_7x12b_data',['../fonts_8c.html#a07c84a2f0baface1585178d34e2b0ae6',1,'fonts.c']]],
   ['font_5flookup_16',['font_lookup',['../sharp__graphics_8c.html#ad07a8e124cb0b8646f7a99437bfa41ab',1,'sharp_graphics.c']]],
-  ['fonts_2ec_17',['fonts.c',['../fonts_8c.html',1,'']]],
-  ['func_2ec_18',['func.c',['../func_8c.html',1,'']]]
+  ['fonts_2ec_17',['fonts.c',['../fonts_8c.html',1,'']]]
 ];

@@ -11,7 +11,5 @@ var keyboard_8c =
     [ "key_push", "keyboard_8c.html#a9517c0e0622b0109ec92b0465b667570", null ],
     [ "scan_keyboard", "keyboard_8c.html#acd7b45442ea54bd555176e5cfc891413", null ],
     [ "wait_for_key_press", "keyboard_8c.html#a95753604948d9a314fab9322d9da30a2", null ],
-    [ "column_pin_array", "keyboard_8c.html#a9438408f0582dc69b79f466d9073fdf4", null ],
-    [ "key_state", "keyboard_8c.html#a8622a526ec42bd71350dc9dc31fc7d4f", null ],
-    [ "row_pin_array", "keyboard_8c.html#a8f8a0e0cfc2049ea6e0ce7bee58f8a6b", null ]
+    [ "key_state", "keyboard_8c.html#a8622a526ec42bd71350dc9dc31fc7d4f", null ]
 ];

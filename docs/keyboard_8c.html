@@ -96,6 +96,7 @@ $(function(){initNavTree('keyboard_8c.html','',''); });
 <div class="textblock"><code>#include &quot;keyboard.h&quot;</code><br />
 <code>#include &quot;main.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="orcos_8h_source.html">orcos.h</a>&quot;</code><br />
+<code>#include &quot;pin_definitions.h&quot;</code><br />
 <code>#include &quot;sharp.h&quot;</code><br />
 <code>#include &quot;sharp_lowlevel.h&quot;</code><br />
 <code>#include &quot;SEGGER_RTT.h&quot;</code><br />
@@ -127,8 +128,6 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a8f8a0e0cfc2049ea6e0ce7bee58f8a6b" id="r_a8f8a0e0cfc2049ea6e0ce7bee58f8a6b"><td class="memItemLeft" align="right" valign="top">const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f8a0e0cfc2049ea6e0ce7bee58f8a6b">row_pin_array</a> [NUM_ROW_PINS]</td></tr>
-<tr class="memitem:a9438408f0582dc69b79f466d9073fdf4" id="r_a9438408f0582dc69b79f466d9073fdf4"><td class="memItemLeft" align="right" valign="top">const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9438408f0582dc69b79f466d9073fdf4">column_pin_array</a> [NUM_COLUMN_PINS]</td></tr>
 <tr class="memitem:a8622a526ec42bd71350dc9dc31fc7d4f" id="r_a8622a526ec42bd71350dc9dc31fc7d4f"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09">KeyState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8622a526ec42bd71350dc9dc31fc7d4f">key_state</a> = <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c">WAIT_PRESS</a></td></tr>
 </table>
 <a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
@@ -144,7 +143,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00008">8</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00009">9</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -165,7 +164,7 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="a7e51438e5f6bf556512ce7103cddac09a164aec81e3119c7cd598426b1998bfba" name="a7e51438e5f6bf556512ce7103cddac09a164aec81e3119c7cd598426b1998bfba"></a>WAIT_RELEASE_AFTER_PRESS&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00021">21</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00014">14</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -185,7 +184,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00144">144</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00138">138</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -204,7 +203,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00137">137</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00131">131</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -226,7 +225,7 @@ Variables</h2></td></tr>
 <p>Pop keycode from input queue. </p>
 <dl class="section return"><dt>Returns</dt><dd>Next keycode in queue, 0 if empty </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00039">39</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00032">32</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -253,7 +252,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00029">29</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00022">22</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -275,7 +274,7 @@ Variables</h2></td></tr>
 <p>Scan keyboard matrix. </p>
 <dl class="section return"><dt>Returns</dt><dd>Keycode of pressed key, 0 if none, 0xFFFF if multiple keys </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00080">80</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00074">74</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -296,30 +295,11 @@ Variables</h2></td></tr>
 
 <p>Wait until a key is pressed Puts system to sleep until key press detected Use <a class="el" href="orcos_8h.html#ac7dc1595df4c87b0d629406c3862b50f" title="Pop keycode from input queue.">key_pop()</a> to retrieve the keycode. </p>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00050">50</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00044">44</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
 <a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
-<a id="a9438408f0582dc69b79f466d9073fdf4" name="a9438408f0582dc69b79f466d9073fdf4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9438408f0582dc69b79f466d9073fdf4">&#9670;&#160;</a></span>column_pin_array</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint16_t column_pin_array[NUM_COLUMN_PINS]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">    GPIO_PIN_0, GPIO_PIN_2, GPIO_PIN_3,</div>
-<div class="line">    GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8}</div>
-</div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00017">17</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
-
-</div>
-</div>
 <a id="a8622a526ec42bd71350dc9dc31fc7d4f" name="a8622a526ec42bd71350dc9dc31fc7d4f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8622a526ec42bd71350dc9dc31fc7d4f">&#9670;&#160;</a></span>key_state</h2>
 
@@ -332,26 +312,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00027">27</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
-
-</div>
-</div>
-<a id="a8f8a0e0cfc2049ea6e0ce7bee58f8a6b" name="a8f8a0e0cfc2049ea6e0ce7bee58f8a6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f8a0e0cfc2049ea6e0ce7bee58f8a6b">&#9670;&#160;</a></span>row_pin_array</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint16_t row_pin_array[NUM_ROW_PINS]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">    GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3,</div>
-<div class="line">    GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15}</div>
-</div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00013">13</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00020">20</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['delay_5fus_0',['delay_us',['../sharp__lowlevel_8c.html#a58f9378c36dbb864c00f8c964c652173',1,'sharp_lowlevel.c']]]
+  ['error_5fhandler_0',['Error_Handler',['../orcos_8c.html#a1730ffe1e560465665eb47d9264826f9',1,'orcos.c']]]
 ];
