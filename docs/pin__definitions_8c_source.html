@@ -104,38 +104,45 @@ $(function(){initNavTree('pin__definitions_8c_source.html','',''); });
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#af7825543d0e59b470f3b9b5349eaf279">    9</a></span><span class="preprocessor">#define DEFINE_PIN_ARRAY(name, ...) const gpio_pin_t name[] = {__VA_ARGS__}</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">/* Pin Definitions here */</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">/* Note: If you change pin definitions below, make sure you update</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> * HAL_NVIC_[Enable|Disable]IRQ calls throughout the code to match */</span></div>
-<div class="foldopen" id="foldopen00014" data-start="{" data-end="};">
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#af67b05e080ddb11d734078f89e05fa6b">   14</a></span><span class="keyword">const</span> gpio_pin_t <a class="code hl_variable" href="pin__definitions_8c.html#af67b05e080ddb11d734078f89e05fa6b">column_pin_array</a>[] = {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    {GPIOA, GPIO_PIN_0},</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    {GPIOA, GPIO_PIN_2},</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    {GPIOA, GPIO_PIN_3},</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    {GPIOA, GPIO_PIN_4},</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    {GPIOA, GPIO_PIN_5},</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    {GPIOA, GPIO_PIN_8},</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>};</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#a876c4864b9e703c06330aebc0bf06eae">   12</a></span><a class="code hl_define" href="pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3">DEFINE_PIN</a>(display_cs, GPIOC, GPIO_PIN_0);</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#a5c92d912d5ba559705e2ed0ddde4b3ff">   13</a></span><a class="code hl_define" href="pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3">DEFINE_PIN</a>(v_div, GPIOC, GPIO_PIN_7);</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#a952d56d13c423794d15fe4edaa57b075">   14</a></span><a class="code hl_define" href="pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3">DEFINE_PIN</a>(v_sens, GPIOC, GPIO_PIN_8);</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#a04680f656f9511a84310b8ffb40097a3">   15</a></span><a class="code hl_define" href="pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3">DEFINE_PIN</a>(disp, GPIOA, GPIO_PIN_10);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#a9d6ad20b09eb74f7761796ca0b838a89">   16</a></span><a class="code hl_define" href="pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3">DEFINE_PIN</a>(v5_en, GPIOA, GPIO_PIN_15);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#a804f22d133fd4f71354bab723a35986e">   17</a></span><a class="code hl_define" href="pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3">DEFINE_PIN</a>(extcomin, GPIOA, GPIO_PIN_9);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">/* Note: If you change pin definitions below, make sure you update</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * HAL_NVIC_[Enable|Disable]IRQ calls throughout the code to match */</span></div>
+<div class="foldopen" id="foldopen00020" data-start="{" data-end="};">
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#af67b05e080ddb11d734078f89e05fa6b">   20</a></span><span class="keyword">const</span> gpio_pin_t <a class="code hl_variable" href="pin__definitions_8c.html#af67b05e080ddb11d734078f89e05fa6b">column_pin_array</a>[] = {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    {GPIOA, GPIO_PIN_0},</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    {GPIOA, GPIO_PIN_2},</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    {GPIOA, GPIO_PIN_3},</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    {GPIOA, GPIO_PIN_4},</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    {GPIOA, GPIO_PIN_5},</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    {GPIOA, GPIO_PIN_8},</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>};</div>
 </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#aff8c3fcf868dff46c3f417930766d4e5">   22</a></span><span class="keyword">const</span> <span class="keywordtype">size_t</span> <a class="code hl_variable" href="pin__definitions_8c.html#aff8c3fcf868dff46c3f417930766d4e5">column_pin_array_count</a> = 6; </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="foldopen" id="foldopen00024" data-start="{" data-end="};">
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543">   24</a></span><span class="keyword">const</span> gpio_pin_t <a class="code hl_variable" href="pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543">row_pin_array</a>[] = {</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    {GPIOB, GPIO_PIN_0},</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    {GPIOB, GPIO_PIN_1},</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    {GPIOB, GPIO_PIN_2},</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    {GPIOB, GPIO_PIN_3},</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    {GPIOB, GPIO_PIN_4},</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    {GPIOB, GPIO_PIN_5},</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    {GPIOB, GPIO_PIN_13},</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    {GPIOB, GPIO_PIN_14},</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    {GPIOB, GPIO_PIN_15},</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>};</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#aff8c3fcf868dff46c3f417930766d4e5">   28</a></span><span class="keyword">const</span> <span class="keywordtype">size_t</span> <a class="code hl_variable" href="pin__definitions_8c.html#aff8c3fcf868dff46c3f417930766d4e5">column_pin_array_count</a> = 6; </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543">   30</a></span><span class="keyword">const</span> gpio_pin_t <a class="code hl_variable" href="pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543">row_pin_array</a>[] = {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    {GPIOB, GPIO_PIN_0},</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    {GPIOB, GPIO_PIN_1},</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    {GPIOB, GPIO_PIN_2},</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    {GPIOB, GPIO_PIN_3},</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    {GPIOB, GPIO_PIN_4},</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    {GPIOB, GPIO_PIN_5},</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    {GPIOB, GPIO_PIN_13},</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    {GPIOB, GPIO_PIN_14},</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    {GPIOB, GPIO_PIN_15},</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>};</div>
 </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#aa5d03cccdceeb0b7683bee05491d943a">   35</a></span><span class="keyword">const</span> <span class="keywordtype">size_t</span> <a class="code hl_variable" href="pin__definitions_8c.html#aa5d03cccdceeb0b7683bee05491d943a">row_pin_array_count</a> = 9;</div>
-<div class="ttc" id="apin__definitions_8c_html_a9321f9c0213083c8df15c37b69995543"><div class="ttname"><a href="pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543">row_pin_array</a></div><div class="ttdeci">const gpio_pin_t row_pin_array[]</div><div class="ttdef"><b>Definition</b> <a href="#l00024">pin_definitions.c:24</a></div></div>
-<div class="ttc" id="apin__definitions_8c_html_aa5d03cccdceeb0b7683bee05491d943a"><div class="ttname"><a href="pin__definitions_8c.html#aa5d03cccdceeb0b7683bee05491d943a">row_pin_array_count</a></div><div class="ttdeci">const size_t row_pin_array_count</div><div class="ttdef"><b>Definition</b> <a href="#l00035">pin_definitions.c:35</a></div></div>
-<div class="ttc" id="apin__definitions_8c_html_af67b05e080ddb11d734078f89e05fa6b"><div class="ttname"><a href="pin__definitions_8c.html#af67b05e080ddb11d734078f89e05fa6b">column_pin_array</a></div><div class="ttdeci">const gpio_pin_t column_pin_array[]</div><div class="ttdef"><b>Definition</b> <a href="#l00014">pin_definitions.c:14</a></div></div>
-<div class="ttc" id="apin__definitions_8c_html_aff8c3fcf868dff46c3f417930766d4e5"><div class="ttname"><a href="pin__definitions_8c.html#aff8c3fcf868dff46c3f417930766d4e5">column_pin_array_count</a></div><div class="ttdeci">const size_t column_pin_array_count</div><div class="ttdef"><b>Definition</b> <a href="#l00022">pin_definitions.c:22</a></div></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="pin__definitions_8c.html#aa5d03cccdceeb0b7683bee05491d943a">   41</a></span><span class="keyword">const</span> <span class="keywordtype">size_t</span> <a class="code hl_variable" href="pin__definitions_8c.html#aa5d03cccdceeb0b7683bee05491d943a">row_pin_array_count</a> = 9;</div>
+<div class="ttc" id="apin__definitions_8c_html_a9321f9c0213083c8df15c37b69995543"><div class="ttname"><a href="pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543">row_pin_array</a></div><div class="ttdeci">const gpio_pin_t row_pin_array[]</div><div class="ttdef"><b>Definition</b> <a href="#l00030">pin_definitions.c:30</a></div></div>
+<div class="ttc" id="apin__definitions_8c_html_aa5d03cccdceeb0b7683bee05491d943a"><div class="ttname"><a href="pin__definitions_8c.html#aa5d03cccdceeb0b7683bee05491d943a">row_pin_array_count</a></div><div class="ttdeci">const size_t row_pin_array_count</div><div class="ttdef"><b>Definition</b> <a href="#l00041">pin_definitions.c:41</a></div></div>
+<div class="ttc" id="apin__definitions_8c_html_ad2584b5cf1aba6c455df440d2286c1a3"><div class="ttname"><a href="pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3">DEFINE_PIN</a></div><div class="ttdeci">#define DEFINE_PIN(name, port, pin_num)</div><div class="ttdef"><b>Definition</b> <a href="#l00006">pin_definitions.c:6</a></div></div>
+<div class="ttc" id="apin__definitions_8c_html_af67b05e080ddb11d734078f89e05fa6b"><div class="ttname"><a href="pin__definitions_8c.html#af67b05e080ddb11d734078f89e05fa6b">column_pin_array</a></div><div class="ttdeci">const gpio_pin_t column_pin_array[]</div><div class="ttdef"><b>Definition</b> <a href="#l00020">pin_definitions.c:20</a></div></div>
+<div class="ttc" id="apin__definitions_8c_html_aff8c3fcf868dff46c3f417930766d4e5"><div class="ttname"><a href="pin__definitions_8c.html#aff8c3fcf868dff46c3f417930766d4e5">column_pin_array_count</a></div><div class="ttdeci">const size_t column_pin_array_count</div><div class="ttdef"><b>Definition</b> <a href="#l00028">pin_definitions.c:28</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

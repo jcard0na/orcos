@@ -93,14 +93,15 @@ $(function(){initNavTree('sharp_8c.html','',''); });
   <div class="headertitle"><div class="title">sharp.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;stm32u3xx_hal.h&quot;</code><br />
-<code>#include &quot;fonts.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;fonts.h&quot;</code><br />
+<code>#include &quot;openrpncalc.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="orcos_8h_source.html">orcos.h</a>&quot;</code><br />
+<code>#include &quot;pin_definitions.h&quot;</code><br />
 <code>#include &quot;sharp.h&quot;</code><br />
 <code>#include &quot;sharp_graphics.h&quot;</code><br />
 <code>#include &quot;sharp_lowlevel.h&quot;</code><br />
+<code>#include &quot;stm32u3xx_hal.h&quot;</code><br />
 <code>#include &quot;stm32u3xx_hal_rtc_ex.h&quot;</code><br />
-<code>#include &quot;openrpncalc.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="orcos_8h_source.html">orcos.h</a>&quot;</code><br />
 <code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
@@ -163,7 +164,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00043">43</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00044">44</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -186,7 +187,7 @@ Variables</h2></td></tr>
 <p>Draw calculator screen based on mode. </p>
 <p>Inverts all pixels in the global framebuffer (black becomes white and vice versa) </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00150">150</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00151">151</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -208,7 +209,7 @@ Variables</h2></td></tr>
 <p>Check if LCD is powered on. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if LCD is powered on, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00121">121</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00122">122</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -227,7 +228,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00083">83</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00084">84</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -254,7 +255,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00106">106</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00107">107</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -275,7 +276,7 @@ Variables</h2></td></tr>
 
 <p>Power on the LCD display Enables power supply and initializes display controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00088">88</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00089">89</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -296,7 +297,7 @@ Variables</h2></td></tr>
 
 <p>Show a test screen on the display. </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00185">185</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00186">186</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -328,7 +329,7 @@ Variables</h2></td></tr>
 </dl>
 <p>Note: dx will be rounded to the closest byte-aligned address </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00057">57</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00058">58</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -345,7 +346,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00037">37</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00038">38</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -361,7 +362,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00033">33</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00034">34</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -401,7 +402,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00032">32</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00033">33</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -417,7 +418,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00031">31</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00032">32</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>

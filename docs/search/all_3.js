@@ -2,7 +2,7 @@ var searchData=
 [
   ['day_0',['day',['../structdt__t.html#a219effc690a1123354f9e9399f05e87a',1,'dt_t']]],
   ['debug_5fprint_1',['DEBUG_PRINT',['../orcos_8h.html#a88edd2aa4feabff4af21a997d5d8aa23',1,'orcos.h']]],
-  ['define_5fpin_2',['DEFINE_PIN',['../pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3',1,'pin_definitions.c']]],
+  ['define_5fpin_2',['DEFINE_PIN',['../pin__definitions_8c.html#ad2584b5cf1aba6c455df440d2286c1a3',1,'DEFINE_PIN:&#160;pin_definitions.c'],['../pin__definitions_8c.html#a876c4864b9e703c06330aebc0bf06eae',1,'DEFINE_PIN(display_cs, GPIOC, GPIO_PIN_0):&#160;pin_definitions.c'],['../pin__definitions_8c.html#a5c92d912d5ba559705e2ed0ddde4b3ff',1,'DEFINE_PIN(v_div, GPIOC, GPIO_PIN_7):&#160;pin_definitions.c'],['../pin__definitions_8c.html#a952d56d13c423794d15fe4edaa57b075',1,'DEFINE_PIN(v_sens, GPIOC, GPIO_PIN_8):&#160;pin_definitions.c'],['../pin__definitions_8c.html#a04680f656f9511a84310b8ffb40097a3',1,'DEFINE_PIN(disp, GPIOA, GPIO_PIN_10):&#160;pin_definitions.c'],['../pin__definitions_8c.html#a9d6ad20b09eb74f7761796ca0b838a89',1,'DEFINE_PIN(v5_en, GPIOA, GPIO_PIN_15):&#160;pin_definitions.c'],['../pin__definitions_8c.html#a804f22d133fd4f71354bab723a35986e',1,'DEFINE_PIN(extcomin, GPIOA, GPIO_PIN_9):&#160;pin_definitions.c']]],
   ['define_5fpin_5farray_3',['DEFINE_PIN_ARRAY',['../pin__definitions_8c.html#af7825543d0e59b470f3b9b5349eaf279',1,'pin_definitions.c']]],
   ['define_5fpins_4',['DEFINE_PINS',['../pin__definitions_8c.html#a542ee9704c583efc3f97342c1290c010',1,'pin_definitions.c']]],
   ['delay_5fus_5',['delay_us',['../sharp__lowlevel_8c.html#a58f9378c36dbb864c00f8c964c652173',1,'sharp_lowlevel.c']]],
