@@ -48,6 +48,11 @@ typedef struct {
 
 /* Pin Declarations here:  they need to match definitions in pin_definitions.c */
 DECLARE_PIN(display_cs);
+DECLARE_PIN(v_div);
+DECLARE_PIN(v_sens);
+DECLARE_PIN(disp);
+DECLARE_PIN(v5_en);
+DECLARE_PIN(extcomin);
 DECLARE_PIN_ARRAY(column_pin_array);
 DECLARE_PIN_ARRAY(row_pin_array);
 

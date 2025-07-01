@@ -10,14 +10,15 @@
  *      Author: apolu
  */
 
-#include "stm32u3xx_hal.h"
 #include "fonts.h"
+#include "openrpncalc.h"
+#include "orcos.h"
+#include "pin_definitions.h"
 #include "sharp.h"
 #include "sharp_graphics.h"
 #include "sharp_lowlevel.h"
+#include "stm32u3xx_hal.h"
 #include "stm32u3xx_hal_rtc_ex.h"
-#include "openrpncalc.h"
-#include "orcos.h"
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -56,7 +57,7 @@ static int current_test_screen = 0;
 
 void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
-    // DEBUG_PRINT("-- LPTIM1: EXTIN toggle ---\n");
+    GPIO_TOGGLE(extcomin);  // EXTCOMIN signal of "OFF"
     RTC_TimeTypeDef Time;
     RTC_DateTypeDef Date;
     /* Get the RTC calendar time */
@@ -88,9 +89,9 @@ void lcd_keep_alive()
 void LCD_power_on()
 {
     DEBUG_PRINT("\n--- LDC_power_on() ---\n");
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // 5V booster enable
+    GPIO_WRITE(v5_en, GPIO_PIN_SET); // 5V booster enable
     HAL_Delay(1);
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET); // DISP signal to "ON"
+    GPIO_WRITE(disp, GPIO_PIN_SET); // DISP signal to "ON"
     /* Configure wakeup interrupt */
     /* RTC Wakeup Interrupt Generation:
       (2047 + 1) × (16 / 32768) = 1.000 seconds
@@ -110,10 +111,10 @@ void LCD_power_off(int clear)
     // HAL_TIM_Base_Stop_IT(&htim1); // Stop the timer
     delay_us(30);
     if (clear)
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET); // DISP signal to "OFF"
+        GPIO_WRITE(disp, GPIO_PIN_RESET); // DISP signal to "OFF"
     delay_us(30);
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);  // EXTCOMIN signal of "OFF"
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // 5V booster disable
+    GPIO_WRITE(extcomin, GPIO_PIN_RESET);  // EXTCOMIN signal of "OFF"
+    GPIO_WRITE(v5_en, GPIO_PIN_RESET); // 5V booster disable
     HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
     lcd_is_on = false;
 }

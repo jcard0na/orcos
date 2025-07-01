@@ -10,6 +10,11 @@
 
 /* Pin Definitions here */
 DEFINE_PIN(display_cs, GPIOC, GPIO_PIN_0);
+DEFINE_PIN(v_div, GPIOC, GPIO_PIN_7);
+DEFINE_PIN(v_sens, GPIOC, GPIO_PIN_8);
+DEFINE_PIN(disp, GPIOA, GPIO_PIN_10);
+DEFINE_PIN(v5_en, GPIOA, GPIO_PIN_15);
+DEFINE_PIN(extcomin, GPIOA, GPIO_PIN_9);
 /* Note: If you change pin definitions below, make sure you update
  * HAL_NVIC_[Enable|Disable]IRQ calls throughout the code to match */
 const gpio_pin_t column_pin_array[] = {
