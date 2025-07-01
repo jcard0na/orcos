@@ -9,6 +9,7 @@
 #define DEFINE_PIN_ARRAY(name, ...) const gpio_pin_t name[] = {__VA_ARGS__}
 
 /* Pin Definitions here */
+DEFINE_PIN(display_cs, GPIOC, GPIO_PIN_0);
 /* Note: If you change pin definitions below, make sure you update
  * HAL_NVIC_[Enable|Disable]IRQ calls throughout the code to match */
 const gpio_pin_t column_pin_array[] = {

@@ -47,7 +47,7 @@ void wait_for_key_press()
   while (1)
   {
     sys_sleep(0);
-    delay_us(50);  // Small delay to wait for GPIO to settle
+    delay_us(100);  // Small delay to wait for GPIO to settle
     uint16_t keycode = scan_keyboard();
 
     // DEBUG_PRINT("key_state: %d keycode: %d\n", key_state, keycode);

@@ -47,6 +47,7 @@ typedef struct {
     } while(0)
 
 /* Pin Declarations here:  they need to match definitions in pin_definitions.c */
+DECLARE_PIN(display_cs);
 DECLARE_PIN_ARRAY(column_pin_array);
 DECLARE_PIN_ARRAY(row_pin_array);
 

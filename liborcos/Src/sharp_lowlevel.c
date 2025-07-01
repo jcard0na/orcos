@@ -6,6 +6,7 @@
 
 #include "sharp_lowlevel.h"
 #include "sharp.h"
+#include "pin_definitions.h"
 #include "stm32u3xx_hal.h"
 
 extern RTC_HandleTypeDef hrtc;
@@ -99,11 +100,11 @@ void LCD_write_line(uint8_t *buf)
 {
     buf[0] = 0x1; // Write Line command
     buf[52] = buf[53] = 0;
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+    GPIO_WRITE(display_cs, GPIO_PIN_SET);
     delay_us(12);
     HAL_SPI_Transmit(&hspi2, buf, LCD_LINE_BUF_SIZE, HAL_MAX_DELAY);
     delay_us(4);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+    GPIO_WRITE(display_cs, GPIO_PIN_RESET);
     delay_us(4);
 }
 
@@ -118,11 +119,11 @@ void lcd_refresh()
     const int num_chunks = (total_lines + chunk_size - 1) / chunk_size;
 
     uint8_t nop = 0x00;
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+    GPIO_WRITE(display_cs, GPIO_PIN_SET);
     delay_us(10);
     HAL_SPI_Transmit(&hspi2, &nop, 1, HAL_MAX_DELAY);
     delay_us(10);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+    GPIO_WRITE(display_cs, GPIO_PIN_RESET);
     delay_us(10);
 
     for (int chunk = 0; chunk < num_chunks; chunk++)
@@ -141,11 +142,11 @@ void lcd_refresh()
         }
         frame_buffer[pos++] = 0x00;
 
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+        GPIO_WRITE(display_cs, GPIO_PIN_SET);
         delay_us(12);
         HAL_SPI_Transmit(&hspi2, frame_buffer, pos, HAL_MAX_DELAY);
         delay_us(4);
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+        GPIO_WRITE(display_cs, GPIO_PIN_RESET);
         delay_us(4);
     }
 }
