@@ -55,29 +55,45 @@ static int current_test_screen = 0;
  * Note: dx will be rounded to the closest byte-aligned address
  */
 
+/**
+ * @brief RTC Wakeup Timer callback function
+ * 
+ * Called every second by RTC wakeup timer interrupt to:
+ * 1. Toggle EXTCOMIN signal (required for Sharp Memory LCD operation)
+ * 2. Update display timeout counter
+ * 3. Handle special cases like RTC test screen updates
+ * 
+ * Note: Must read both time and date registers to properly update shadow registers
+ * 
+ * @param hrtc Pointer to RTC handle
+ */
 void WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
-    GPIO_TOGGLE(extcomin);  // EXTCOMIN signal of "OFF"
+    GPIO_TOGGLE(extcomin);  // Required to prevent LCD image retention
+    
     RTC_TimeTypeDef Time;
     RTC_DateTypeDef Date;
     /* Get the RTC calendar time */
     HAL_RTC_GetTime(hrtc, &Time, RTC_FORMAT_BIN);
-    // Do not skip reading the date: This triggers an update to the shadow registers!
+    /* Must read date register to update shadow registers */
     HAL_RTC_GetDate(hrtc, &Date, RTC_FORMAT_BIN);
+    
 #if DEBUG
-    SEGGER_RTT_printf(0, "wake up timer event %02d:%02d! (%d)\n", Time.Minutes, Time.Seconds, timeout_counter);
+    SEGGER_RTT_printf(0, "wake up timer event %02d:%02d! (%d)\n", 
+                     Time.Minutes, Time.Seconds, timeout_counter);
 #endif
 
-    // If we are showng the RTC test screen, update the time
+    /* Special case: Update RTC test screen if currently displayed */
     if (current_test_screen == 5)
     {
         LCD_test_screen(current_test_screen);
     }
 
+    /* Increment and check display timeout counter */
     timeout_counter++;
     if (timeout_counter > OFF_TIMEOUT)
     {
-        LCD_power_off(1);
+        LCD_power_off(1);  // Turn off display after timeout period (5 minutes)
     }
 }
 
