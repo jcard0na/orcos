@@ -31,7 +31,7 @@ void sys_sleep(int off)
 		// Second, set the row corresponding to ON/OFF key to ext. interrupt mode
 		// (This is the last row in the matrix)
 		GPIO_INIT_SINGLE(row_pin_array[row_pin_array_count - 1],
-						 GPIO_MODE_IT_RISING_FALLING,
+						 GPIO_MODE_IT_FALLING,
 						 GPIO_NOPULL,
 						 GPIO_SPEED_FREQ_LOW);
 
@@ -49,7 +49,7 @@ void sys_sleep(int off)
 	{
 		// Set all rows to ext. interrupt mode
 		GPIO_INIT_ARRAY(row_pin_array,
-						GPIO_MODE_IT_RISING_FALLING,
+						GPIO_MODE_IT_FALLING,
 						GPIO_NOPULL,
 						GPIO_SPEED_FREQ_LOW);
 	}

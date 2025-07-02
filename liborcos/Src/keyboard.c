@@ -11,14 +11,6 @@ static uint16_t key_queue[KEY_QUEUE_SIZE];
 static uint8_t key_queue_head = 0;
 static uint8_t key_queue_tail = 0;
 
-enum KeyState
-{
-  WAIT_PRESS,
-  WAIT_RELEASE_AFTER_PRESS
-};
-
-enum KeyState key_state = WAIT_PRESS;
-
 void key_push(uint16_t keycode)
 {
   uint8_t next_head = (key_queue_head + 1) % KEY_QUEUE_SIZE;
@@ -43,32 +35,10 @@ uint16_t key_pop(void)
 
 void wait_for_key_press()
 {
-  int last_keycode = 0;
-  while (1)
-  {
-    sys_sleep(0);
-    uint16_t keycode = scan_keyboard();
-
-    // DEBUG_PRINT("key_state: %d keycode: %d\n", key_state, keycode);
-    switch (key_state)
-    {
-    case WAIT_PRESS:
-      if (keycode > 0)
-      {
-        last_keycode = keycode;
-        key_state = WAIT_RELEASE_AFTER_PRESS;
-      }
-      break;
-    case WAIT_RELEASE_AFTER_PRESS:
-      if (keycode == 0)
-      {
-        key_push(last_keycode);
-        key_state = WAIT_PRESS;
-        return;
-      }
-      break;
-    }
-  }
+  sys_sleep(0);
+  uint16_t keycode = scan_keyboard();
+  key_push(keycode);
+  return;
 }
 
 uint16_t scan_keyboard(void)
