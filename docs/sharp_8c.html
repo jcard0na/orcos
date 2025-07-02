@@ -187,7 +187,7 @@ Variables</h2></td></tr>
 <p>Draw calculator screen based on mode. </p>
 <p>Inverts all pixels in the global framebuffer (black becomes white and vice versa) </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00151">151</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00167">167</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -209,7 +209,7 @@ Variables</h2></td></tr>
 <p>Check if LCD is powered on. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if LCD is powered on, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00122">122</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00138">138</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -228,7 +228,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00084">84</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00100">100</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -255,7 +255,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00107">107</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00123">123</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -276,7 +276,7 @@ Variables</h2></td></tr>
 
 <p>Power on the LCD display Enables power supply and initializes display controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00089">89</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00105">105</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -297,7 +297,7 @@ Variables</h2></td></tr>
 
 <p>Show a test screen on the display. </p>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00186">186</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00202">202</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>
@@ -327,9 +327,22 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Note: dx will be rounded to the closest byte-aligned address </p>
+<p>Note: dx will be rounded to the closest byte-aligned address</p>
+<p>RTC Wakeup Timer callback function</p>
+<p>Called every second by RTC wakeup timer interrupt to:</p><ol type="1">
+<li>Toggle EXTCOMIN signal (required for Sharp Memory LCD operation)</li>
+<li>Update display timeout counter</li>
+<li>Handle special cases like RTC test screen updates</li>
+</ol>
+<p>Note: Must read both time and date registers to properly update shadow registers</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hrtc</td><td>Pointer to RTC handle </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00058">58</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sharp_8c_source.html#l00070">70</a> of file <a class="el" href="sharp_8c_source.html">sharp.c</a>.</p>
 
 </div>
 </div>

@@ -107,12 +107,6 @@ $(function(){initNavTree('keyboard_8c.html','',''); });
 Macros</h2></td></tr>
 <tr class="memitem:a0a27c6c21376d77d548e9229d67a51de" id="r_a0a27c6c21376d77d548e9229d67a51de"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a27c6c21376d77d548e9229d67a51de">KEY_QUEUE_SIZE</a>&#160;&#160;&#160;16</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a7e51438e5f6bf556512ce7103cddac09" id="r_a7e51438e5f6bf556512ce7103cddac09"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e51438e5f6bf556512ce7103cddac09">KeyState</a> { <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c">WAIT_PRESS</a>
-, <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09a164aec81e3119c7cd598426b1998bfba">WAIT_RELEASE_AFTER_PRESS</a>
- }</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a9517c0e0622b0109ec92b0465b667570" id="r_a9517c0e0622b0109ec92b0465b667570"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9517c0e0622b0109ec92b0465b667570">key_push</a> (uint16_t keycode)</td></tr>
@@ -125,10 +119,6 @@ Functions</h2></td></tr>
 <tr class="memdesc:acd7b45442ea54bd555176e5cfc891413"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scan keyboard matrix.  <br /></td></tr>
 <tr class="memitem:a537318eafe9182b60dc22ef54966c6a1" id="r_a537318eafe9182b60dc22ef54966c6a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a537318eafe9182b60dc22ef54966c6a1">HAL_GPIO_EXTI_Rising_Callback</a> (uint16_t GPIO_Pin)</td></tr>
 <tr class="memitem:a0b334860563f4a109443e0a604af2300" id="r_a0b334860563f4a109443e0a604af2300"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b334860563f4a109443e0a604af2300">HAL_GPIO_EXTI_Falling_Callback</a> (uint16_t GPIO_Pin)</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a8622a526ec42bd71350dc9dc31fc7d4f" id="r_a8622a526ec42bd71350dc9dc31fc7d4f"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09">KeyState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8622a526ec42bd71350dc9dc31fc7d4f">key_state</a> = <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c">WAIT_PRESS</a></td></tr>
 </table>
 <a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
 <a id="a0a27c6c21376d77d548e9229d67a51de" name="a0a27c6c21376d77d548e9229d67a51de"></a>
@@ -144,27 +134,6 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00009">9</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
-
-</div>
-</div>
-<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
-<a id="a7e51438e5f6bf556512ce7103cddac09" name="a7e51438e5f6bf556512ce7103cddac09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e51438e5f6bf556512ce7103cddac09">&#9670;&#160;</a></span>KeyState</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09">KeyState</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c" name="a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c"></a>WAIT_PRESS&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a7e51438e5f6bf556512ce7103cddac09a164aec81e3119c7cd598426b1998bfba" name="a7e51438e5f6bf556512ce7103cddac09a164aec81e3119c7cd598426b1998bfba"></a>WAIT_RELEASE_AFTER_PRESS&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00014">14</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -184,7 +153,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00139">139</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00108">108</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -203,7 +172,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00132">132</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00101">101</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -225,7 +194,7 @@ Variables</h2></td></tr>
 <p>Pop keycode from input queue. </p>
 <dl class="section return"><dt>Returns</dt><dd>Next keycode in queue, 0 if empty </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00032">32</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00024">24</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -252,7 +221,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00022">22</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00014">14</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -274,7 +243,7 @@ Variables</h2></td></tr>
 <p>Scan keyboard matrix. </p>
 <dl class="section return"><dt>Returns</dt><dd>Keycode of pressed key, 0 if none, 0xFFFF if multiple keys </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00075">75</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00044">44</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>
@@ -295,24 +264,7 @@ Variables</h2></td></tr>
 
 <p>Wait until a key is pressed Puts system to sleep until key press detected Use <a class="el" href="orcos_8h.html#ac7dc1595df4c87b0d629406c3862b50f" title="Pop keycode from input queue.">key_pop()</a> to retrieve the keycode. </p>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00044">44</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
-
-</div>
-</div>
-<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
-<a id="a8622a526ec42bd71350dc9dc31fc7d4f" name="a8622a526ec42bd71350dc9dc31fc7d4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8622a526ec42bd71350dc9dc31fc7d4f">&#9670;&#160;</a></span>key_state</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09">KeyState</a> key_state = <a class="el" href="#a7e51438e5f6bf556512ce7103cddac09a563d040c9ac60f74aa5dd53e846fd43c">WAIT_PRESS</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00020">20</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8c_source.html#l00036">36</a> of file <a class="el" href="keyboard_8c_source.html">keyboard.c</a>.</p>
 
 </div>
 </div>

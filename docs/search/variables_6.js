@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['min_0',['min',['../structtm__t.html#ab7e4bc75b76c7af1ddf58adbb6db33d9',1,'tm_t']]],
-  ['month_1',['month',['../structdt__t.html#a01d2ffa4a0964a9a1a1476a38a48ba54',1,'dt_t']]]
+  ['row_5fpin_5farray_0',['row_pin_array',['../pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543',1,'pin_definitions.c']]],
+  ['row_5fpin_5farray_5fcount_1',['row_pin_array_count',['../pin__definitions_8c.html#aa5d03cccdceeb0b7683bee05491d943a',1,'pin_definitions.c']]]
 ];

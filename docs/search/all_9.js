@@ -9,8 +9,6 @@ var searchData=
   ['key_5fpush_6',['key_push',['../keyboard_8c.html#a9517c0e0622b0109ec92b0465b667570',1,'key_push(uint16_t keycode):&#160;keyboard.c'],['../orcos_8h.html#a9517c0e0622b0109ec92b0465b667570',1,'key_push(uint16_t keycode):&#160;keyboard.c']]],
   ['key_5fqueue_5fsize_7',['KEY_QUEUE_SIZE',['../keyboard_8c.html#a0a27c6c21376d77d548e9229d67a51de',1,'keyboard.c']]],
   ['key_5fsign_8',['KEY_SIGN',['../group___k_e_y_c_o_d_e_s.html#ga493549a47eea62a36d0a11cc214e8b30',1,'orcos.h']]],
-  ['key_5fstate_9',['key_state',['../keyboard_8c.html#a8622a526ec42bd71350dc9dc31fc7d4f',1,'keyboard.c']]],
-  ['keyboard_2ec_10',['keyboard.c',['../keyboard_8c.html',1,'']]],
-  ['keycodes_11',['KEYCODES',['../group___k_e_y_c_o_d_e_s.html',1,'']]],
-  ['keystate_12',['KeyState',['../keyboard_8c.html#a7e51438e5f6bf556512ce7103cddac09',1,'keyboard.c']]]
+  ['keyboard_2ec_9',['keyboard.c',['../keyboard_8c.html',1,'']]],
+  ['keycodes_10',['KEYCODES',['../group___k_e_y_c_o_d_e_s.html',1,'']]]
 ];

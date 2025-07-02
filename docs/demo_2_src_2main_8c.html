@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OpenRPNCalc OS (ORCOS): liborcos/Src/power.c File Reference</title>
+<title>OpenRPNCalc OS (ORCOS): demo/Src/main.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -64,7 +64,7 @@ $(function() {
   </div>
 </div>
 <script type="text/javascript">
-$(function(){initNavTree('power_8c.html','',''); });
+$(function(){initNavTree('demo_2_src_2main_8c.html','',''); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -90,31 +90,30 @@ $(function(){initNavTree('power_8c.html','',''); });
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">power.c File Reference</div></div>
+  <div class="headertitle"><div class="title">main.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;stm32u3xx_hal.h&quot;</code><br />
-<code>#include &quot;pin_definitions.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;main.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="orcos_8h_source.html">orcos.h</a>&quot;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
 </div>
-<p><a href="power_8c_source.html">Go to the source code of this file.</a></p>
+<p><a href="demo_2_src_2main_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:abfb3a43ffa132292fca23ef2cd6535ab" id="r_abfb3a43ffa132292fca23ef2cd6535ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfb3a43ffa132292fca23ef2cd6535ab">sys_sleep</a> (int off)</td></tr>
-<tr class="memdesc:abfb3a43ffa132292fca23ef2cd6535ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put calculator into low-power sleep mode.  <br /></td></tr>
-<tr class="memitem:a2b1ed233a180d3991b4832e9de38e176" id="r_a2b1ed233a180d3991b4832e9de38e176"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b1ed233a180d3991b4832e9de38e176">sys_reset</a> (void)</td></tr>
-<tr class="memdesc:a2b1ed233a180d3991b4832e9de38e176"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a system reset by triggering the CPU's reset.  <br /></td></tr>
+<tr class="memitem:a840291bc02cba5474a4cb46a9b9566fe" id="r_a840291bc02cba5474a4cb46a9b9566fe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a840291bc02cba5474a4cb46a9b9566fe">main</a> (void)</td></tr>
+<tr class="memdesc:a840291bc02cba5474a4cb46a9b9566fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">The application entry point.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="a2b1ed233a180d3991b4832e9de38e176" name="a2b1ed233a180d3991b4832e9de38e176"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b1ed233a180d3991b4832e9de38e176">&#9670;&#160;</a></span>sys_reset()</h2>
+<a id="a840291bc02cba5474a4cb46a9b9566fe" name="a840291bc02cba5474a4cb46a9b9566fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a840291bc02cba5474a4cb46a9b9566fe">&#9670;&#160;</a></span>main()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void sys_reset </td>
+          <td class="memname">int main </td>
           <td>(</td>
           <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -122,37 +121,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Performs a system reset by triggering the CPU's reset. </p>
-<p>Perform system reset Immediately resets the microcontroller. </p>
-
-<p class="definition">Definition at line <a class="el" href="power_8c_source.html#l00089">89</a> of file <a class="el" href="power_8c_source.html">power.c</a>.</p>
-
-</div>
-</div>
-<a id="abfb3a43ffa132292fca23ef2cd6535ab" name="abfb3a43ffa132292fca23ef2cd6535ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfb3a43ffa132292fca23ef2cd6535ab">&#9670;&#160;</a></span>sys_sleep()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void sys_sleep </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>off</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Put calculator into low-power sleep mode. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">off</td><td>If non-zero, only wake on ON key. If zero, wake on any key. </td></tr>
+<p>The application entry point. </p>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">int</td><td></td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="power_8c_source.html#l00018">18</a> of file <a class="el" href="power_8c_source.html">power.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2_src_2main_8c_source.html#l00010">10</a> of file <a class="el" href="demo_2_src_2main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -169,7 +146,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_e1551348931f086513d2aaf563b1a1f3.html">liborcos</a></li><li class="navelem"><a href="dir_e8fffed566d79ab295c89ecb2698b232.html">Src</a></li><li class="navelem"><a href="power_8c.html">power.c</a></li>
+    <li class="navelem"><a href="dir_b6c2a257bfab6380ca9b3cb94b12cb25.html">demo</a></li><li class="navelem"><a href="dir_e4f8a8910423e99ae66295ccf431dc97.html">Src</a></li><li class="navelem"><a href="demo_2_src_2main_8c.html">main.c</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

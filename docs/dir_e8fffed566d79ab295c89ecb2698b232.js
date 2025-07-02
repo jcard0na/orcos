@@ -3,6 +3,7 @@ var dir_e8fffed566d79ab295c89ecb2698b232 =
     [ "fonts.c", "fonts_8c.html", "fonts_8c" ],
     [ "io.c", "io_8c.html", "io_8c" ],
     [ "keyboard.c", "keyboard_8c.html", "keyboard_8c" ],
+    [ "main.c", "liborcos_2_src_2main_8c.html", null ],
     [ "orcos.c", "orcos_8c.html", "orcos_8c" ],
     [ "pin_definitions.c", "pin__definitions_8c.html", "pin__definitions_8c" ],
     [ "power.c", "power_8c.html", "power_8c" ],

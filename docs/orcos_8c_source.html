@@ -257,7 +257,7 @@ $(function(){initNavTree('orcos_8c_source.html','',''); });
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="comment">/*Configure GPIO pins : PA0 PA2 PA3 PA4</span></div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="comment">                             PA5 PA8 */</span></div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    GPIO_INIT_ARRAY(<a class="code hl_variable" href="pin__definitions_8c.html#af67b05e080ddb11d734078f89e05fa6b">column_pin_array</a>, GPIO_MODE_OUTPUT_OD, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    GPIO_INIT_ARRAY(<a class="code hl_variable" href="pin__definitions_8c.html#af67b05e080ddb11d734078f89e05fa6b">column_pin_array</a>, GPIO_MODE_OUTPUT_OD, GPIO_PULLUP, GPIO_SPEED_FREQ_LOW);</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <span class="comment">/*Configure GPIO pins : PA1 PA6 PA7 PA11</span></div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">                             PA12 */</span></div>
@@ -268,7 +268,7 @@ $(function(){initNavTree('orcos_8c_source.html','',''); });
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="comment">/*Configure GPIO pins : PB0 PB1 PB2 PB13</span></div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="comment">                             PB14 PB3 PB4 PB5 */</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    GPIO_INIT_ARRAY(<a class="code hl_variable" href="pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543">row_pin_array</a>, GPIO_MODE_INPUT, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW);</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    GPIO_INIT_ARRAY(<a class="code hl_variable" href="pin__definitions_8c.html#a9321f9c0213083c8df15c37b69995543">row_pin_array</a>, GPIO_MODE_INPUT, GPIO_PULLUP, GPIO_SPEED_FREQ_LOW);</div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <span class="comment">/*Configure GPIO pin : PB15 */</span></div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    GPIO_InitStruct.Pin = GPIO_PIN_15;</div>
