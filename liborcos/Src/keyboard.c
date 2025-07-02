@@ -47,7 +47,6 @@ void wait_for_key_press()
   while (1)
   {
     sys_sleep(0);
-    delay_us(100);  // Small delay to wait for GPIO to settle
     uint16_t keycode = scan_keyboard();
 
     // DEBUG_PRINT("key_state: %d keycode: %d\n", key_state, keycode);
@@ -86,7 +85,7 @@ uint16_t scan_keyboard(void)
   // Scan columns
   for (int16_t column = 0; column < NUM_COLUMN_PINS; column++) {
     GPIO_WRITE(column_pin_array[column], GPIO_PIN_RESET); // Set column pin to low
-    delay_us(50); // Small delay for transitions
+    delay_us(20); // Small delay for transitions
 
     // Read row pins
     for (int16_t row = 0; row < NUM_ROW_PINS; row++) {

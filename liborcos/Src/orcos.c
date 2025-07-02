@@ -191,7 +191,7 @@ static void MX_GPIO_Init(void)
 
     /*Configure GPIO pins : PA0 PA2 PA3 PA4
                              PA5 PA8 */
-    GPIO_INIT_ARRAY(column_pin_array, GPIO_MODE_OUTPUT_OD, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW);
+    GPIO_INIT_ARRAY(column_pin_array, GPIO_MODE_OUTPUT_OD, GPIO_PULLUP, GPIO_SPEED_FREQ_LOW);
 
     /*Configure GPIO pins : PA1 PA6 PA7 PA11
                              PA12 */
@@ -202,7 +202,7 @@ static void MX_GPIO_Init(void)
 
     /*Configure GPIO pins : PB0 PB1 PB2 PB13
                              PB14 PB3 PB4 PB5 */
-    GPIO_INIT_ARRAY(row_pin_array, GPIO_MODE_INPUT, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW);
+    GPIO_INIT_ARRAY(row_pin_array, GPIO_MODE_INPUT, GPIO_PULLUP, GPIO_SPEED_FREQ_LOW);
 
     /*Configure GPIO pin : PB15 */
     GPIO_InitStruct.Pin = GPIO_PIN_15;

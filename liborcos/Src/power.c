@@ -23,14 +23,14 @@ void sys_sleep(int off)
 		// First set all rows to input
 		GPIO_INIT_ARRAY(row_pin_array,
 						GPIO_MODE_INPUT,
-						GPIO_NOPULL,
+						GPIO_PULLUP,
 						GPIO_SPEED_FREQ_LOW);
 
 		// Second, set the row corresponding to ON/OFF key to ext. interrupt mode
 		// (This is the last row in the matrix)
 		GPIO_INIT_SINGLE(row_pin_array[row_pin_array_count - 1],
 						 GPIO_MODE_IT_RISING_FALLING,
-						 GPIO_NOPULL,
+						 GPIO_PULLUP,
 						 GPIO_SPEED_FREQ_LOW);
 
 		// Third, disable interrupts for all other keyboard pins
@@ -48,7 +48,7 @@ void sys_sleep(int off)
 		// Set all rows to ext. interrupt mode
 		GPIO_INIT_ARRAY(row_pin_array,
 						GPIO_MODE_IT_RISING_FALLING,
-						GPIO_NOPULL,
+						GPIO_PULLUP,
 						GPIO_SPEED_FREQ_LOW);
 	}
 	// Delay 1 ms for all transitional processes to finish
