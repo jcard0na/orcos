@@ -76,9 +76,9 @@ void sys_sleep(int off)
 	HAL_NVIC_EnableIRQ(EXTI14_IRQn);
 
 	// Re-enable the internal pull ups on all rows to make keyboard scanning
-	// more responsive
+	// more responsive.  Also, disable interrupts.
 	GPIO_INIT_ARRAY(row_pin_array,
-					GPIO_MODE_IT_RISING_FALLING,
+					GPIO_MODE_INPUT,
 					GPIO_NOPULL,
 					GPIO_SPEED_FREQ_LOW);
 }
