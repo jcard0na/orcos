@@ -20,17 +20,19 @@ void sys_sleep(int off)
 	if (off)
 	{
 
-		// First set all rows to input
+		// First set all rows to input and disable the internal pull-up
+		// The high-valued external pull-ups are sufficient to
+		// trigger interrupts and should draw less current.
 		GPIO_INIT_ARRAY(row_pin_array,
 						GPIO_MODE_INPUT,
-						GPIO_PULLUP,
+						GPIO_NOPULL,
 						GPIO_SPEED_FREQ_LOW);
 
 		// Second, set the row corresponding to ON/OFF key to ext. interrupt mode
 		// (This is the last row in the matrix)
 		GPIO_INIT_SINGLE(row_pin_array[row_pin_array_count - 1],
 						 GPIO_MODE_IT_RISING_FALLING,
-						 GPIO_PULLUP,
+						 GPIO_NOPULL,
 						 GPIO_SPEED_FREQ_LOW);
 
 		// Third, disable interrupts for all other keyboard pins
@@ -48,7 +50,7 @@ void sys_sleep(int off)
 		// Set all rows to ext. interrupt mode
 		GPIO_INIT_ARRAY(row_pin_array,
 						GPIO_MODE_IT_RISING_FALLING,
-						GPIO_PULLUP,
+						GPIO_NOPULL,
 						GPIO_SPEED_FREQ_LOW);
 	}
 	// Delay 1 ms for all transitional processes to finish
@@ -72,6 +74,13 @@ void sys_sleep(int off)
 	HAL_NVIC_EnableIRQ(EXTI5_IRQn);
 	HAL_NVIC_EnableIRQ(EXTI13_IRQn);
 	HAL_NVIC_EnableIRQ(EXTI14_IRQn);
+
+	// Re-enable the internal pull ups on all rows to make keyboard scanning
+	// more responsive
+	GPIO_INIT_ARRAY(row_pin_array,
+					GPIO_MODE_IT_RISING_FALLING,
+					GPIO_NOPULL,
+					GPIO_SPEED_FREQ_LOW);
 }
 
 /**
