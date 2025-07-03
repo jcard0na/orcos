@@ -67,7 +67,6 @@ liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi.c \
 liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_spi_ex.c \
 liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim.c \
 liborcos/Drivers/STM32U3xx_HAL_Driver/Src/stm32u3xx_hal_tim_ex.c \
-liborcos/Src/calc.c \
 liborcos/Src/fonts.c \
 liborcos/Src/io.c \
 liborcos/Src/keyboard.c \
