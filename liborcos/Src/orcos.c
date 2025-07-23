@@ -175,7 +175,7 @@ static void MX_GPIO_Init(void)
     HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
     /*Configure GPIO pin : display_cs */
-    GPIO_INIT_SINGLE(display_cs, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FREQ_VERY_HIGH);
+    GPIO_INIT_SINGLE(display_cs, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW);
 
     /*Configure GPIO pins : PC2 PC6 */
     GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_6;
