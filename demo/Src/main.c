@@ -32,9 +32,15 @@ int main(void)
       if (shift)
         LCD_test_screen(++counter);
       break;
+    case KEY_F << 8 | KEY_SIGN:
+      LCD_test_screen(++counter);
+      break;
     case KEY_0:
       if (shift)
         LCD_test_screen(--counter);
+      break;
+    case KEY_F << 8 | KEY_0:
+      LCD_test_screen(--counter);
       break;
     case KEY_ON:
       if (shift)

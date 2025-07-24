@@ -1,5 +1,5 @@
 /**
- * @file orcos.h 
+ * @file orcos.h
  * @brief OpenRPNCalc Operating System (ORCOS) library header
  *
  * This is a subset of functions from dmcp.h, distributed under BSD-3 license.
@@ -20,13 +20,13 @@
 int get_vbat(void);
 
 // LCD dimensions and buffer sizes
-#define LCD_WIDTH 400    ///< Display width in pixels
-#define LCD_HEIGHT 240   ///< Display height in pixels 
-#define LCD_LINE_SIZE 50 ///< Bytes per line in framebuffer
+#define LCD_WIDTH 400                         ///< Display width in pixels
+#define LCD_HEIGHT 240                        ///< Display height in pixels
+#define LCD_LINE_SIZE 50                      ///< Bytes per line in framebuffer
 #define LCD_LINE_BUF_SIZE (LCD_LINE_SIZE + 4) ///< Buffer size for line transfers
 
 /* Color Constants */
-#define LCD_SET_VALUE 0 // '1' bits in the given buffer will activate display pixels (black)
+#define LCD_SET_VALUE 0      // '1' bits in the given buffer will activate display pixels (black)
 #define LCD_EMPTY_VALUE ~(0) // '1' bits in the given buffer will clear display pixels (white)
 
 /* Font identifiers */
@@ -58,13 +58,13 @@ bool LCD_is_on(void);
 void LCD_test_screen(uint16_t count);
 
 /// Blit operation types
-#define BLT_OR    0  ///< OR operation (set pixels)
-#define BLT_ANDN  1  ///< AND-NOT operation (clear pixels)
-#define BLT_XOR   2  ///< XOR operation (toggle pixels)
+#define BLT_OR 0   ///< OR operation (set pixels)
+#define BLT_ANDN 1 ///< AND-NOT operation (clear pixels)
+#define BLT_XOR 2  ///< XOR operation (toggle pixels)
 
-/// Fill modes for blit operations  
-#define BLT_NONE  0  ///< No fill - use source value
-#define BLT_SET   1  ///< Fill with constant value
+/// Fill modes for blit operations
+#define BLT_NONE 0 ///< No fill - use source value
+#define BLT_SET 1  ///< Fill with constant value
 
 // Note: Most drawing functions are well-documented in sharp_graphics.c
 // Only adding brief descriptions here to avoid duplication
@@ -105,27 +105,27 @@ int lcd_for_calc(int what_screen);
 /** \addtogroup SCREENS
  * @{
  */
-#define 	DISP_CALC   0
-#define 	DISP_SYS_MENU   2
-#define 	DISP_BOOTLOADER   4
-#define 	DISP_UNIMPLEMENTED   5
-#define 	DISP_USB_WRITE   6
-#define 	DISP_MSC_CONNECT_USB   7
-#define 	DISP_ABOUT   8
-#define 	DISP_FAT_FORMAT   9
-#define 	DISP_FAULT   11
-#define 	DISP_QSPI_BAD_CRC   12
-#define 	DISP_QSPI_CHECK   13
-#define 	DISP_MARK_REGION   15
-#define 	DISP_DISK_TEST   16
-#define 	DISP_DSKTST_CONNECT_USB   17
-#define 	DISP_QSPI_CONNECT_USB   18
-#define 	DISP_OFF_IMAGE_ERR   19
-#define 	DISP_HELP   21
-#define 	DISP_BOOTLDR_CON_USB   22
-#define 	DISP_PROD_DIAG   23
-#define 	DISP_POWER_CHECK   24
-#define 	DISP_FLASH_CONNECT_USB   26
+#define DISP_CALC 0
+#define DISP_SYS_MENU 2
+#define DISP_BOOTLOADER 4
+#define DISP_UNIMPLEMENTED 5
+#define DISP_USB_WRITE 6
+#define DISP_MSC_CONNECT_USB 7
+#define DISP_ABOUT 8
+#define DISP_FAT_FORMAT 9
+#define DISP_FAULT 11
+#define DISP_QSPI_BAD_CRC 12
+#define DISP_QSPI_CHECK 13
+#define DISP_MARK_REGION 15
+#define DISP_DISK_TEST 16
+#define DISP_DSKTST_CONNECT_USB 17
+#define DISP_QSPI_CONNECT_USB 18
+#define DISP_OFF_IMAGE_ERR 19
+#define DISP_HELP 21
+#define DISP_BOOTLDR_CON_USB 22
+#define DISP_PROD_DIAG 23
+#define DISP_POWER_CHECK 24
+#define DISP_FLASH_CONNECT_USB 26
 /** @} */
 
 /**
@@ -177,7 +177,7 @@ void key_push(uint16_t keycode);
  */
 void wait_for_key_press();
 
-/** \addtogroup KEYCODES 
+/** \addtogroup KEYCODES
  * @{
  */
 #define KEY_NONE 0
@@ -188,13 +188,12 @@ void wait_for_key_press();
 #define KEY_ON 54
 /** @} */
 
-#define MULTIPLE_KEYS_PRESSED(x)  ((x) > 0xff)
-#define FIRST_KEYCODE(x)  ((x) & 0xff)
-#define SECOND_KEYCODE(x)  ((x) >> 8)
-#define TOO_MANY_KEYS_PRESSED(x)  ((x) == 0xffff)
+#define MULTIPLE_KEYS_PRESSED(x) ((x) > 0xff)
+#define LOW_KEYCODE(x) ((x) & 0xff)
+#define HIGH_KEYCODE(x) ((x) >> 8)
+#define TOO_MANY_KEYS_PRESSED(x) ((x) == 0xffff)
 
-
-// Date/Time functions 
+// Date/Time functions
 typedef struct
 {
   uint16_t year;

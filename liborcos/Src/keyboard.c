@@ -91,7 +91,12 @@ uint16_t scan_keyboard(void)
   if (key_count == 1) {
     return key1;
   } else if (key_count == 2) {
-    return key1 | (key2 << 8); // Combine both keys
+    // Ensure higher key is in MSB position
+    if (key1 > key2) {
+      return key2 | (key1 << 8);
+    } else {
+      return key1 | (key2 << 8);
+    }
   } else if (key_count > 2) {
     return 0xFFFF; // Too many keys
   }
