@@ -44,6 +44,7 @@ void sys_sleep(int off)
 		HAL_NVIC_DisableIRQ(EXTI5_IRQn);
 		HAL_NVIC_DisableIRQ(EXTI13_IRQn);
 		HAL_NVIC_DisableIRQ(EXTI14_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI15_IRQn);
 	}
 	else
 	{
@@ -52,10 +53,17 @@ void sys_sleep(int off)
 						GPIO_MODE_IT_FALLING,
 						GPIO_NOPULL,
 						GPIO_SPEED_FREQ_LOW);
+		// Enable interrupts for all keyboard pins
+		HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI4_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI5_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI13_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI14_IRQn);
+		HAL_NVIC_EnableIRQ(EXTI15_IRQn);
 	}
-	// Delay 1 ms for all transitional processes to finish
-	// e.g. OD pins with external pull-ups take a long time to change state
-	delay_us(100);
 
 	// Go back to STOP mode after interrupt completes
 	HAL_PWR_EnableSleepOnExit();
@@ -65,21 +73,25 @@ void sys_sleep(int off)
 	DEBUG_PRINT("--- sleep (off = %d)---\n", off);
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERMODE_STOP2, PWR_STOPENTRY_WFI);
 	DEBUG_PRINT("--- wake up --- \n");
-	// Restore interrupts for all other keyboard pins
-	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI1_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI2_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI3_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI4_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI5_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI13_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI14_IRQn);
+
+	HAL_NVIC_DisableIRQ(EXTI0_IRQn);
+	HAL_NVIC_DisableIRQ(EXTI1_IRQn);
+	HAL_NVIC_DisableIRQ(EXTI2_IRQn);
+	HAL_NVIC_DisableIRQ(EXTI3_IRQn);
+	HAL_NVIC_DisableIRQ(EXTI4_IRQn);
+	HAL_NVIC_DisableIRQ(EXTI5_IRQn);
+	HAL_NVIC_DisableIRQ(EXTI13_IRQn);
+	HAL_NVIC_DisableIRQ(EXTI14_IRQn);
+	HAL_NVIC_DisableIRQ(EXTI15_IRQn);
+
+	// 100 us delay to let contact bounce settle before scanning the keyboard. 
+	delay_us(100);
 
 	// Re-enable the internal pull ups on all rows to make keyboard scanning
 	// more responsive.  Also, disable interrupts.
 	GPIO_INIT_ARRAY(row_pin_array,
 					GPIO_MODE_INPUT,
-					GPIO_NOPULL,
+					GPIO_PULLUP,
 					GPIO_SPEED_FREQ_LOW);
 }
 
